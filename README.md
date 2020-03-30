@@ -1,0 +1,2 @@
+Dependecy List: 
+    Vue
