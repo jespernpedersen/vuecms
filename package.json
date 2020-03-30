@@ -1,0 +1,23 @@
+{
+  "name": "vuecms",
+  "version": "1.0.0",
+  "description": "This will be a CMS to create new websites with Vue.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jespernpedersen/vuecms.git"
+  },
+  "keywords": [
+    "cms",
+    "website-builder"
+  ],
+  "author": "Jesper Nissen-Pedersen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jespernpedersen/vuecms/issues"
+  },
+  "homepage": "https://github.com/jespernpedersen/vuecms#readme"
+}
