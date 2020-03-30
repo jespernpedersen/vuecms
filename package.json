@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/jespernpedersen/vuecms#readme",
   "dependencies": {
+    "firebase": "^7.13.1",
     "vue": "^2.6.11"
   }
 }
