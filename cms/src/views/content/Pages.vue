@@ -24,8 +24,7 @@
               Page Slug
             </div>
           </div>
-          <section v-for="page in pages" :key="page['.key']" class="page-list">
-            <div class="row">
+          <section v-for="page in pages" :key="page['.key']" class="row">
               <div class="select">
                 <input type="checkbox" />
               </div>
@@ -41,7 +40,6 @@
               <div class="page-slug">
                 {{ page.slug }}
               </div>
-            </div>
           </section>
         </div>
     </div>
@@ -96,7 +94,7 @@ export default {
       display: flex;
       justify-content: space-between;
       text-align: center;
-      padding: 10px 15px;
+      padding: 15px;
     }
 
     .page-title {
@@ -110,7 +108,7 @@ export default {
     .page-published {
       text-align: left;
     }
-    
+
     .page-id {
       min-width: 2%;
     }
@@ -140,5 +138,9 @@ export default {
     .select-all,
     .select {
       min-width: 8%;
+    }
+
+    .v-table .row:not(:last-child) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
 </style>
