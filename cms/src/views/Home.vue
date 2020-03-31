@@ -16,3 +16,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.home {
+  min-height: 100vh;
+  display: flex;
+}
+</style>
