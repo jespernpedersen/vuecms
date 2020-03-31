@@ -14,6 +14,9 @@
             <div class="page-id">
               ID
             </div>
+            <div class="page-publish">
+              Published
+            </div>
             <div class="page-title">
               Page Title
             </div>
@@ -28,6 +31,9 @@
               </div>
               <div class="page-id">
                 {{ page.id }}
+              </div>
+              <div class="page-published">
+                <span v-bind:class="page.published"></span>
               </div>
               <div class="page-title">
                 {{ page.title }}
@@ -54,8 +60,8 @@ export default {
   data () {
     return {
       pages: [
-        { id: 1, slug: 'example-slug', title: 'Example Page'},
-        { id: 2, slug: 'example-slug-2', title: 'Example 2'}
+        { id: 1, slug: 'example-slug', title: 'Example Page', published: 'True' },
+        { id: 2, slug: 'example-slug-2', title: 'Example 2', published: 'False'}
       ],
     }
   },
@@ -99,10 +105,36 @@ export default {
     }
     .select-all,
     .select,
-    .page-id,
-    .page-slug {
-      min-width: 8%;
+    .page-slug,
+    .page-publish,
+    .page-published {
       text-align: left;
+    }
+    
+    .page-id {
+      min-width: 2%;
+    }
+
+    .page-publish,
+    .page-published {
+      text-align: center;
+      min-width: 10%;
+    }
+
+    .page-published span {
+      width: 10px;
+      height: 10px;
+      background-color: black;
+      border-radius: 100%;
+      display: inline-block;
+    }
+
+    .page-published span.True {
+      background-color: green;
+    }
+
+    .page-published span.False {
+      background-color: red;
     }
     
     .select-all,
