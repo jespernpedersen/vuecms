@@ -6,13 +6,14 @@
         <div class="v-table">
           <div class="table-header">
             <div class="select-all">
-              Select All
+              
+                <input type="checkbox" /> Select All
             </div>
             <div class="page-id">
               ID
             </div>
             <div class="page-title">
-              Title
+              Page Title
             </div>
             <div class="page-slug">
               Page Slug
@@ -21,7 +22,7 @@
           <section v-for="page in pages" :key="page['.key']" class="page-list">
             <div class="row">
               <div class="select">
-                Select
+                <input type="checkbox" />
               </div>
               <div class="page-id">
                 {{ page.id }}
@@ -51,7 +52,8 @@ export default {
   data () {
     return {
       pages: [
-        { id: 1, slug: 'example-slug', title: 'Example Page'}
+        { id: 1, slug: 'example-slug', title: 'Example Page'},
+        { id: 2, slug: 'example-slug-2', title: 'Example 2'}
       ],
     }
   },
@@ -59,13 +61,11 @@ export default {
 </script>
 
 <style>
+
     .content {
         flex: 1 0 auto;
         background-color: #ebebeb;
-        padding-top: 15px;
-        padding-bottom: 15px;
-        padding-left: 275px;
-        padding-right: 30px;
+        padding: 15px 30px;
     }
 
     h1 {
@@ -99,7 +99,12 @@ export default {
     .select,
     .page-id,
     .page-slug {
-      min-width: 10%;
+      min-width: 8%;
       text-align: left;
+    }
+    
+    .select-all,
+    .select {
+      min-width: 8%;
     }
 </style>

@@ -1,37 +1,63 @@
 <template>
   <aside class="primary-cms-menu">
     <ul class="level-first">
-        <li class="active">
+        <li class="active" v-on:click="menuview = 'content-menu'">
             <unicon name="layer-group" />
             <span>Content</span>
-            <ul class="level-second">
-                <li>
-                    <router-link to="/management/pages">
-                        <unicon name="window-restore" />
-                        <span>Pages</span>
-                    </router-link>
-                </li>
-                <li>
-                    <router-link to="/management/blocks">
-                        <unicon name="cube" />
-                        <span>Blocks</span>               
-                    </router-link>
-                </li>
-            </ul>
         </li>
         <li>
             <unicon name="images" />
             <span>Media Library</span>
         </li>
+        
+        <li v-on:click="menuview = 'user-menu'">
+            <unicon name="users-alt" />
+            <span>Users</span>
+        </li>
         <li>
             <unicon name="cog" />
             <span>Settings</span>
         </li>
+    </ul>
+    <ul class="level-second content-menu" v-if="menuview === 'content-menu'">
         <li>
-            <span>Item 4</span>
+            <router-link to="/management/pages">
+                <unicon name="window-restore" />
+                <span>Pages</span>
+            </router-link>
         </li>
         <li>
-            <span>Item 5</span>
+            <router-link to="/management/blocks">
+                <unicon name="cube" />
+                <span>Blocks</span>               
+            </router-link>
+        </li>
+        <li>
+            <router-link to="/management/banner">
+                <unicon name="comment-alt-exclamation" />
+                <span>Status Banner</span>               
+            </router-link>
+        </li>
+    </ul>
+    
+    <ul class="user-menu level-second" v-if="menuview === 'user-menu'">
+        <li>
+            <router-link to="/management/pages">
+                <unicon name="window-restore" />
+                <span>Customers</span>
+            </router-link>
+        </li>
+        <li>
+            <router-link to="/management/blocks">
+                <unicon name="cube" />
+                <span>Accounts</span>               
+            </router-link>
+        </li>
+        <li>
+            <router-link to="/management/banner">
+                <unicon name="comment-alt-exclamation" />
+                <span>Status Banner</span>               
+            </router-link>
         </li>
     </ul>
   </aside>
@@ -39,7 +65,12 @@
 
 <script>
 export default {
-  name: 'Menu'
+  name: 'Menu',
+  data () {
+    return {
+      menuview: "content-menu"
+    }
+  }
 }
 </script>
 
@@ -62,9 +93,10 @@ a {
 .primary-cms-menu {
     height: 100vh;
     flex-shrink: 0;
+    display: flex;
 }
 
-.primary-cms-menu > ul {
+.primary-cms-menu .level-first {
     width: 65px;
     display: flex;
     height: 100%;
@@ -74,7 +106,7 @@ a {
     flex-direction: column;
 }
 
-.primary-cms-menu > ul > li {
+.primary-cms-menu .level-first > li {
     position: relative;
     width: 100%;
     text-align: center;
@@ -95,37 +127,36 @@ a {
     height: 24px;
 }
 
-.primary-cms-menu > ul > li > ul > li  {
+.primary-cms-menu .level-second > li  {
     transition: 0.3s ease-in-out;
     background-color: transparent;
 }
 
-.primary-cms-menu > ul > li > ul > li .unicon {
+.primary-cms-menu .level-second > li .unicon {
     margin-right: 8px;
 }
 
-.primary-cms-menu > ul > li > span {
+.primary-cms-menu .level-first > li > span {
     display: inline-block;
     width: 65px;
     display: none;
 }
 
-.primary-cms-menu > ul > li > ul {
-    position: absolute;
-    left: 100%;
+.primary-cms-menu .level-second {
     top: 0;
     width: 255px;
     background-color: #222;
     height: 100vh;
 }
 
-.primary-cms-menu > ul > li > ul > li a {
+.primary-cms-menu .level-second > li a {
     display: block;
     padding: 15px 30px 15px 20px;
     text-align: left;
+    color: #FFF;
 }
 
-.primary-cms-menu > ul > li > ul > li .router-link-active {
+.primary-cms-menu .level-second li .router-link-active {
     background-color: rgba(255, 255, 255, 0.15);
 
 }
