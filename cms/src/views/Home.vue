@@ -1,7 +1,16 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <header>
+      Frontend Header
+    </header>
+
+    <main>
+      Frontend Main
+    </main>
+
+    <footer>
+      Frontend Footer
+    </footer>
   </div>
 </template>
 
@@ -21,5 +30,14 @@ export default {
 .home {
   min-height: 100vh;
   display: flex;
+}
+button {
+  background-color: green;
+  color: #FFF;
+  border: none;
+  padding: 12px 20px;
+  cursor: pointer;
+  float: right;
+  margin-top: 10px;
 }
 </style>

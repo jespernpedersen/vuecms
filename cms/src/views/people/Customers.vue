@@ -2,18 +2,8 @@
   <div class="home">
     <Menu></Menu>
     <div class="content">
-        <h1>Banner</h1>
-        <div class="enable-banner">
-        <form>
-            <label>Enable Banner</label><input type="checkbox">
-        </form>
-        </div>
-        <h3>Preview: </h3>
-        <div class="preview-banner">
-            <div class="banner">
-
-            </div>
-        </div>
+        <h1>Customers</h1>
+        This will be a list of customers who have used the contact form
     </div>
   </div>
 </template>
@@ -23,7 +13,7 @@
 import Menu from '@/components/management/Menu.vue'
 
 export default {
-  name: 'Blocks',
+  name: 'Customers',
   components: {
     Menu
   }

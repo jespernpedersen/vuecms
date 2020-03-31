@@ -2,7 +2,10 @@
   <div class="home">
     <Menu></Menu>
     <div class="content">
+    
+        <button>Add New Block</button>
         <h1>Blocks</h1>
+        This page is for building modular pages
         <div class="v-table">
           <div class="table-header">
             <div class="select-all">

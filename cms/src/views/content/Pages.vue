@@ -2,6 +2,8 @@
   <div class="home">
     <Menu></Menu>
     <div class="content">
+    
+        <button>Add New Page</button>
         <h1>Pages</h1>
         <div class="v-table">
           <div class="table-header">

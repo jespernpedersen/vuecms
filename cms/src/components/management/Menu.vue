@@ -1,7 +1,7 @@
 <template>
   <aside class="primary-cms-menu">
     <ul class="level-first">
-        <li class="active" v-on:click="menuview = 'content-menu'">
+        <li v-on:click="menuview = 'content-menu'">
             <unicon name="layer-group" />
             <span>Content</span>
         </li>
@@ -19,44 +19,47 @@
             <span>Settings</span>
         </li>
     </ul>
+
+    <!-- View for Content Submenu -->
     <ul class="level-second content-menu" v-if="menuview === 'content-menu'">
         <li>
-            <router-link to="/management/pages">
+            <router-link to="/management/content/pages">
                 <unicon name="window-restore" />
                 <span>Pages</span>
             </router-link>
         </li>
         <li>
-            <router-link to="/management/blocks">
+            <router-link to="/management/content/blocks">
                 <unicon name="cube" />
                 <span>Blocks</span>               
             </router-link>
         </li>
         <li>
-            <router-link to="/management/banner">
+            <router-link to="/management/content/banner">
                 <unicon name="comment-alt-exclamation" />
                 <span>Status Banner</span>               
+            </router-link>
+        </li>
+        <li>
+            <router-link to="/management/content/menu">
+                <unicon name="list-ul" />
+                <span>Menu Management</span>               
             </router-link>
         </li>
     </ul>
     
+    <!-- View for User Menu's Submenu -->
     <ul class="user-menu level-second" v-if="menuview === 'user-menu'">
         <li>
-            <router-link to="/management/pages">
-                <unicon name="window-restore" />
+            <router-link to="/management/people/customers">
+                <unicon name="bitcoin-circle" />
                 <span>Customers</span>
             </router-link>
         </li>
         <li>
-            <router-link to="/management/blocks">
-                <unicon name="cube" />
+            <router-link to="/management/people/accounts">
+                <unicon name="user-square" />
                 <span>Accounts</span>               
-            </router-link>
-        </li>
-        <li>
-            <router-link to="/management/banner">
-                <unicon name="comment-alt-exclamation" />
-                <span>Status Banner</span>               
             </router-link>
         </li>
     </ul>
@@ -112,6 +115,7 @@ a {
     text-align: center;
     display: inline-block;
     padding: 17px 0;
+    cursor: pointer;
 }
 
 .primary-cms-menu > ul > li.active {
