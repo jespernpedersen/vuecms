@@ -2,7 +2,7 @@
   <div class="home">
     <Menu></Menu>
     <div class="content">
-        Content
+        <h1>Pages</h1>
     </div>
   </div>
 </template>
@@ -24,5 +24,10 @@ export default {
         flex: 1 0 auto;
         background-color: #ebebeb;
         padding: 20px 0;
+        padding-left: 275px;
+    }
+
+    h1 {
+        text-align: left;
     }
 </style>

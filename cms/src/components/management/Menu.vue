@@ -1,18 +1,25 @@
 <template>
   <aside class="primary-cms-menu">
     <ul class="level-first">
-        <li><span>Item 1</span>
+        <li class="active">
+            <unicon name="layer-group" />
+            <span>Content</span>
             <ul class="level-second">
                 <li>
-                    <span>Sub-Item 1</span>
+                    <router-link to="/management/pages">
+                        <unicon name="window-restore" />
+                        <span>Pages</span>
+                    </router-link>
                 </li>
                 <li>
-                    <span>Sub-Item 2</span>
+                    <unicon name="cube" />
+                    <span>Blocks</span>
                 </li>
             </ul>
         </li>
         <li>
-            <span>Item 2</span>
+            <unicon name="cog" />
+            <span>Settings</span>
         </li>
         <li>
             <span>Item 3</span>
@@ -43,6 +50,11 @@ ul {
     padding: 0;
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 
 .primary-cms-menu {
     height: 100vh;
@@ -64,12 +76,30 @@ ul {
     width: 100%;
     text-align: center;
     display: inline-block;
+    padding: 17px 0;
+}
+
+.primary-cms-menu > ul > li.active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.primary-cms-menu > ul > li .unicon {
+    fill: white;
+    vertical-align: middle;
+}
+
+.primary-cms-menu > ul > li > .unicon {
+    height: 24px;
+}
+
+.primary-cms-menu > ul > li > ul > li .unicon {
+    margin-right: 8px;
 }
 
 .primary-cms-menu > ul > li > span {
     display: inline-block;
     width: 65px;
-    padding: 10px 0;
+    display: none;
 }
 
 .primary-cms-menu > ul > li > ul {
@@ -82,7 +112,7 @@ ul {
 }
 
 .primary-cms-menu > ul > li > ul > li {  
-    padding: 15px 30px;
+    padding: 15px 30px 15px 20px;
     text-align: left;
 }
 

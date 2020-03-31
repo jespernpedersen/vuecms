@@ -2,11 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
-
 import Unicon from 'vue-unicons'
-import { uniLayerGroupMonochrome, uniCarWash } from 'vue-unicons/src/icons'
+import { uniCube, uniLayerGroup, uniWindowRestore, uniCog } from 'vue-unicons/src/icons'
 
-Unicon.add([uniLayerGroupMonochrome, uniCarWash])
+Unicon.add([uniCube, uniLayerGroup, uniWindowRestore, uniCog])
 Vue.use(Unicon)
 
 Vue.config.productionTip = false
