@@ -23,11 +23,13 @@
 }
 
 #nav {
-  padding: 30px;
+  padding: 8px;
+  background-color: #222;
+  color: #FFF;
+  text-align: left;
 
   a {
-    font-weight: bold;
-    color: #2c3e50;
+    color: inherit;
 
     &.router-link-exact-active {
       color: #42b983;

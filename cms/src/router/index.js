@@ -10,16 +10,16 @@ const routes = [{
         component: Home
     },
     {
-        path: '/management',
+        path: '/management/pages',
         name: 'Content Management System',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/Management.vue')
+            import ( /* webpackChunkName: "about" */ '../views/Pages.vue')
     },
     {
-        path: '/management/pages',
-        name: 'Pages',
+        path: '/management/blocks',
+        name: 'Blocks',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/Management.vue')
+            import ( /* webpackChunkName: "about" */ '../views/Blocks.vue')
     }
 ]
 

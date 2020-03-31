@@ -2,7 +2,7 @@
   <div class="home">
     <Menu></Menu>
     <div class="content">
-        <h1>Pages</h1>
+        <h1>Blocks</h1>
     </div>
   </div>
 </template>
@@ -12,7 +12,7 @@
 import Menu from '@/components/management/Menu.vue'
 
 export default {
-  name: 'Management Dashboard',
+  name: 'Blocks',
   components: {
     Menu
   }
@@ -23,7 +23,7 @@ export default {
     .content {
         flex: 1 0 auto;
         background-color: #ebebeb;
-        padding: 20px 0;
+        padding: 15px 0;
         padding-left: 275px;
     }
 

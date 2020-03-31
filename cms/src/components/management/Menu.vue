@@ -12,17 +12,20 @@
                     </router-link>
                 </li>
                 <li>
-                    <unicon name="cube" />
-                    <span>Blocks</span>
+                    <router-link to="/management/blocks">
+                        <unicon name="cube" />
+                        <span>Blocks</span>               
+                    </router-link>
                 </li>
             </ul>
         </li>
         <li>
-            <unicon name="cog" />
-            <span>Settings</span>
+            <unicon name="images" />
+            <span>Media Library</span>
         </li>
         <li>
-            <span>Item 3</span>
+            <unicon name="cog" />
+            <span>Settings</span>
         </li>
         <li>
             <span>Item 4</span>
@@ -92,6 +95,11 @@ a {
     height: 24px;
 }
 
+.primary-cms-menu > ul > li > ul > li  {
+    transition: 0.3s ease-in-out;
+    background-color: transparent;
+}
+
 .primary-cms-menu > ul > li > ul > li .unicon {
     margin-right: 8px;
 }
@@ -111,12 +119,13 @@ a {
     height: 100vh;
 }
 
-.primary-cms-menu > ul > li > ul > li {  
+.primary-cms-menu > ul > li > ul > li a {
+    display: block;
     padding: 15px 30px 15px 20px;
     text-align: left;
 }
 
-.primary-cms-menu > ul > li > ul > li:nth-of-type(odd) {
+.primary-cms-menu > ul > li > ul > li .router-link-active {
     background-color: rgba(255, 255, 255, 0.15);
 
 }
