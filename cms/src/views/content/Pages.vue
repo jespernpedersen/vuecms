@@ -23,6 +23,9 @@
             <div class="page-slug">
               Page Slug
             </div>
+            <div class="page-actions">
+              Actions
+            </div>
           </div>
           <section v-for="page in pages" :key="page['.key']" class="row">
               <div class="select">
@@ -39,6 +42,9 @@
               </div>
               <div class="page-slug">
                 {{ page.slug }}
+              </div>
+              <div class="page-edit">
+                <a v-bind:href="'/management/content/pages/' + page.id">Edit</a>
               </div>
           </section>
         </div>
@@ -72,9 +78,8 @@ export default {
 
 <style>
     .pages-view {
-      
-  min-height: calc(100vh - 35px);
-  display: flex;
+      min-height: calc(100vh - 35px);
+      display: flex;
     }
     .content {
         flex: 1 0 auto;
@@ -115,6 +120,11 @@ export default {
     .page-publish,
     .page-published {
       text-align: left;
+    }
+
+    .page-actions,
+    .page-edit {
+      min-width: 5%;
     }
 
     .page-id {

@@ -5,10 +5,16 @@ import Home from '../views/Home.vue'
 Vue.use(VueRouter)
 
 const routes = [{
+        // Frontpage Route
         path: '/',
         name: 'Home',
         component: Home
     },
+    // Frontend Routes (needs to be dynamic)
+
+
+
+    // Backend Routers
     {
         path: '/management/content/pages',
         name: 'Content Management System',
