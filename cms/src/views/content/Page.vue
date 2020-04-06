@@ -2,15 +2,27 @@
   <div class="pages-view">
     <Menu></Menu>
     <div class="content">
-    <div class="field">
-        <input 
-        v-model="page.title"
-        @keydown.enter="editField('title')"
-        /> 
-        
-        <h1>{{ page.title }}</h1>
-        <p style="text-align: left">{{ page.slug }}</p>
-    </div>
+        <div class="field">
+            <label>Title</label>
+            <input class="title"
+            v-model="page.title"
+            @keydown.enter="editField('title')"
+            />
+        </div>
+        <div class="field">
+            <label>Slug</label>
+            <input
+            v-model="page.slug"
+            @keydown.enter="editField('slug')"
+            />
+        </div>
+        <div class="field">
+            <label>Content</label>
+            <textarea
+                v-model="page.content"
+                @keydown.enter="editField('content')"
+            ></textarea>
+        </div>
     </div>
   </div>
 </template>
@@ -170,11 +182,33 @@ export default {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
 
-    input {
-        display: block;
-        margin: 20px 0;
+    input,
+    textarea {
+        display: inline-block;
+        margin: 5px 0;
+        padding: 10px;
+        vertical-align: middle;
+        width: 50%;
+    }
+
+    textarea {
+        min-height: 900px;
+    }
+
+    input.title {
         font-size: 40px;
         font-weight: bold;
-        padding: 10px;
+    }
+
+    .field {
+        display: block;
+        text-align: left;
+    }
+
+    .field label {
+        vertical-align: middle;
+        margin-right: 20px;
+        min-width: 100px;
+        display: inline-block;
     }
 </style>

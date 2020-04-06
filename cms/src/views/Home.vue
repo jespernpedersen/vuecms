@@ -4,6 +4,8 @@
       Frontend Header
     </header>
     <main>
+      <h1>{{ page.title }}</h1>
+      <p>{{ page.content }}</p>
     </main>
     <footer>
       Frontend Footer
@@ -14,6 +16,7 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import { db } from '../firebase/db.js'
 
 export default {
   name: 'Home',
@@ -23,6 +26,11 @@ export default {
   data () {
     return {
       page: [],
+    }
+  },
+  firestore() {
+    return {
+      page: db.collection("pages").doc("0"),
     }
   }
 }

@@ -3,7 +3,7 @@
     <Menu></Menu>
     <div class="content">
     
-        <button>Add New Page</button>
+        <button @click="newPage()">Add New Page</button>
         <h1>Pages</h1>
         <div class="v-table">
           <div class="table-header">
@@ -64,6 +64,18 @@ export default {
   data () {
     return {
       pages: [],
+    }
+  },
+  methods: {
+    newPage() {
+        // Get newest ID from firebase
+        let ref = db.collection("pages").orderBy("id", "desc");
+        console.log(ref);
+
+
+        // Create new entry in Firebase with dummy data
+
+        // Redirect user to new page
     }
   },
   firestore() {
