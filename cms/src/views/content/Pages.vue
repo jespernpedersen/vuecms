@@ -49,6 +49,21 @@
 <script>
 // @ is an alias to /src
 import Menu from '@/components/management/Menu.vue'
+import Firebase from 'firebase'
+
+let config = {
+    apiKey: "a0ISjRwyJFyTT8WfZWI3ooDWlU4FldaizBx3RFRn",
+    authDomain: "vuecms-63087.firebaseapp.com",
+    databaseURL: "https://vuecms-63087.firebaseio.com",
+    projectId: "vuecms-63087",
+    storageBucket: "vuecms-63087.appspot.com",
+    messagingSenderId: "720603301863"
+}
+
+let app = Firebase.initializeApp(config);
+let db = app.database();
+let pagesRef = db.ref('pages');
+
 
 export default {
   name: 'Management',
@@ -57,12 +72,12 @@ export default {
   },
   data () {
     return {
-      pages: [
-        { id: 1, slug: 'example-slug', title: 'Example Page', published: 'True' },
-        { id: 2, slug: 'example-slug-2', title: 'Example 2', published: 'False'}
-      ],
+      pages: [],
     }
   },
+  firebase: {
+    pages: pagesRef
+  }
 }
 </script>
 
@@ -127,11 +142,11 @@ export default {
       display: inline-block;
     }
 
-    .page-published span.True {
+    .page-published span.true {
       background-color: green;
     }
 
-    .page-published span.False {
+    .page-published span.false {
       background-color: red;
     }
     
