@@ -18,9 +18,8 @@
 <script>
 import Menu from '@/components/management/Menu.vue'
 import { db } from '../../firebase/db.js'
+
 let pageID = null;
-
-
 
 export default {
   name: 'Page',
@@ -29,19 +28,24 @@ export default {
   },
   data () {
     return {
-      pages: []
+      pages: [],
     }
   },
   methods: {
       editField(field) {
-        db.collection("pages").doc("0").update({
-            field: this.page.title
-        })
+        if(field == "title") {
+            db.collection("pages").doc(this.$router.app._route.params.id).update({
+                title: this.page.title
+            })
+        }
+        else {
+            alert("Error. Could not find field");
+        }
       }
   },
   firestore() {
     return {
-      page: db.collection("pages").doc(this.$router.app._route.params.id)
+      page: db.collection("pages").doc(this.$router.app._route.params.id),
     }
   }
 }
