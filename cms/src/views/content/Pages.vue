@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="pages-view">
     <Menu></Menu>
     <div class="content">
     
@@ -49,19 +49,8 @@
 <script>
 // @ is an alias to /src
 import Menu from '@/components/management/Menu.vue'
-import Firebase from 'firebase'
+import db from '../../firebase/db.js'
 
-let config = {
-    apiKey: "a0ISjRwyJFyTT8WfZWI3ooDWlU4FldaizBx3RFRn",
-    authDomain: "vuecms-63087.firebaseapp.com",
-    databaseURL: "https://vuecms-63087.firebaseio.com",
-    projectId: "vuecms-63087",
-    storageBucket: "vuecms-63087.appspot.com",
-    messagingSenderId: "720603301863"
-}
-
-let app = Firebase.initializeApp(config);
-let db = app.database();
 let pagesRef = db.ref('pages');
 
 
@@ -82,7 +71,11 @@ export default {
 </script>
 
 <style>
-
+    .pages-view {
+      
+  min-height: calc(100vh - 35px);
+  display: flex;
+    }
     .content {
         flex: 1 0 auto;
         background-color: #ebebeb;
