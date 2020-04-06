@@ -4,7 +4,6 @@
       Frontend Header
     </header>
     <main>
-      <h1>{{ page[0].title }}</h1>
     </main>
     <footer>
       Frontend Footer
@@ -15,10 +14,6 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
-import db from '../firebase/db.js'
-
-let pageRef = db.ref('pages');
-
 
 export default {
   name: 'Home',
@@ -29,9 +24,6 @@ export default {
     return {
       page: [],
     }
-  },
-  firebase: {
-    page: pageRef
   }
 }
 </script>

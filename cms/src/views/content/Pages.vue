@@ -53,11 +53,31 @@
 </template>
 
 <script>
+import Menu from '@/components/management/Menu.vue'
+import { db } from '../../firebase/db.js'
+
+export default {
+  name: 'Management',
+  components: {
+    Menu
+  },
+  data () {
+    return {
+      pages: [],
+    }
+  },
+  firestore() {
+    return {
+      pages: db.collection("pages")
+    }
+  }
+}
+/*
 // @ is an alias to /src
 import Menu from '@/components/management/Menu.vue'
 import db from '../../firebase/db.js'
 
-let pagesRef = db.ref('pages');
+let pagesRef = db.collection('pages').doc("0");
 
 
 export default {
@@ -74,6 +94,7 @@ export default {
     pages: pagesRef
   }
 }
+*/
 </script>
 
 <style>

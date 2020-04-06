@@ -3,19 +3,51 @@
     <Menu></Menu>
     <div class="content">
     <div class="field">
-        Title: 
         <input 
-            type="text"
-            v-model="page[0].title"
-            @keydown.enter="editField(page[0])"
-        />
-        {{ page[0].title }}
+        v-model="page.title"
+        @keydown.enter="editField('title')"
+        /> 
+        
+        <h1>{{ page.title }}</h1>
+        <p style="text-align: left">{{ page.slug }}</p>
     </div>
     </div>
   </div>
 </template>
 
 <script>
+import Menu from '@/components/management/Menu.vue'
+import { db } from '../../firebase/db.js'
+let pageID = null;
+
+
+
+export default {
+  name: 'Page',
+  components: {
+    Menu
+  },
+  data () {
+    return {
+      pages: []
+    }
+  },
+  methods: {
+      editField(field) {
+        db.collection("pages").doc("0").update({
+            field: this.page.title
+        })
+      }
+  },
+  firestore() {
+    return {
+      page: db.collection("pages").doc(this.$router.app._route.params.id)
+    }
+  }
+}
+
+
+/*
 // @ is an alias to /src
 import Menu from '@/components/management/Menu.vue'
 import db from '../../firebase/db.js'
@@ -49,7 +81,8 @@ export default {
   firebase: {
     page: db.ref('pages')
   }
-}
+}^
+*/
 </script>
 
 <style>
@@ -131,5 +164,13 @@ export default {
 
     .v-table .row:not(:last-child) {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    input {
+        display: block;
+        margin: 20px 0;
+        font-size: 40px;
+        font-weight: bold;
+        padding: 10px;
     }
 </style>

@@ -12,9 +12,8 @@ Unicon.add([uniCube, uniLayerGroup, uniWindowRestore, uniCog, uniImages, uniUser
 Vue.use(Unicon)
 
 // Firebase
-import { rtdbPlugin } from 'vuefire'
-Vue.use(rtdbPlugin)
-
+import VueFirestore from 'vue-firestore';
+Vue.use(VueFirestore);
 
 Vue.config.productionTip = false
 
