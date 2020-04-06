@@ -3,11 +3,9 @@
     <header>
       Frontend Header
     </header>
-
     <main>
-      Frontend Main
+      <h1>{{ page[0].title }}</h1>
     </main>
-
     <footer>
       Frontend Footer
     </footer>
@@ -17,19 +15,42 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import Firebase from 'firebase'
+
+let config = {
+    apiKey: "a0ISjRwyJFyTT8WfZWI3ooDWlU4FldaizBx3RFRn",
+    authDomain: "vuecms-63087.firebaseapp.com",
+    databaseURL: "https://vuecms-63087.firebaseio.com",
+    projectId: "vuecms-63087",
+    storageBucket: "vuecms-63087.appspot.com",
+    messagingSenderId: "720603301863"
+}
+
+let app = Firebase.initializeApp(config);
+let db = app.database();
+let pageRef = db.ref('pages')
 
 export default {
   name: 'Home',
   components: {
     HelloWorld
+  },
+  data () {
+    return {
+      page: [],
+    }
+  },
+  firebase: {
+    page: pageRef
   }
 }
 </script>
 
 <style>
 .home {
-  min-height: 100vh;
+  min-height: calc(100vh - 35px);
   display: flex;
+  flex-direction: column;
 }
 button {
   background-color: green;
@@ -40,4 +61,27 @@ button {
   float: right;
   margin-top: 10px;
 }
+
+header, main, footer {
+  width: 100%;
+}
+
+header {
+  background-color: teal;
+  padding: 30px 0;
+  color: #FFF;
+}
+
+main {
+  background-color: #ebebeb;
+  padding: 30px 0;
+  flex: 1 0 auto;
+}
+
+footer {
+  background-color: #222;
+  padding: 30px 0;
+  color: #FFF;
+}
+
 </style>
