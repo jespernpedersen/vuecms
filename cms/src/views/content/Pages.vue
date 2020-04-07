@@ -67,6 +67,8 @@
 import Menu from '@/components/management/Menu.vue'
 import { db } from '../../firebase/db.js'
 
+let pageRef = db.collection("pages");
+
 export default {
   name: 'Management',
   components: {
@@ -80,7 +82,7 @@ export default {
   methods: {
     async newPage() {
         // Get newest ID from firebase and increment by one
-        db.collection("pages").orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
+        pageRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
             // New data
 
@@ -91,7 +93,7 @@ export default {
             let newPageRef = String(newPageId);
 
             // Firebase Call
-            db.collection("pages").doc(newPageRef).set({
+            pageRef.doc(newPageRef).set({
               "id": newPageId,
               "content": "This is a placeholder",
               "featured": false,
@@ -104,12 +106,12 @@ export default {
     },
     togglePublish(id, state) {
       if(state == false) {
-        db.collection("pages").doc(id).update({
+        pageRef.doc(id).update({
           published: true
         })
       }
       else if(state == true) {
-        db.collection("pages").doc(id).update({
+        pageRef.doc(id).update({
           published: false
         })
       }
@@ -119,13 +121,13 @@ export default {
     },
     assignFrontpage(id) {
       // Remove all others as frontpage
-      db.collection("pages").get().then(function(querySnapshot) {
+      pageRef.get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
             // We don't include the current page to be removed
               if(doc.id != id) {
-                var pagesRef = db.collection("pages").doc(doc.id);
+                var nonFrontpage = pageRef.doc(doc.id);
 
-                return pagesRef.update({
+                return nonFrontpage.update({
                     featured: false
                 });
               }
@@ -133,17 +135,17 @@ export default {
       });
 
       // Update current page to be featured
-      db.collection("pages").doc(id).update({
+      pageRef.doc(id).update({
         featured: true
       });
     },
     deletePage(id) {
-      db.collection("pages").doc(id).delete();
+      pageRef.doc(id).delete();
     }
   },
   firestore() {
     return {
-      pages: db.collection("pages")
+      pages: pageRef
     }
   }
 }
