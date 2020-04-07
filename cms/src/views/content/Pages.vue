@@ -35,7 +35,8 @@
                 {{ page.id }}
               </div>
               <div class="page-published">
-                <span v-bind:class="page.published"></span>
+                <span v-if="page.published === false" class="false"></span>
+                <span v-if="page.published === true" class="true"></span>
               </div>
               <div class="page-title">
                 {{ page.title }}
@@ -72,8 +73,7 @@ export default {
         let ref = db.collection("pages").orderBy("id", "desc");
         console.log(ref);
 
-
-        // Create new entry in Firebase with dummy data
+        // Create new entry in Firebase with template data
 
         // Redirect user to new page
     }
