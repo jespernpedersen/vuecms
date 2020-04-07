@@ -5,16 +5,16 @@
             <unicon name="layer-group" />
             <span>Content</span>
         </li>
-        <li>
+        <li class="disabled">
             <unicon name="images" />
             <span>Media Library</span>
         </li>
         
-        <li v-on:click="menuview = 'user-menu'">
+        <li class="disabled" v-on:click="menuview = 'user-menu'">
             <unicon name="users-alt" />
             <span>Users</span>
         </li>
-        <li>
+        <li class="disabled">
             <unicon name="cog" />
             <span>Settings</span>
         </li>
@@ -28,35 +28,36 @@
                 <span>Pages</span>
             </router-link>
         </li>
-        <li>
+        <li class="disabled">
             <router-link to="/management/content/blocks">
                 <unicon name="cube" />
                 <span>Blocks</span>               
             </router-link>
         </li>
-        <li>
-            <router-link to="/management/content/banner">
-                <unicon name="comment-alt-exclamation" />
-                <span>Status Banner</span>               
-            </router-link>
-        </li>
-        <li>
+        
+        <li class="disabled">
             <router-link to="/management/content/menu">
                 <unicon name="list-ul" />
                 <span>Menu Management</span>               
+            </router-link>
+        </li>
+        <li class="disabled">
+            <router-link to="/management/content/banner">
+                <unicon name="comment-alt-exclamation" />
+                <span>Status Banner</span>               
             </router-link>
         </li>
     </ul>
     
     <!-- View for User Menu's Submenu -->
     <ul class="user-menu level-second" v-if="menuview === 'user-menu'">
-        <li>
+        <li class="disabled">
             <router-link to="/management/people/customers">
                 <unicon name="bitcoin-circle" />
                 <span>Customers</span>
             </router-link>
         </li>
-        <li>
+        <li class="disabled">
             <router-link to="/management/people/accounts">
                 <unicon name="user-square" />
                 <span>Accounts</span>               
@@ -163,6 +164,10 @@ a {
 .primary-cms-menu .level-second li .router-link-active {
     background-color: rgba(255, 255, 255, 0.15);
 
+}
+
+.disabled {
+    opacity: 0.3;
 }
 
 
