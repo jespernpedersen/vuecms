@@ -38,8 +38,8 @@
                 {{ page.id }}
               </div>
               <div class="page-published">
-                <span v-if="page.published === false" class="false"></span>
-                <span v-if="page.published === true" class="true"></span>
+                <span v-if="page.published === false" class="false" @click="togglePublish(page['.key'], page.published)"></span>
+                <span v-if="page.published === true" class="true" @click="togglePublish(page['.key'], page.published)"></span>
               </div>
               <div class="page-title">
                 {{ page.title }}
@@ -103,6 +103,21 @@ export default {
         // Create new entry in Firebase with template data
 
         // Redirect user to new page
+    },
+    togglePublish(id, state) {
+      if(state == false) {
+        db.collection("pages").doc(id).update({
+          published: true
+        })
+      }
+      else if(state == true) {
+        db.collection("pages").doc(id).update({
+          published: false
+        })
+      }
+      else {
+        alert("Something went wrong. Could not read published state of page");
+      }
     },
     assignFrontpage(id) {
       // Remove all others as frontpage
