@@ -49,7 +49,7 @@ export default {
   display: flex;
   flex-direction: column;
 }
-button {
+button.add {
   background-color: green;
   color: #FFF;
   border: none;

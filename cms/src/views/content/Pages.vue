@@ -3,7 +3,7 @@
     <Menu></Menu>
     <div class="content">
     
-        <button @click="newPage()">Add New Page</button>
+        <button class="add" @click="newPage()">Add New Page</button>
         <h1>Pages</h1>
         <div class="v-table">
           <div class="table-header">
@@ -53,6 +53,7 @@
               </div>
               <div class="page-edit">
                 <a v-bind:href="'/management/content/pages/' + page.id">Edit</a>
+                <button class="delete" @click="deletePage(page['.key'])">Delete</button>
               </div>
           </section>
         </div>
@@ -140,7 +141,7 @@ export default {
       });
     },
     deletePage(id) {
-
+      db.collection("pages").doc(id).delete();
     }
   },
   firestore() {
