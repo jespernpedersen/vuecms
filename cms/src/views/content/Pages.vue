@@ -99,10 +99,6 @@ export default {
               "slug": "placeholder",
               "title": "Placeholder title"
             })
-            console.log(newPageId);
-
-            // Redirect to new page
-            this.$router.go("/management/content/pages/" + newPageId)
           })
         });
     },
