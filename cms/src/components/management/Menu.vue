@@ -98,6 +98,8 @@ a {
     height: 100vh;
     flex-shrink: 0;
     display: flex;
+    position: fixed;
+    top: 35px;
 }
 
 .primary-cms-menu .level-first {

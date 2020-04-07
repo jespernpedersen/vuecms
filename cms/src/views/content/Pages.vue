@@ -151,13 +151,16 @@ export default {
 
 <style>
     .pages-view {
-      min-height: calc(100vh - 35px);
+      min-height: calc(100vh);
       display: flex;
     }
     .content {
         flex: 1 0 auto;
         background-color: #ebebeb;
-        padding: 15px 30px;
+        padding-left: 350px;
+        padding-top: 50px;
+        padding-right: 30px;
+        min-height: 100%;
     }
 
     h1 {

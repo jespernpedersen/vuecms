@@ -2,6 +2,8 @@
   <div class="pages-view">
     <Menu></Menu>
     <div class="content">
+        <!--Temp  -->
+        <header>Header Block</header>
         <div class="field">
             <label>Title</label>
             <input class="title"
@@ -23,6 +25,7 @@
                 @keydown.enter="editField('content')"
             ></textarea>
         </div>
+        <footer>Footer Block</footer>
     </div>
   </div>
 </template>
@@ -110,7 +113,9 @@ export default {
     .content {
         flex: 1 0 auto;
         background-color: #ebebeb;
-        padding: 15px 30px;
+        padding-left: 350px;
+        padding-top: 50px;
+        padding-right: 30px;
     }
 
     h1 {

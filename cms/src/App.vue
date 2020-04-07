@@ -27,6 +27,8 @@
   background-color: #222;
   color: #FFF;
   text-align: left;
+  position: fixed;
+  width: 100%;
 
   a {
     color: inherit;
