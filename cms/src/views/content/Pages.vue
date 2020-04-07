@@ -75,19 +75,36 @@ export default {
     }
   },
   methods: {
-    newPage() {
-        // Get newest ID from firebase
-        let ref = db.collection("pages").orderBy("id", "desc").limit(1);
-        console.log(ref['.key']);
+    async newPage() {
+        // Get newest ID from firebase and increment by one
+        db.collection("pages").orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            // New data
+
+            // We need to set the id to be an integer as we get it as an string from firebase
+            let newPageId = Number(doc.id) + 1;
+
+            // However the id for ref still needs to be a string
+            let newPageRef = String(newPageId);
+
+            // Firebase Call
+            db.collection("pages").doc(newPageRef).set({
+              "id": newPageId,
+              "content": "This is a placeholder",
+              "featured": false,
+              "published": false,
+              "slug": "placeholder",
+              "title": "Placeholder title"
+            })
+            console.log(newPageId);
+          })
+        });
 
         // Create new entry in Firebase with template data
 
         // Redirect user to new page
     },
-    async assignFrontpage(id) {
-      // Get ID
-      console.log(id);
-
+    assignFrontpage(id) {
       // Remove all others as frontpage
       db.collection("pages").get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
@@ -106,6 +123,9 @@ export default {
       db.collection("pages").doc(id).update({
         featured: true
       });
+    },
+    deletePage(id) {
+
     }
   },
   firestore() {
