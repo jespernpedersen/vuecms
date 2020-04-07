@@ -37,9 +37,11 @@
               <div class="page-id">
                 {{ page.id }}
               </div>
-              <div class="page-published">
-                <span v-if="page.published === false" class="false" @click="togglePublish(page['.key'], page.published)"></span>
-                <span v-if="page.published === true" class="true" @click="togglePublish(page['.key'], page.published)"></span>
+              <div class="page-published" v-if="page.published === false" @click="togglePublish(page['.key'], page.published)">
+                <span class="false"></span>
+              </div>
+              <div class="page-published" v-if="page.published === true" @click="togglePublish(page['.key'], page.published)">
+                <span class="true"></span>
               </div>
               <div class="page-title">
                 {{ page.title }}
@@ -98,12 +100,11 @@ export default {
               "title": "Placeholder title"
             })
             console.log(newPageId);
+
+            // Redirect to new page
+            this.$router.go("/management/content/pages/" + newPageId)
           })
         });
-
-        // Create new entry in Firebase with template data
-
-        // Redirect user to new page
     },
     togglePublish(id, state) {
       if(state == false) {
@@ -150,29 +151,6 @@ export default {
     }
   }
 }
-/*
-// @ is an alias to /src
-import Menu from '@/components/management/Menu.vue'
-import db from '../../firebase/db.js'
-
-let pagesRef = db.collection('pages').doc("0");
-
-
-export default {
-  name: 'Management',
-  components: {
-    Menu
-  },
-  data () {
-    return {
-      pages: [],
-    }
-  },
-  firebase: {
-    pages: pagesRef
-  }
-}
-*/
 </script>
 
 <style>
@@ -263,5 +241,25 @@ export default {
 
     .v-table .row:not(:last-child) {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+
+    .page-edit {
+      display: grid;
+      grid-template-columns: auto auto;
+      grid-gap: 5px;
+    }
+
+    .page-edit a, 
+    .page-edit button {
+      color: inherit;
+      text-decoration: none;
+      background-image: none;
+      border: none;
+      font-size: 14px;
+      border: 1px solid #000;
+      padding: 5px;
+      display: inline-block;
+      background-color: #FFF;
     }
 </style>
