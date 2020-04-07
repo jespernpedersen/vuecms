@@ -84,22 +84,28 @@ export default {
 
         // Redirect user to new page
     },
-    assignFrontpage(id) {
+    async assignFrontpage(id) {
       // Get ID
       console.log(id);
 
       // Remove all others as frontpage
       db.collection("pages").get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
-              var pagesRef = db.collection("pages").doc(doc.id);
+            // We don't include the current page to be removed
+              if(doc.id != id) {
+                var pagesRef = db.collection("pages").doc(doc.id);
 
-              return pagesRef.update({
-                  featured: false
-              });
+                return pagesRef.update({
+                    featured: false
+                });
+              }
           });
       });
 
-      // Update database
+      // Update current page to be featured
+      db.collection("pages").doc(id).update({
+        featured: true
+      });
     }
   },
   firestore() {
@@ -194,7 +200,7 @@ export default {
       min-width: 10%;
     }
 
-    span {
+    .v-table span {
       width: 10px;
       height: 10px;
       background-color: black;

@@ -4,8 +4,8 @@
       Frontend Header
     </header>
     <main>
-      <h1>{{ page.title }}</h1>
-      <p>{{ page.content }}</p>
+      <h1 class="title">{{ page[0].title }}</h1>
+      <p v-if="page[0].content" class="description">{{ page[0].content }}</p>
     </main>
     <footer>
       Frontend Footer
@@ -17,6 +17,13 @@
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import { db } from '../firebase/db.js'
+
+
+var pageRef = db.collection("pages")
+
+var query = pageRef.where("featured", "==", true);
+
+// let query = db.collection("pages").doc("0")
 
 export default {
   name: 'Home',
@@ -30,7 +37,7 @@ export default {
   },
   firestore() {
     return {
-      page: db.collection("pages").doc("0"),
+      page: query,
     }
   }
 }
@@ -62,9 +69,20 @@ header {
   color: #FFF;
 }
 
+.title {
+  text-align: center;
+  background-color: #ccc;
+  padding: 20px 0;
+  color: #222;
+}
+
+.description {
+  background-color: lightblue;
+  padding: 20px 0;
+}
+
 main {
   background-color: #ebebeb;
-  padding: 30px 0;
   flex: 1 0 auto;
 }
 
