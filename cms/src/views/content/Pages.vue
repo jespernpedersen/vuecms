@@ -23,6 +23,9 @@
             <div class="page-slug">
               Page Slug
             </div>
+            <div class="page-featured">
+              Frontpage
+            </div>
             <div class="page-actions">
               Actions
             </div>
@@ -43,6 +46,10 @@
               </div>
               <div class="page-slug">
                 {{ page.slug }}
+              </div>
+              <div class="page-featured">
+                <span v-if="page.featured === false" class="false"  @click="assignFrontpage(page['.key'])"></span>
+                <span v-if="page.featured === true" class="true"></span>
               </div>
               <div class="page-edit">
                 <a v-bind:href="'/management/content/pages/' + page.id">Edit</a>
@@ -70,12 +77,29 @@ export default {
   methods: {
     newPage() {
         // Get newest ID from firebase
-        let ref = db.collection("pages").orderBy("id", "desc");
-        console.log(ref);
+        let ref = db.collection("pages").orderBy("id", "desc").limit(1);
+        console.log(ref['.key']);
 
         // Create new entry in Firebase with template data
 
         // Redirect user to new page
+    },
+    assignFrontpage(id) {
+      // Get ID
+      console.log(id);
+
+      // Remove all others as frontpage
+      db.collection("pages").get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+              var pagesRef = db.collection("pages").doc(doc.id);
+
+              return pagesRef.update({
+                  featured: false
+              });
+          });
+      });
+
+      // Update database
     }
   },
   firestore() {
@@ -170,7 +194,7 @@ export default {
       min-width: 10%;
     }
 
-    .page-published span {
+    span {
       width: 10px;
       height: 10px;
       background-color: black;
@@ -178,11 +202,15 @@ export default {
       display: inline-block;
     }
 
-    .page-published span.true {
+    .page-featured {
+      min-width: 10%;
+    }
+
+    span.true {
       background-color: green;
     }
 
-    .page-published span.false {
+    span.false {
       background-color: red;
     }
     

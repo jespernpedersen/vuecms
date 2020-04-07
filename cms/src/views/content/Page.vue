@@ -6,7 +6,7 @@
             <label>Title</label>
             <input class="title"
             v-model="page.title"
-            @keydown.enter="editField('title')"
+            @keydown.enter="editField('title', this)"
             />
         </div>
         <div class="field">
@@ -44,11 +44,12 @@ export default {
     }
   },
   methods: {
-      editField(field) {
-        if(field == "title") {
+      editField(fieldType, field) {
+        if(fieldType == "title") {
             db.collection("pages").doc(this.$router.app._route.params.id).update({
                 title: this.page.title
             })
+            console.log(field);
         }
         else {
             alert("Error. Could not find field");
