@@ -14,7 +14,7 @@
     <aside class="page-include-view">
     <h3>Page List</h3>
       <ul>
-        <li v-for="page in pages" :key="page['.key']">{{ page.title }}</li>
+        <li v-for="page in pages" :key="page['.key']" @click="addMenuItem(page, menus[0])">{{ page.title }}</li>
       </ul>
     </aside>
   </div>
@@ -90,6 +90,29 @@ export default {
     }
   },
   methods: {
+    async addMenuItem(page, menu) {
+      // Disclaimer: Placeholder that the menu chosen is first menu
+      let menuItemRef = menuRef.doc("0").collection("items");
+
+      // Get Last Menu ID and increment
+      menuItemRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          // Convert to integer so we can increment it
+          let newMenuItemId = Number(doc.id) + 1;
+          // Convert it to string so we can use it in Firebase
+          let newMenuItemRef = String(newMenuItemId);
+
+          console.log(newMenuItemRef);
+
+            // Update Database
+            menuItemRef.doc(newMenuItemRef).set({
+              "id": newMenuItemId,
+              "name": page.name
+            })
+        })
+      })
+
+    },
     async debug(item) {
       console.log(item);
     },
@@ -114,14 +137,14 @@ export default {
           })
         });
     },
-    async newMenuItem() {
-      // 
-    }
   },
   firestore() {    
     return {
       pages: pagesRef
     }
+  },
+  watch: {
+    // Subscribe to changes made to menu
   }
 }
 </script>
