@@ -5,14 +5,18 @@
         <h1>Menu</h1>
         <p>This is where I will edit menu and change its order</p>
         <section v-for="menu in menus" :key="menu['.key']" class="menu">
-          <div class="menu-id">{{ menu.id }}</div>
           <div class="menu-name">{{ menu.name }}</div>
           <ul v-for="item in menu.items">
-            <li><span class="debug">{{ item.id }}</span>{{ item.name }}</li>
+            <li><span class="debug"><strong>ID: </strong>{{ item.id }}</span><strong>Name: </strong>{{ item.name }}</li>
           </ul>
-          <button @click="debug(menu)">Debug</button>
         </section>
     </div>
+    <aside class="page-include-view">
+    <h3>Page List</h3>
+      <ul>
+        <li  v-for="page in pages" :key="page['.key']">{{ page.title }}</li>
+      </ul>
+    </aside>
   </div>
 </template>
 
@@ -21,9 +25,15 @@
 import Menu from '@/components/management/Menu.vue'
 import { db } from '../../firebase/db.js'
 
-let menuRef = db.collection("menus");
 
+// Get Menu Data
+let menuRef = db.collection("menus");
 let getMenus = [];
+
+// Get Page Data
+let pagesRef = db.collection("pages");
+
+
 
 // Function for querying all subcollections - this will be used to get every menu item inside multiple menus
 
@@ -75,7 +85,8 @@ export default {
   },
   data () {
     return {
-      menus: getMenus
+      menus: getMenus,
+      pages: []
     }
   },
   methods: {
@@ -107,12 +118,18 @@ export default {
       // 
     }
   },
-  firestore() {
+  firestore() {    
+    return {
+      pages: pagesRef
+    }
   }
 }
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
     .menu-management-view{
       min-height: calc(100vh);
       display: flex;
@@ -126,6 +143,38 @@ export default {
         min-height: 100%;
     }
 
+    aside.page-include-view {
+      width: 290px;
+      padding-top: 32px;
+      background-color: #333;
+      color: #FFF;
+      text-align: left;
+    }
+
+    aside.page-include-view h3 {
+      padding: 15px 30px;
+    }
+
+    aside.page-include-view ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      display: inline-block;
+    }
+
+    aside.page-include-view ul li {
+      width: 100%;
+      background-color: rgba(255,255,255,0.2);
+      padding: 15px 30px;
+      display: inline-block;
+    }
+
+    aside.page-include-view ul li:nth-of-type(odd) {
+      
+      background-color: rgba(255,255,255,0.4);
+    }
+
     .menu {
       margin: 30px 0;
       background-color: #CCC;
@@ -134,13 +183,12 @@ export default {
     }
 
     .debug {
-      background-color: white;
       padding: 3px;
       margin-right: 5px;
     }
 
     .menu ul {
-      margin-left: 30px;
+      margin-left: 20px;
     }
 
 
