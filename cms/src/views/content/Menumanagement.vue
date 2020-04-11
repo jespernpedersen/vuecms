@@ -5,15 +5,9 @@
         <h1>Menu</h1>
         <p>This is where I will edit menu and change its order</p>
         <section v-for="menu in menus" :key="menu['.key']" class="menu">
-          <div class="menu-id">{{ menu.id }}</div>
-          <div class="menu-name">{{ menu.name }}</div>
-          <ul v-for="item in singleMenu" class="menu-items">
-              <li> {{ item.name }} </li>
-              
-          </ul>
-          
-          
-        <button @click="debug(menu)">Debug</button>
+          <div class="menu-id">{{ menu[0].id }}</div>
+          <div class="menu-name">{{ menu[0].name }}</div>
+          <button @click="debug(menu)">Debug</button>
         </section>
     </div>
   </div>
@@ -24,29 +18,47 @@
 import Menu from '@/components/management/Menu.vue'
 import { db } from '../../firebase/db.js'
 
-let pageRef = db.collection("pages");
 let menuRef = db.collection("menus");
-let singleMenuRef = db.collection("menus").doc("0").collection("items");
 
-let menus = [];
+let getMenus = [];
 
 // Function for querying all subcollections - this will be used to get every menu item inside multiple menus
 // Get Collection
-menuRef.orderBy("id", "asc").get().then(function(querySnapshot) {
+menuRef.get().then(function(querySnapshot) {
   // Get Every First Level Documents (i.e. menus)
   querySnapshot.forEach(function(doc) {
+    // Get data
+    let menu = doc.data();
     // Main Collection
-    menus.push(doc);
+
+    let menuArray = [{
+      id: menu.id,
+      name: menu.name,
+      items: []
+    }]
+
+    getMenus.push(menuArray);
     // console.log(menus);
-    
+
+    /*
     // Sub Collections
     menuRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
       let this_menu = doc.id;
       subquerySnapshot.forEach(function(subdoc) {
-          // menus.this_menu.push(subdoc);
-          console.log(this_menu);
+        // Get item data
+        let item = subdoc.data();
+
+        // Construct
+        let itemsArray = [{
+          id: item.id,
+          name: item.name
+        }]
+
+        console.log(itemsArray);
+
       });
     });
+    */
   });
 });
 
@@ -57,13 +69,12 @@ export default {
   },
   data () {
     return {
-      pages: [],
-      menus: [],
-      singleMenu: []
+      menus: getMenus
     }
   },
   methods: {
     async debug(item) {
+      console.log(item);
     },
     async newMenu() {
         // Get newest ID from firebase and increment by one
@@ -91,11 +102,6 @@ export default {
     }
   },
   firestore() {
-    return {
-      pages: pageRef,
-      menus: menuRef,
-      singleMenu: singleMenuRef
-    }
   }
 }
 </script>
