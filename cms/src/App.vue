@@ -29,6 +29,7 @@
   text-align: left;
   position: fixed;
   width: 100%;
+  top: 0;
 
   a {
     color: inherit;

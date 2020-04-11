@@ -14,7 +14,7 @@
     <aside class="page-include-view">
     <h3>Page List</h3>
       <ul>
-        <li  v-for="page in pages" :key="page['.key']">{{ page.title }}</li>
+        <li v-for="page in pages" :key="page['.key']">{{ page.title }}</li>
       </ul>
     </aside>
   </div>
@@ -31,7 +31,7 @@ let menuRef = db.collection("menus");
 let getMenus = [];
 
 // Get Page Data
-let pagesRef = db.collection("pages");
+let pagesRef = db.collection("pages").where("published", "==", true);
 
 
 
@@ -143,6 +143,30 @@ export default {
         min-height: 100%;
     }
 
+    .menu {
+      margin: 30px 0;
+      background-color: #CCC;
+      text-align: left;
+      padding: 30px;
+    }
+
+    .debug {
+      padding: 3px;
+      margin-right: 5px;
+    }
+
+    .menu ul {
+      margin-left: 20px;
+    }
+
+
+    h1,
+    h3,
+    p {
+        text-align: left;
+    }
+
+    /* Page List, should maybe its own component */
     aside.page-include-view {
       width: 290px;
       padding-top: 32px;
@@ -171,30 +195,6 @@ export default {
     }
 
     aside.page-include-view ul li:nth-of-type(odd) {
-      
       background-color: rgba(255,255,255,0.4);
-    }
-
-    .menu {
-      margin: 30px 0;
-      background-color: #CCC;
-      text-align: left;
-      padding: 30px;
-    }
-
-    .debug {
-      padding: 3px;
-      margin-right: 5px;
-    }
-
-    .menu ul {
-      margin-left: 20px;
-    }
-
-
-    h1,
-    h3,
-    p {
-        text-align: left;
     }
 </style>

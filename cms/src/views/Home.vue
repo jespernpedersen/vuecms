@@ -3,9 +3,16 @@
     <header>
       Frontend Header
     </header>
+    <nav>
+      <div class="container">
+      <ul>
+        <li v-for="item in menuitems">
+          {{ item.name }}
+        </li>
+      </ul>
+      </div>
+    </nav>
     <main>
-      <h1 class="title">{{ page[0].title }}</h1>
-      <p v-if="page[0].content" class="description">{{ page[0].content }}</p>
     </main>
     <footer>
       Frontend Footer
@@ -19,11 +26,12 @@ import HelloWorld from '@/components/HelloWorld.vue'
 import { db } from '../firebase/db.js'
 
 
+// Find frontpage page
 var pageRef = db.collection("pages")
-
 var query = pageRef.where("featured", "==", true);
 
-// let query = db.collection("pages").doc("0")
+// Get Menu Items
+var menuItemsRef = db.collection("menus").doc("0").collection("items");
 
 export default {
   name: 'Home',
@@ -33,11 +41,13 @@ export default {
   data () {
     return {
       page: [],
+      menus: []
     }
   },
   firestore() {
     return {
       page: query,
+      menuitems: menuItemsRef
     }
   }
 }
@@ -86,10 +96,43 @@ main {
   flex: 1 0 auto;
 }
 
+nav {
+  padding: 20px 0;
+}
+
+nav ul {
+  display: flex;
+  color: #222;
+  width: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  
+  border: 1px solid #000;
+  padding: 15px;
+}
+
+.home {
+  margin-top: 35px;
+}
+
+nav ul li:not(:last-of-type) {
+  margin-right: 20px;
+}
+
 footer {
   background-color: #222;
   padding: 30px 0;
   color: #FFF;
+}
+
+.container {
+  max-width: 1199px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 </style>
