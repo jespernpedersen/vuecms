@@ -5,8 +5,11 @@
         <h1>Menu</h1>
         <p>This is where I will edit menu and change its order</p>
         <section v-for="menu in menus" :key="menu['.key']" class="menu">
-          <div class="menu-id">{{ menu[0].id }}</div>
-          <div class="menu-name">{{ menu[0].name }}</div>
+          <div class="menu-id">{{ menu.id }}</div>
+          <div class="menu-name">{{ menu.name }}</div>
+          <ul v-for="item in menu.items">
+            <li><span class="debug">{{ item.id }}</span>{{ item.name }}</li>
+          </ul>
           <button @click="debug(menu)">Debug</button>
         </section>
     </div>
@@ -23,7 +26,8 @@ let menuRef = db.collection("menus");
 let getMenus = [];
 
 // Function for querying all subcollections - this will be used to get every menu item inside multiple menus
-// Get Collection
+
+// All our menus
 menuRef.get().then(function(querySnapshot) {
   // Get Every First Level Documents (i.e. menus)
   querySnapshot.forEach(function(doc) {
@@ -31,34 +35,36 @@ menuRef.get().then(function(querySnapshot) {
     let menu = doc.data();
     // Main Collection
 
-    let menuArray = [{
+    let menuArray = {
       id: menu.id,
       name: menu.name,
+      // We start with empty items, and later add them down
       items: []
-    }]
+    }
 
+    // Add menu to object
     getMenus.push(menuArray);
-    // console.log(menus);
 
-    /*
-    // Sub Collections
+    // Menu Items
     menuRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
+      // Set ID of the menu's items we will sort by
       let this_menu = doc.id;
+
+      // For every menu item, we push them to our object configured by our menu id
       subquerySnapshot.forEach(function(subdoc) {
         // Get item data
         let item = subdoc.data();
 
-        // Construct
-        let itemsArray = [{
+        // Construct data
+        let itemsArray = {
           id: item.id,
           name: item.name
-        }]
+        }
 
-        console.log(itemsArray);
-
+        // Add menu items to object
+        getMenus[doc.id]['items'].push(itemsArray);
       });
     });
-    */
   });
 });
 
@@ -125,6 +131,12 @@ export default {
       background-color: #CCC;
       text-align: left;
       padding: 30px;
+    }
+
+    .debug {
+      background-color: white;
+      padding: 3px;
+      margin-right: 5px;
     }
 
     .menu ul {
