@@ -5,7 +5,7 @@
         <h1>Menu</h1>
         <p>This is where I will edit menu and change its order</p>
         <section v-for="menu in menus" :key="menu['.key']" class="menu">
-          <div class="menu-name">{{ menu.name }}</div>
+          <h4 class="menu-name">{{ menu.name }}</h4>
           <ul v-for="item in menu.items">
             <li><span class="debug"><strong>ID: </strong>{{ item.id }}</span><strong>Name: </strong>{{ item.name }}</li>
           </ul>
