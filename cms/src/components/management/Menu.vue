@@ -28,17 +28,16 @@
                 <span>Pages</span>
             </router-link>
         </li>
+        <li>
+            <router-link to="/management/content/menu">
+                <unicon name="list-ul" />
+                <span>Menu Management</span>               
+            </router-link>
+        </li>
         <li class="disabled">
             <router-link to="/management/content/blocks">
                 <unicon name="cube" />
                 <span>Blocks</span>               
-            </router-link>
-        </li>
-        
-        <li class="disabled">
-            <router-link to="/management/content/menu">
-                <unicon name="list-ul" />
-                <span>Menu Management</span>               
             </router-link>
         </li>
         <li class="disabled">

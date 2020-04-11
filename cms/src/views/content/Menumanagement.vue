@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="menu-management-view">
     <Menu></Menu>
     <div class="content">
         <h1>Menu</h1>
