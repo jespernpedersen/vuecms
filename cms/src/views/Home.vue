@@ -14,8 +14,11 @@
       </ul>
       </div>
     </nav>
-    <main>
-      <h1 v-for="page in pages">{{ page.title }}</h1>
+    <main v-for="page in pages">
+      <div class="container">
+        <h1>{{ page.title }}</h1>
+        <p>{{ page.content }}</p>
+      </div>
     </main>
     <footer>
       Frontend Footer
@@ -136,7 +139,13 @@ export default {
 }
 
 .home h1 {
-  text-align: center;
+  text-align: left;
+}
+
+.home main p {
+  text-align: left;
+  margin-top: 10px;
+  font-size: 18px;
 }
 
 </style>
