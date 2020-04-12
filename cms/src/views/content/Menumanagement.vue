@@ -208,7 +208,7 @@ export default {
     }
 
     .menu:not(:first-child) {
-      margin-left: 15px;
+      margin-left: 23px;
     }
  
     .menu h4 {

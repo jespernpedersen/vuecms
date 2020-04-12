@@ -7,7 +7,9 @@
       <div class="container">
       <ul>
         <li v-for="item in menuitems">
-          {{ item.name }}
+          <a v-bind:href="item.url" :title='"Read more about " + item.name'>
+            {{ item.name }}
+          </a>
         </li>
       </ul>
       </div>
