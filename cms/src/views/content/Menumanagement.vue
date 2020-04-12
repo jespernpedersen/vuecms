@@ -21,11 +21,11 @@
                 <div class="expanded-item">
                   <div class="menu-option">
                     <label>Menu Title</label>
-                    <input v-model="item.name" placeholder="Name of the menu item" />
+                    <input v-model="item.name" placeholder="Name of the menu item" @keydown.enter="editMenuItem(menu.id, item.id, 'name', item.name)"/>
                   </div>
                   <div class="menu-option">
                     <label>URL-shortlink</label>
-                    <input v-model="item.url" placeholder="This is the link that will be shown in the address bar" />
+                    <input v-model="item.url" placeholder="This is the link that will be shown in the address bar"  @keydown.enter="editMenuItem(menu.id, item.id, 'url', item.url)" />
                   </div>
                 </div>
               </li>
@@ -138,7 +138,30 @@ export default {
             })
         })
       })
+    },
+    async editMenuItem(menuid, itemid, fieldtype, fieldvalue) {
+      // Convert ids of menus to strings for usage in Firebase
+      let menu_id = String(menuid)
+      let item_id = String(itemid)
 
+      // Only allow these field types, this avoids people manipulating our database
+      if(fieldtype == "name") {
+        db.collection("menus").doc(menu_id).collection("items").doc(item_id).update({
+          name: fieldvalue
+        })
+      }
+      else if(fieldtype == "url") {
+        db.collection("menus").doc(menu_id).collection("items").doc(item_id).update({
+          url: fieldvalue
+        })
+      }
+      /*
+      console.log(" "); 
+      console.log("Menu ID: " + menuid)
+      console.log("Item ID: " + itemid)
+      console.log("Field Type: " + fieldtype)
+      console.log("Field Value: " + fieldvalue)
+      */
     },
     async debug(item) {
       console.log(item);
