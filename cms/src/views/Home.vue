@@ -91,7 +91,9 @@ export default {
 }
 
 .home nav ul {
-  display: flex;
+  
+    grid-template-columns: auto auto auto auto auto;
+    grid-gap: 20px;
   color: #222;
   width: 100%;
   list-style: none;
@@ -100,9 +102,9 @@ export default {
 }
 
 .home nav ul li {
-  
   border: 1px solid #000;
   padding: 15px;
+  width: 100%;
 }
 
 .home {
