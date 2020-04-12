@@ -102,12 +102,10 @@ export default {
           // Convert it to string so we can use it in Firebase
           let newMenuItemRef = String(newMenuItemId);
 
-          console.log(newMenuItemRef);
-
             // Update Database
             menuItemRef.doc(newMenuItemRef).set({
               "id": newMenuItemId,
-              "name": page.name
+              "name": page.title
             })
         })
       })
