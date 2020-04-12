@@ -15,6 +15,7 @@
       </div>
     </nav>
     <main>
+      <h1 v-for="page in pages">{{ page.title }}</h1>
     </main>
     <footer>
       Frontend Footer
@@ -32,8 +33,12 @@ import { db } from '../firebase/db.js'
 var pageRef = db.collection("pages")
 var query = pageRef.where("featured", "==", true);
 
+let page = [];
+
 // Get Menu Items
 var menuItemsRef = db.collection("menus").doc("0").collection("items");
+
+
 
 export default {
   name: 'Home',
@@ -42,13 +47,13 @@ export default {
   },
   data () {
     return {
-      page: [],
+      pages: [],
       menus: []
     }
   },
   firestore() {
     return {
-      page: query,
+      pages: query,
       menuitems: menuItemsRef
     }
   }

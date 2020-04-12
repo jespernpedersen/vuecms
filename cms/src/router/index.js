@@ -11,7 +11,11 @@ const routes = [{
         component: Home
     },
     // Frontend Routes (needs to be dynamic)
-
+    {
+        path: '/:page',
+        name: 'Page',
+        component: Home
+    },
 
 
     // Backend Routers
