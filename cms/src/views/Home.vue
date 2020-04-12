@@ -91,9 +91,9 @@ export default {
 }
 
 .home nav ul {
-  
-    grid-template-columns: auto auto auto auto auto;
-    grid-gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
   color: #222;
   width: 100%;
   list-style: none;
