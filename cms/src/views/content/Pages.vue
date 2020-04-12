@@ -175,7 +175,7 @@ export default {
         min-height: 100%;
     }
 
-    h1 {
+    .pages-view h1 {
         text-align: left;
     }
 

@@ -185,7 +185,7 @@ export default {
       min-height: calc(100vh);
       display: flex;
     }
-    .content {
+    .menu-management-view .content {
         flex: 1 auto;
         background-color: #ebebeb;
         padding-left: 350px;
@@ -194,44 +194,44 @@ export default {
         min-height: 100%;
     }
 
-    .all-menu {
+    .menu-management-view  .all-menu {
       display: flex;
       flex-wrap: wrap;
       width: 100%;
     }
 
-    .menu {
+    .menu-management-view .menu {
       margin: 30px 0;
       background-color: #CCC;
       text-align: left;
       width: calc(33% - 10px);
     }
 
-    .menu:not(:first-child) {
+    .menu-management-view .menu:not(:first-child) {
       margin-left: 23px;
     }
  
-    .menu h4 {
+    .menu-management-view .menu h4 {
       width: 100%;
       background-color: rgba(255, 255, 255, 0.3);
       padding: 20px;
     }
 
-    .menu ul {
+    .menu-management-view .menu ul {
       padding: 15px;
       list-style: none;
     }
 
-    input {
+    .menu-management-view input {
       padding: 10px;
       margin-right: 10px;
       min-width: 250px;
     }
-    form {
+    .menu-management-view form {
       text-align: left;
     }
 
-    .menu ul li {
+    .menu-management-view .menu ul li {
       background-color: rgba(255, 255, 255, 0.5);
       border: 1px solid #CCC;
       width: 100%;
@@ -243,20 +243,20 @@ export default {
       padding: 0;
     }
 
-    strong {
+    .menu-management-view strong {
       margin-right: 5px;
     }
 
-    .menu ul li .menu-option:not(:first-child) {
+    .menu-management-view .menu ul li .menu-option:not(:first-child) {
       margin-top: 10px;
     }
 
-    .menu ul li.expanded {
+    .menu-management-view .menu ul li.expanded {
       padding-bottom: 170px;
       transition: 0.3s ease-in-out;
     }
 
-    .menu label {
+    .menu-management-view .menu label {
       font-style: italic;
       font-size: 14px;
       margin-bottom: 5px;
@@ -264,11 +264,11 @@ export default {
       width: 100%;
     }
 
-    .menu ul li input {
+    .menu-management-view .menu ul li input {
       width: 100%;
     }
 
-    .expanded-item {
+    .menu-management-view .expanded-item {
       width: 100%;
       position: absolute;
       top: 40px;
@@ -276,7 +276,7 @@ export default {
       padding: 10px;
     }
 
-    .menu-item-content {
+    .menu-management-view .menu-item-content {
       float: left;
       display: flex;
       align-items: center;
@@ -284,24 +284,20 @@ export default {
       padding: 10px;
     }
 
-    .menu ul li .unicon {
+    .menu-management-view .menu ul li .unicon {
       position: absolute;
       right: 5px;
       top: 7px;
     }
 
-    .debug {
+    .menu-management-view .debug {
       padding: 3px;
       margin-right: 5px;
     }
 
-    .menu ul {
-    }
-
-
-    h1,
-    h3,
-    p {
+    .menu-management-view h1,
+    .menu-management-view h3,
+    .menu-management-view p {
         text-align: left;
     }
 
@@ -333,7 +329,7 @@ export default {
       display: inline-block;
     }
     
-      button.add {
+    .menu-management-view button.add {
         background-color: green;
         color: #FFF;
         border: none;

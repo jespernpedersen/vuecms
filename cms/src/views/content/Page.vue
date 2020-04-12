@@ -118,7 +118,7 @@ export default {
         padding-right: 30px;
     }
 
-    h1 {
+    .pages-view h1 {
         text-align: left;
     }
 
