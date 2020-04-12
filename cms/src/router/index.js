@@ -68,7 +68,7 @@ const routes = [{
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
-    routes: [..._routes]
+    routes
 })
 
 export default router
