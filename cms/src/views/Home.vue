@@ -59,15 +59,6 @@ export default {
   display: flex;
   flex-direction: column;
 }
-button.add {
-  background-color: green;
-  color: #FFF;
-  border: none;
-  padding: 12px 20px;
-  cursor: pointer;
-  float: right;
-  margin-top: 10px;
-}
 
 header, main, footer {
   width: 100%;
@@ -96,11 +87,11 @@ main {
   flex: 1 0 auto;
 }
 
-nav {
+.home nav {
   padding: 20px 0;
 }
 
-nav ul {
+.home nav ul {
   display: flex;
   color: #222;
   width: 100%;

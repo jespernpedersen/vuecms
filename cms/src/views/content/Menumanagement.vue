@@ -4,15 +4,21 @@
     <div class="content">
         <h1>Menu</h1>
         <p>This is where I will edit menu and change its order</p>
-        <section v-for="menu in menus" :key="menu['.key']" class="menu">
-          <h4 class="menu-name">{{ menu.name }}</h4>
-          <ul v-for="item in menu.items">
-            <li><span class="debug"><strong>ID: </strong>{{ item.id }}</span><strong>Name: </strong>{{ item.name }}</li>
-          </ul>
-        </section>
+        <form v-on:submit.prevent="newMenu(newMenuText)">
+          <input v-model="newMenuText" placeholder="Type in the name for your new menu" /> 
+          <button class="add"> Add New Menu</button>
+        </form>
+        <nav class="all-menu">
+          <nav v-for="menu in menus" :key="menu['.key']" class="menu">
+            <h4 class="menu-name">{{ menu.name }}</h4>
+            <ul>
+              <li  v-for="item in menu.items"><span class="debug"><strong>ID: </strong>{{ item.id }}</span><strong>Name: </strong>{{ item.name }}</li>
+            </ul>
+          </nav>
+        </nav>
     </div>
     <aside class="page-include-view">
-    <h3>Page List</h3>
+    <h3>Pages</h3>
       <ul>
         <li v-for="page in pages" :key="page['.key']" @click="addMenuItem(page, menus[0])">{{ page.title }}</li>
       </ul>
@@ -86,7 +92,8 @@ export default {
   data () {
     return {
       menus: getMenus,
-      pages: []
+      pages: [],
+      newMenuText: null
     }
   },
   methods: {
@@ -114,7 +121,8 @@ export default {
     async debug(item) {
       console.log(item);
     },
-    async newMenu() {
+    async newMenu(newMenuText) {
+        console.log(newMenuText);
         // Get newest ID from firebase and increment by one
         menuRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
@@ -129,7 +137,7 @@ export default {
             // Firebase Call
             menuRef.doc(newMenuRef).set({
               "id": newMenuId,
-              "name": "PH",
+              "name": newMenuText,
               "menu-slug": "PH"
             })
           })
@@ -156,7 +164,7 @@ export default {
       display: flex;
     }
     .content {
-        flex: 1 0 auto;
+        flex: 1 auto;
         background-color: #ebebeb;
         padding-left: 350px;
         padding-top: 50px;
@@ -164,11 +172,46 @@ export default {
         min-height: 100%;
     }
 
+    .all-menu {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
     .menu {
       margin: 30px 0;
       background-color: #CCC;
       text-align: left;
-      padding: 30px;
+      width: calc(50% - 15px);
+    }
+
+    .menu h4 {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.3);
+      padding: 20px;
+    }
+
+    .menu ul {
+      padding: 15px;
+      list-style: none;
+    }
+
+    input {
+      padding: 10px;
+      margin-right: 10px;
+      min-width: 250px;
+    }
+    form {
+      text-align: left;
+    }
+
+    .menu ul li {
+      background-color: rgba(255, 255, 255, 0.5);
+      padding: 10px;
+      border: 1px solid #CCC;
+      width: 100%;
+      display: inline-block;
     }
 
     .debug {
@@ -177,7 +220,6 @@ export default {
     }
 
     .menu ul {
-      margin-left: 20px;
     }
 
 
@@ -214,6 +256,16 @@ export default {
       padding: 15px 30px;
       display: inline-block;
     }
+    
+      button.add {
+        background-color: green;
+        color: #FFF;
+        border: none;
+        padding: 12px 20px;
+        cursor: pointer;
+        margin-top: 10px;
+        display: inline-block;
+      }
 
     aside.page-include-view ul li:nth-of-type(odd) {
       background-color: rgba(255,255,255,0.4);
