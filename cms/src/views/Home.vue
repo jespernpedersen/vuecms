@@ -19,7 +19,6 @@
     </main>
     <footer>
       Frontend Footer
-      <button @click="debug()">Debug</button>
     </footer>
   </div>
 </template>
@@ -107,8 +106,13 @@ export default {
   width: 100%;
 }
 
+.home nav ul li a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .home {
-  margin-top: 35px;
+  margin-top: 34px;
 }
 
 .home nav ul li:not(:last-of-type) {

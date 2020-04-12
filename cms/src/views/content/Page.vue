@@ -2,8 +2,6 @@
   <div class="pages-view">
     <Menu></Menu>
     <div class="content">
-        <!--Temp  -->
-        <header>Header Block</header>
         <div class="field">
             <label>Title</label>
             <input class="title"
@@ -25,7 +23,7 @@
                 @keydown.enter="editField('content')"
             ></textarea>
         </div>
-        <footer>Footer Block</footer>
+        
     </div>
   </div>
 </template>
@@ -209,12 +207,11 @@ export default {
     .field {
         display: block;
         text-align: left;
+        margin-bottom: 20px;
     }
 
     .field label {
-        vertical-align: middle;
-        margin-right: 20px;
-        min-width: 100px;
+        width: 100%;
         display: inline-block;
     }
 </style>

@@ -98,7 +98,7 @@ a {
     flex-shrink: 0;
     display: flex;
     position: fixed;
-    top: 35px;
+    top: 34px;
 }
 
 .primary-cms-menu .level-first {
