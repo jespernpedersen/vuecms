@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="page">
     <header>
       Frontend Header
     </header>
@@ -26,17 +26,28 @@
 
 <script>
 import { db } from '../firebase/db.js'
+
+
+// Find frontpage page
+var pageRef = db.collection("pages");
+
+
+var query = pageRef.where("featured", "==", true);
+
+let page = [];
+
 // Get Menu Items
 var menuItemsRef = db.collection("menus").doc("0").collection("items");
 
 export default {
-  name: 'Home',
+  name: 'Page',
   components: {
   },
   data () {
     return {
       pages: [],
-      menus: []
+      menus: [],
+      route: this.$route.params.page
     }
   },
   methods: {
@@ -45,7 +56,7 @@ export default {
   },
   firestore() {
     return {
-      pages: db.collection("pages").where("featured", "==", true),
+      pages: pageRef.where("slug", "==", this.$route.params.page),
       menuitems: menuItemsRef
     }
   }
@@ -53,44 +64,44 @@ export default {
 </script>
 
 <style>
-.home {
+.page {
   min-height: calc(100vh - 35px);
   display: flex;
   flex-direction: column;
 }
 
-.home header, main, footer {
+.page header, main, footer {
   width: 100%;
 }
 
-.home header {
+.page header {
   background-color: teal;
   padding: 30px 0;
   color: #FFF;
 }
 
-.home .title {
+.page .title {
   text-align: center;
   background-color: #ccc;
   padding: 20px 0;
   color: #222;
 }
 
-.home .description {
+.page .description {
   background-color: lightblue;
   padding: 20px 0;
 }
 
-.home main {
+.page main {
   background-color: #ebebeb;
   flex: 1 0 auto;
 }
 
-.home nav {
+.page nav {
   padding: 20px 0;
 }
 
-.home nav ul {
+.page nav ul {
   display: flex;
   color: #222;
   width: 100%;
@@ -99,21 +110,21 @@ export default {
   padding: 0;
 }
 
-.home nav ul li {
+.page nav ul li {
   
   border: 1px solid #000;
   padding: 15px;
 }
 
-.home {
+.page {
   margin-top: 35px;
 }
 
-.home nav ul li:not(:last-of-type) {
+.page nav ul li:not(:last-of-type) {
   margin-right: 20px;
 }
 
-.home footer {
+.page footer {
   background-color: #222;
   padding: 30px 0;
   color: #FFF;
