@@ -157,16 +157,16 @@ export default {
       display: flex;
     }
     
-button.add {
-  background-color: green;
-  color: #FFF;
-  border: none;
-  padding: 12px 20px;
-  cursor: pointer;
-  float: right;
-  margin-top: 10px;
-}
-    .content {
+    .pages-view button.add {
+      background-color: green;
+      color: #FFF;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      float: right;
+      margin-top: 10px;
+    }
+    .pages-view .content {
         flex: 1 0 auto;
         background-color: #ebebeb;
         padding-left: 350px;

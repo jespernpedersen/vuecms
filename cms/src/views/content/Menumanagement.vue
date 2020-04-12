@@ -25,7 +25,7 @@
                   </div>
                   <div class="menu-option">
                     <label>URL-shortlink</label>
-                    <input v-model="item.name" placeholder="This is the link that will be shown in the address bar" />
+                    <input v-model="item.url" placeholder="This is the link that will be shown in the address bar" />
                   </div>
                 </div>
               </li>
@@ -60,7 +60,7 @@ let pagesRef = db.collection("pages").where("published", "==", true);
 // Function for querying all subcollections - this will be used to get every menu item inside multiple menus
 
 // All our menus
-menuRef.get().then(function(querySnapshot) {
+menuRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
   // Get Every First Level Documents (i.e. menus)
   querySnapshot.forEach(function(doc) {
     // Get data
@@ -90,7 +90,8 @@ menuRef.get().then(function(querySnapshot) {
         // Construct data
         let itemsArray = {
           id: item.id,
-          name: item.name
+          name: item.name,
+          url: item.url
         }
 
         // Add menu items to object
@@ -132,7 +133,8 @@ export default {
             // Update Database
             menuItemRef.doc(newMenuItemRef).set({
               "id": newMenuItemId,
-              "name": page.title
+              "name": page.title,
+              "url": page.slug
             })
         })
       })
@@ -158,7 +160,6 @@ export default {
             menuRef.doc(newMenuRef).set({
               "id": newMenuId,
               "name": newMenuText,
-              "menu-slug": "PH",
               "items": []
             })
           })

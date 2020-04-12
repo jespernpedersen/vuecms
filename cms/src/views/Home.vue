@@ -60,29 +60,29 @@ export default {
   flex-direction: column;
 }
 
-header, main, footer {
+.home header, main, footer {
   width: 100%;
 }
 
-header {
+.home header {
   background-color: teal;
   padding: 30px 0;
   color: #FFF;
 }
 
-.title {
+.home .title {
   text-align: center;
   background-color: #ccc;
   padding: 20px 0;
   color: #222;
 }
 
-.description {
+.home .description {
   background-color: lightblue;
   padding: 20px 0;
 }
 
-main {
+.home main {
   background-color: #ebebeb;
   flex: 1 0 auto;
 }
@@ -100,7 +100,7 @@ main {
   padding: 0;
 }
 
-nav ul li {
+.home nav ul li {
   
   border: 1px solid #000;
   padding: 15px;
@@ -110,11 +110,11 @@ nav ul li {
   margin-top: 35px;
 }
 
-nav ul li:not(:last-of-type) {
+.home nav ul li:not(:last-of-type) {
   margin-right: 20px;
 }
 
-footer {
+.home footer {
   background-color: #222;
   padding: 30px 0;
   color: #FFF;
