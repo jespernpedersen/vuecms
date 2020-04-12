@@ -127,4 +127,12 @@ export default {
   margin-right: auto;
 }
 
+.home main {
+  padding: 30px;
+}
+
+.home h1 {
+  text-align: center;
+}
+
 </style>
