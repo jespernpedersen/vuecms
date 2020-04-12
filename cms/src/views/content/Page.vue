@@ -110,7 +110,7 @@ export default {
       min-height: calc(100vh - 35px);
       display: flex;
     }
-    .content {
+    .pages-view .content {
         flex: 1 0 auto;
         background-color: #ebebeb;
         padding-left: 350px;

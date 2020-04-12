@@ -21,15 +21,4 @@ export default {
 </script>
 
 <style>
-    .content {
-        flex: 1 0 auto;
-        background-color: #ebebeb;
-        padding: 15px 30px;
-        text-align: left;
-    }
-
-    h1,
-    h3 {
-        text-align: left;
-    }
 </style>
