@@ -12,7 +12,23 @@
           <nav v-for="menu in menus" :key="menu['.key']" class="menu">
             <h4 class="menu-name">{{ menu.name }}</h4>
             <ul>
-              <li  v-for="item in menu.items"><span class="debug"><strong>ID: </strong>{{ item.id }}</span><strong>Name: </strong>{{ item.name }}</li>
+              <li v-for="item in menu.items" @click="selected = String(menu.id) + String(item.id)" :class="{expanded:selected == String(menu.id) + String(item.id)}">
+                <div class="menu-item-content">
+                <strong>Name: </strong><span class="menu-name">{{ item.name }}</span>
+                </div>
+                <unicon name="angle-down" v-if="selected != String(menu.id) + String(item.id)" />
+                <unicon name="angle-up" v-if="selected == String(menu.id) + String(item.id)" />
+                <div class="expanded-item">
+                  <div class="menu-option">
+                    <label>Menu Title</label>
+                    <input v-model="item.name" placeholder="Name of the menu item" />
+                  </div>
+                  <div class="menu-option">
+                    <label>URL-shortlink</label>
+                    <input v-model="item.name" placeholder="This is the link that will be shown in the address bar" />
+                  </div>
+                </div>
+              </li>
             </ul>
           </nav>
         </nav>
@@ -93,10 +109,14 @@ export default {
     return {
       menus: getMenus,
       pages: [],
-      newMenuText: null
+      newMenuText: null,
+      selected: undefined
     }
   },
   methods: {
+    async expandMenuItem(item) {
+      console.log(item);
+    },
     async addMenuItem(page, menu) {
       // Disclaimer: Placeholder that the menu chosen is first menu
       let menuItemRef = menuRef.doc("0").collection("items");
@@ -138,7 +158,8 @@ export default {
             menuRef.doc(newMenuRef).set({
               "id": newMenuId,
               "name": newMenuText,
-              "menu-slug": "PH"
+              "menu-slug": "PH",
+              "items": []
             })
           })
         });
@@ -174,7 +195,6 @@ export default {
 
     .all-menu {
       display: flex;
-      justify-content: space-between;
       flex-wrap: wrap;
       width: 100%;
     }
@@ -183,9 +203,13 @@ export default {
       margin: 30px 0;
       background-color: #CCC;
       text-align: left;
-      width: calc(50% - 15px);
+      width: calc(33% - 10px);
     }
 
+    .menu:not(:first-child) {
+      margin-left: 15px;
+    }
+ 
     .menu h4 {
       width: 100%;
       background-color: rgba(255, 255, 255, 0.3);
@@ -208,10 +232,61 @@ export default {
 
     .menu ul li {
       background-color: rgba(255, 255, 255, 0.5);
-      padding: 10px;
       border: 1px solid #CCC;
       width: 100%;
       display: inline-block;
+      position: relative;
+      overflow: hidden;
+      transition: 0.3s ease-in-out;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    strong {
+      margin-right: 5px;
+    }
+
+    .menu ul li .menu-option:not(:first-child) {
+      margin-top: 10px;
+    }
+
+    .menu ul li.expanded {
+      padding-bottom: 170px;
+      transition: 0.3s ease-in-out;
+    }
+
+    .menu label {
+      font-style: italic;
+      font-size: 14px;
+      margin-bottom: 5px;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .menu ul li input {
+      width: 100%;
+    }
+
+    .expanded-item {
+      width: 100%;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      padding: 10px;
+    }
+
+    .menu-item-content {
+      float: left;
+      display: flex;
+      align-items: center;
+      
+      padding: 10px;
+    }
+
+    .menu ul li .unicon {
+      position: absolute;
+      right: 5px;
+      top: 7px;
     }
 
     .debug {

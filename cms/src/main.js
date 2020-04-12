@@ -7,8 +7,9 @@ import router from './router'
 
 // Icons
 import Unicon from 'vue-unicons'
-import { uniCube, uniLayerGroup, uniWindowRestore, uniCog, uniImages, uniUsersAlt, uniCommentAltExclamation, uniListUl, uniBitcoinCircle, uniUserSquare } from 'vue-unicons/src/icons'
-Unicon.add([uniCube, uniLayerGroup, uniWindowRestore, uniCog, uniImages, uniUsersAlt, uniCommentAltExclamation, uniListUl, uniBitcoinCircle, uniUserSquare])
+import { uniCube, uniLayerGroup, uniWindowRestore, uniCog, uniImages, uniUsersAlt, uniCommentAltExclamation, uniListUl, uniBitcoinCircle, uniUserSquare, uniAngleDown, uniAngleUp } from 'vue-unicons/src/icons'
+
+Unicon.add([uniCube, uniLayerGroup, uniWindowRestore, uniCog, uniImages, uniUsersAlt, uniCommentAltExclamation, uniListUl, uniBitcoinCircle, uniUserSquare, uniAngleDown, uniAngleUp])
 Vue.use(Unicon)
 
 // Firebase
