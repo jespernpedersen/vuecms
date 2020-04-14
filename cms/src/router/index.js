@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
-const routes = [{
+const my_routes = [{
         // Frontpage Route
         path: '/',
         name: 'Home',
@@ -13,7 +13,9 @@ const routes = [{
     // Frontend Routes (needs to be dynamic)
     {
         path: '/:page',
-        name: 'Page',
+        params: {
+            menuid: ':menuid'
+        },
         component: () =>
             import ( /* webpackChunkName: "about" */ '../views/Page.vue')
     },
@@ -68,7 +70,7 @@ const routes = [{
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
-    routes
+    routes: my_routes
 })
 
 export default router

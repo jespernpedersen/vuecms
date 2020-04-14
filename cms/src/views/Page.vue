@@ -7,15 +7,16 @@
       <div class="container">
       <ul>
         <li v-for="item in menuitems">
-          <a v-bind:href="item.url" :title='"Read more about " + item.name'>
-            {{ item.name }}
-          </a>
+          <a v-bind:href="item.url">{{ item.name }}</a>
         </li>
       </ul>
       </div>
     </nav>
     <main>
-      <h1 v-for="page in pages">{{ page.title }}</h1>
+      <div class="container">
+        <h1>{{ pages[0].title }}</h1>
+        <p>{{ pages[0].content }}</p>
+      </div>
     </main>
     <footer>
       Frontend Footer
@@ -34,10 +35,18 @@ var pageRef = db.collection("pages");
 
 var query = pageRef.where("featured", "==", true);
 
-let page = [];
-
 // Get Menu Items
+
 var menuItemsRef = db.collection("menus").doc("0").collection("items");
+
+let pages = [];
+let getPage = [];
+
+
+
+// var menuItemsRef = 
+
+// let testid = $router.app._route.params.page;
 
 export default {
   name: 'Page',
@@ -45,20 +54,54 @@ export default {
   },
   data () {
     return {
-      pages: [],
+      pages: getPage,
       menus: [],
-      route: this.$route.params.page
+      menufilter: []
     }
   },
   methods: {
-    debug() {
+    debug(element) {
+      console.log(element);
+    },
+    debugMenu(element) {
+    },
+    async getRoute() {
+      // First we get the page from router
+      let routeId = this.$router.app._route.params.page;
+
+      // Then we filter through database for the menu item that is equal to our route page
+      let menu = db.collection("menus").doc("0").collection("items").where("url", "==", routeId)
+
+
+      menu.limit(1).get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+          if(doc.exists) {
+            let menu_data =  doc.data()
+
+            console.log(menu_data.reference)
+
+            db.collection("pages").where("id", "==", menu_data.reference).get().then(function(subQuerySnapshot) {
+              subQuerySnapshot.forEach(function(subdoc) {
+                let page_data = subdoc.data()
+
+                getPage.push(page_data)
+              })
+            })
+          }
+          else {
+            alert("Document doesn't exist")
+          }
+        })
+      })
     }
   },
   firestore() {
     return {
-      pages: pageRef.where("slug", "==", this.$route.params.page),
       menuitems: menuItemsRef
     }
+  },
+  mounted() {
+    this.getRoute();
   }
 }
 </script>
@@ -118,6 +161,11 @@ export default {
 
 .page {
   margin-top: 35px;
+}
+
+main {
+  text-align: left;
+  padding: 30px;
 }
 
 .page nav ul li:not(:last-of-type) {

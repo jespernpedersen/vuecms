@@ -7,9 +7,7 @@
       <div class="container">
       <ul>
         <li v-for="item in menuitems">
-          <a v-bind:href="item.url" :title='"Read more about " + item.name'>
-            {{ item.name }}
-          </a>
+          <router-link :to="{ path: item.url, params: {menuid: item.id }}">{{ item.name }}</router-link>
         </li>
       </ul>
       </div>
