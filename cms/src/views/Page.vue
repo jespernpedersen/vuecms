@@ -20,7 +20,6 @@
     </main>
     <footer>
       Frontend Footer
-      <button @click="debug()">Debug</button>
     </footer>
   </div>
 </template>

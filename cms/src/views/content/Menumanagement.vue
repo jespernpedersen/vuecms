@@ -12,6 +12,11 @@
           <nav v-for="menu in menus" :key="menu['.key']" class="menu">
             <h4 class="menu-name">{{ menu.name }}</h4>
             <ul>
+              <li>
+                <div class="menu-item-content">
+                  <strong>Frontpage [Default]</strong>
+                </div>
+              </li>
               <li v-for="item in menu.items" @click="selected = String(menu.id) + String(item.id)" :class="{expanded:selected == String(menu.id) + String(item.id)}">
                 <div class="menu-item-content">
                 <strong>Name: </strong><span class="menu-name">{{ item.name }}</span>
@@ -170,13 +175,6 @@ export default {
           url: fieldvalue
         })
       }
-      /*
-      console.log(" "); 
-      console.log("Menu ID: " + menuid)
-      console.log("Item ID: " + itemid)
-      console.log("Field Type: " + fieldtype)
-      console.log("Field Value: " + fieldvalue)
-      */
     },
     async debug(item) {
       console.log(item);
