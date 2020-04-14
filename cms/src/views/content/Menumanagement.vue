@@ -144,7 +144,6 @@ export default {
         else {
             // Convert it to string so we can use it in Firebase
             let newMenuItemRef = "0";
-
             // Update Database
             menuItemRef.doc(newMenuItemRef).set({
               "id": newMenuItemRef,
