@@ -123,38 +123,51 @@ export default {
       // Disclaimer: Placeholder that the menu chosen is first menu
       let menuItemRef = menusRef.doc("0").collection("items");
 
-      // Get Last Menu ID and increment
-      menuItemRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
-        // If there are no menu items, we cannot increment it, so if the menu is empty, we will start at 0
-        if(querySnapshot.size != 0 ) {
-          querySnapshot.forEach(function(doc) {
-            // Convert to integer so we can increment it
-            let newMenuItemId = Number(doc.id) + 1;
-            // Convert it to string so we can use it in Firebase
-            let newMenuItemRef = String(newMenuItemId);
+      await new Promise((resolve) => {
+        // Get Last Menu ID and increment
+        menuItemRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
+          // If there are no menu items, we cannot increment it, so if the menu is empty, we will start at 0
+          
+          if(querySnapshot.size != 0 ) {
+            querySnapshot.forEach(function(doc) {
+              // Convert to integer so we can increment it
+              let newMenuItemId = Number(doc.id) + 1;
+              // Convert it to string so we can use it in Firebase
+              let newMenuItemRef = String(newMenuItemId);
 
-            // Create our slug based on page.tite as lowercase and replacing spaces with dashes
-            slug = page.title.replace(/\s+/g, '-').toLowerCase()
+              // Create our slug based on page.tite as lowercase and replacing spaces with dashes
+              let slug = page.title.replace(/\s+/g, '-').toLowerCase()
 
-            // Update Database
-            menuItemRef.doc(newMenuItemRef).set({
-              "id": newMenuItemId,
-              "name": page.title,
-              "url": slug,
-              "reference": page.id
+              // Update Database
+                menuItemRef.doc(newMenuItemRef).set({
+                  "id": newMenuItemId,
+                  "name": page.title,
+                  "url": slug,
+                  "reference": page.id
+                }).then(resolve())
+
+              
+              // Vuefire doesn't allow for dynamic adding of subcollections without page reload, so we will force it here
+              menu.items.push({
+                  "id": newMenuItemId,
+                  "name": page.title,
+                  "url": slug,
+                  "reference": page.id
+              })
+
             })
-          })
-        }
-        else {
-            slug = page.title.replace(/\s+/g, '-').toLowerCase()
-            // Update Database
-            menuItemRef.doc("0").set({
-              "id": newMenuItemRef,
-              "name": page.title,
-              "url": slug,
-              "reference": page.id
-            })     
-        }
+          }
+          else {
+              let slug = page.title.replace(/\s+/g, '-').toLowerCase()
+              // Update Database
+              menuItemRef.doc("0").set({
+                "id": newMenuItemRef,
+                "name": page.title,
+                "url": slug,
+                "reference": page.id
+              })     
+          }
+        })
       })
     },
     async editMenuItem(menuid, itemid, fieldtype, fieldvalue) {
