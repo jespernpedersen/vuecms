@@ -123,7 +123,6 @@ export default {
       // Disclaimer: Placeholder that the menu chosen is first menu
       let menuItemRef = menusRef.doc("0").collection("items");
 
-      await new Promise((resolve) => {
         // Get Last Menu ID and increment
         menuItemRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
           // If there are no menu items, we cannot increment it, so if the menu is empty, we will start at 0
@@ -139,14 +138,12 @@ export default {
               let slug = page.title.replace(/\s+/g, '-').toLowerCase()
 
               // Update Database
-                menuItemRef.doc(newMenuItemRef).set({
-                  "id": newMenuItemId,
-                  "name": page.title,
-                  "url": slug,
-                  "reference": page.id
-                }).then(resolve())
-
-              
+              menuItemRef.doc(newMenuItemRef).set({
+                "id": newMenuItemId,
+                "name": page.title,
+                "url": slug,
+                "reference": page.id
+              })
               // Vuefire doesn't allow for dynamic adding of subcollections without page reload, so we will force it here
               menu.items.push({
                   "id": newMenuItemId,
@@ -168,7 +165,6 @@ export default {
               })     
           }
         })
-      })
     },
     async editMenuItem(menuid, itemid, fieldtype, fieldvalue) {
       // Convert ids of menus to strings for usage in Firebase
