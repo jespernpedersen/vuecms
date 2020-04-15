@@ -10,13 +10,6 @@
             />
         </div>
         <div class="field">
-            <label>Slug</label>
-            <input
-            v-model="page.slug"
-            @keydown.enter="editField('slug')"
-            />
-        </div>
-        <div class="field">
             <label>Content</label>
             <textarea
                 v-model="page.content"
