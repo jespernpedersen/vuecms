@@ -131,15 +131,14 @@ export default {
         // If there are no menu items, we cannot increment it, so if the menu is empty, we will start at 0
         if(querySnapshot.size != 0 ) {
           querySnapshot.forEach(function(doc) {
-            console.log(doc.id)
             // Convert to integer so we can increment it
             let newMenuItemId = Number(doc.id) + 1;
             // Convert it to string so we can use it in Firebase
             let newMenuItemRef = String(newMenuItemId);
 
+            // Create our slug based on page.tite as lowercase and replacing spaces with dashes
             let slug = page.title
             slug = slug.replace(/\s+/g, '-').toLowerCase()
-
 
             // Update Database
             menuItemRef.doc(newMenuItemRef).set({
@@ -151,13 +150,13 @@ export default {
           })
         }
         else {
-            // Convert it to string so we can use it in Firebase
-            let newMenuItemRef = "0";
+            let slug = page.title
+            slug = slug.replace(/\s+/g, '-').toLowerCase()
             // Update Database
-            menuItemRef.doc(newMenuItemRef).set({
+            menuItemRef.doc("0").set({
               "id": newMenuItemRef,
               "name": page.title,
-              "url": page.slug,
+              "url": slug,
               "reference": page.id
             })     
         }
