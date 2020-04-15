@@ -19,7 +19,7 @@
               </li>
               <li v-for="item in menu.items" @click="selected = String(menu.id) + String(item.id)" :class="{expanded:selected == String(menu.id) + String(item.id)}">
                 <div class="menu-item-content">
-                <strong>Name: </strong><span class="menu-name">{{ item.name }}</span>
+                <strong>Item Name: </strong><span class="menu-name">{{ item.name }}</span>
                 </div>
                 <unicon name="angle-down" v-if="selected != String(menu.id) + String(item.id)" />
                 <unicon name="angle-up" v-if="selected == String(menu.id) + String(item.id)" />
