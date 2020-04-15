@@ -20,9 +20,6 @@
             <div class="page-title">
               Page Title
             </div>
-            <div class="page-slug">
-              Page Slug
-            </div>
             <div class="page-featured">
               Frontpage
             </div>
@@ -45,9 +42,6 @@
               </div>
               <div class="page-title">
                 {{ page.title }}
-              </div>
-              <div class="page-slug">
-                {{ page.slug }}
               </div>
               <div class="page-featured">
                 <span v-if="page.featured === false" class="false"  @click="assignFrontpage(page['.key'])"></span>

@@ -28,8 +28,9 @@
 import { db, pagesRef, menusRef } from '../firebase/db.js'
 
 // Get Menu Items
-var menuItemsRef = db.collection("menus").doc("0").collection("items");
+var menuItemsRef = menusRef.doc("0").collection("items");
 
+// Pages
 let pages = [];
 let getPage = [];
 
@@ -57,7 +58,7 @@ export default {
             let menu_data =  doc.data()
 
             // Then we sort through pages using the reference to page ids from menu to get the page content
-            db.collection("pages").where("id", "==", menu_data.reference).get().then(function(subQuerySnapshot) {
+            pagesRef.where("id", "==", menu_data.reference).get().then(function(subQuerySnapshot) {
               subQuerySnapshot.forEach(function(subdoc) {
                 // We put the content of the page into the variable Array
                 getPage.push(subdoc.data())
