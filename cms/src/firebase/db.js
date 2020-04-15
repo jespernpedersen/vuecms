@@ -1,5 +1,5 @@
-import { firebase } from "@firebase/app";
-import "@firebase/firestore";
+import { firebase } from "@firebase/app"
+import "@firebase/firestore"
 
 const firebaseApp = firebase.initializeApp({
     apiKey: "a0ISjRwyJFyTT8WfZWI3ooDWlU4FldaizBx3RFRn",
@@ -10,4 +10,8 @@ const firebaseApp = firebase.initializeApp({
     messagingSenderId: "720603301863"
 })
 
-export const db = firebaseApp.firestore();
+const db = firebaseApp.firestore()
+
+const pagesRef = db.collection("pages")
+const menusRef = db.collection("menus")
+const blocksRef = db.collection("blocks")
