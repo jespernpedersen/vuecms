@@ -12,7 +12,7 @@
           <nav v-for="menu in menus" :key="menu['.key']" class="menu">
             <h4 class="menu-name">{{ menu.name }}</h4>
             <ul>
-              <li>
+              <li v-if="menu.id == 0">
                 <div class="menu-item-content">
                   <strong>Frontpage [Default]</strong>
                 </div>
@@ -50,14 +50,14 @@
 <script>
 // @ is an alias to /src
 import Menu from '@/components/management/Menu.vue'
-import { db, menusRef } from '../../firebase/db.js'
+import { db, menusRef, pagesRef } from '../../firebase/db.js'
 
 
 // Get Menu Data
 let getMenus = [];
 
 // Get Page Data
-let pagesRef = db.collection("pages").where("published", "==", true);
+let visiblePagesRef = pagesRef.where("published", "==", true);
 
 
 
@@ -119,9 +119,6 @@ export default {
     }
   },
   methods: {
-    async expandMenuItem(item) {
-      console.log(item);
-    },
     async addMenuItem(page, menu) {
       // Disclaimer: Placeholder that the menu chosen is first menu
       let menuItemRef = menusRef.doc("0").collection("items");
@@ -202,7 +199,7 @@ export default {
   },
   firestore() {    
     return {
-      pages: pagesRef
+      pages: visiblePagesRef
     }
   },
   watch: {
