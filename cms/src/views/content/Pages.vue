@@ -65,9 +65,7 @@
 
 <script>
 import Menu from '@/components/management/Menu.vue'
-import { db } from '../../firebase/db.js'
-
-let pageRef = db.collection("pages");
+import { db, pagesRef } from '../../firebase/db.js'
 
 export default {
   name: 'Management',
@@ -82,7 +80,7 @@ export default {
   methods: {
     async newPage() {
         // Get newest ID from firebase and increment by one
-        pageRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
+        pagesRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
             // New data
 
@@ -93,7 +91,7 @@ export default {
             let newPageRef = String(newPageId);
 
             // Firebase Call
-            pageRef.doc(newPageRef).set({
+            pagesRef.doc(newPageRef).set({
               "id": newPageId,
               "content": "This is a placeholder",
               "featured": false,
@@ -106,12 +104,12 @@ export default {
     },
     togglePublish(id, state) {
       if(state == false) {
-        pageRef.doc(id).update({
+        pagesRef.doc(id).update({
           published: true
         })
       }
       else if(state == true) {
-        pageRef.doc(id).update({
+        pagesRef.doc(id).update({
           published: false
         })
       }
@@ -121,7 +119,7 @@ export default {
     },
     assignFrontpage(id) {
       // Remove all others as frontpage
-      pageRef.get().then(function(querySnapshot) {
+      pagesRef.get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
             // We don't include the current page to be removed
               if(doc.id != id) {
@@ -135,17 +133,17 @@ export default {
       });
 
       // Update current page to be featured
-      pageRef.doc(id).update({
+      pagesRef.doc(id).update({
         featured: true
       });
     },
     deletePage(id) {
-      pageRef.doc(id).delete();
+      pagesRef.doc(id).delete();
     }
   },
   firestore() {
     return {
-      pages: pageRef
+      pages: pagesRef
     }
   }
 }

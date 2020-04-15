@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <header>
-      Frontend Header
+      <a href="/">Frontend Header</a>
     </header>
     <nav>
       <div class="container">
@@ -25,10 +25,7 @@
 </template>
 
 <script>
-import { db } from '../firebase/db.js'
-
-// Find frontpage page
-var pageRef = db.collection("pages");
+import { db, pagesRef, menusRef } from '../firebase/db.js'
 
 // Get Menu Items
 var menuItemsRef = db.collection("menus").doc("0").collection("items");
@@ -52,7 +49,7 @@ export default {
       let routeId = this.$router.app._route.params.page;
 
       // Then we filter through database for the menu item that is equal to our route page
-      let menu = db.collection("menus").doc("0").collection("items").where("url", "==", routeId)
+      let menu = menusRef.doc("0").collection("items").where("url", "==", routeId)
       menu.limit(1).get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
           if(doc.exists) {

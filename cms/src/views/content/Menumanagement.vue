@@ -50,11 +50,10 @@
 <script>
 // @ is an alias to /src
 import Menu from '@/components/management/Menu.vue'
-import { db } from '../../firebase/db.js'
+import { db, menusRef } from '../../firebase/db.js'
 
 
 // Get Menu Data
-let menuRef = db.collection("menus");
 let getMenus = [];
 
 // Get Page Data
@@ -65,7 +64,7 @@ let pagesRef = db.collection("pages").where("published", "==", true);
 // Function for querying all subcollections - this will be used to get every menu item inside multiple menus
 
 // All our menus
-menuRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
+menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
   // Get Every First Level Documents (i.e. menus)
   querySnapshot.forEach(function(doc) {
     // Get data
@@ -83,7 +82,7 @@ menuRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
     getMenus.push(menuArray);
 
     // Menu Items
-    menuRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
+    menusRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
       // Set ID of the menu's items we will sort by
       let this_menu = doc.id;
 
@@ -125,7 +124,7 @@ export default {
     },
     async addMenuItem(page, menu) {
       // Disclaimer: Placeholder that the menu chosen is first menu
-      let menuItemRef = menuRef.doc("0").collection("items");
+      let menuItemRef = menusRef.doc("0").collection("items");
 
       // Get Last Menu ID and increment
       menuItemRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
@@ -182,7 +181,7 @@ export default {
     async newMenu(newMenuText) {
         console.log(newMenuText);
         // Get newest ID from firebase and increment by one
-        menuRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
+        menusRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
             // New data
 
@@ -190,10 +189,10 @@ export default {
             let newMenuId = Number(doc.id) + 1;
 
             // However the id for ref still needs to be a string
-            let newMenuRef = String(newMenuId);
+            let newmenusRef = String(newMenuId);
 
             // Firebase Call
-            menuRef.doc(newMenuRef).set({
+            menusRef.doc(newmenusRef).set({
               "id": newMenuId,
               "name": newMenuText,
               "items": []
@@ -214,158 +213,147 @@ export default {
 </script>
 
 <style>
+
 * {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
-    .menu-management-view{
+.menu-management-view{
       min-height: calc(100vh);
+      display: -webkit-box;
+      display: -ms-flexbox;
       display: flex;
-    }
-    .menu-management-view .content {
-        flex: 1 auto;
+}
+.menu-management-view .content {
+        -webkit-box-flex: 1;
+            -ms-flex: 1 auto;
+                flex: 1 auto;
         background-color: #ebebeb;
         padding-left: 350px;
         padding-top: 50px;
         padding-right: 30px;
         min-height: 100%;
-    }
-
-    .menu-management-view  .all-menu {
-      display: flex;
-      flex-wrap: wrap;
+}
+.menu-management-view  .all-menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 30px;
       width: 100%;
-    }
-
-    .menu-management-view .menu {
+}
+.menu-management-view .menu {
       margin: 30px 0;
       background-color: #CCC;
       text-align: left;
-      width: calc(33% - 10px);
-    }
-
-    .menu-management-view .menu:not(:first-child) {
-      margin-left: 23px;
-    }
- 
-    .menu-management-view .menu h4 {
+}
+.menu-management-view .menu h4 {
       width: 100%;
       background-color: rgba(255, 255, 255, 0.3);
       padding: 20px;
-    }
-
-    .menu-management-view .menu ul {
+}
+.menu-management-view .menu ul {
       padding: 15px;
       list-style: none;
-    }
-
-    .menu-management-view input {
+}
+.menu-management-view input {
       padding: 10px;
       margin-right: 10px;
-      min-width: 250px;
-    }
-    .menu-management-view form {
+      width: 250px;
+}
+.menu-management-view form {
       text-align: left;
-    }
-
-    .menu-management-view .menu ul li {
+}
+.menu-management-view .menu ul li {
       background-color: rgba(255, 255, 255, 0.5);
       border: 1px solid #CCC;
       width: 100%;
       display: inline-block;
       position: relative;
       overflow: hidden;
+      -webkit-transition: 0.3s ease-in-out;
       transition: 0.3s ease-in-out;
       cursor: pointer;
       padding: 0;
-    }
-
-    .menu-management-view strong {
+}
+.menu-management-view strong {
       margin-right: 5px;
-    }
-
-    .menu-management-view .menu ul li .menu-option:not(:first-child) {
+}
+.menu-management-view .menu ul li .menu-option:not(:first-child) {
       margin-top: 10px;
-    }
-
-    .menu-management-view .menu ul li.expanded {
+}
+.menu-management-view .menu ul li.expanded {
       padding-bottom: 170px;
+      -webkit-transition: 0.3s ease-in-out;
       transition: 0.3s ease-in-out;
-    }
-
-    .menu-management-view .menu label {
+}
+.menu-management-view .menu label {
       font-style: italic;
       font-size: 14px;
       margin-bottom: 5px;
       display: inline-block;
       width: 100%;
-    }
-
-    .menu-management-view .menu ul li input {
+}
+.menu-management-view .menu ul li input {
       width: 100%;
-    }
-
-    .menu-management-view .expanded-item {
+}
+.menu-management-view .expanded-item {
       width: 100%;
       position: absolute;
       top: 40px;
       left: 0;
       padding: 10px;
-    }
-
-    .menu-management-view .menu-item-content {
+}
+.menu-management-view .menu-item-content {
       float: left;
+      display: -webkit-box;
+      display: -ms-flexbox;
       display: flex;
-      align-items: center;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
       
       padding: 10px;
-    }
-
-    .menu-management-view .menu ul li .unicon {
+}
+.menu-management-view .menu ul li .unicon {
       position: absolute;
       right: 5px;
       top: 7px;
-    }
-
-    .menu-management-view .debug {
+}
+.menu-management-view .debug {
       padding: 3px;
       margin-right: 5px;
-    }
-
-    .menu-management-view h1,
+}
+.menu-management-view h1,
     .menu-management-view h3,
     .menu-management-view p {
         text-align: left;
-    }
+}
 
     /* Page List, should maybe its own component */
-    aside.page-include-view {
-      width: 290px;
+aside.page-include-view {
+      min-width: 290px;
       padding-top: 32px;
       background-color: #333;
       color: #FFF;
       text-align: left;
-    }
-
-    aside.page-include-view h3 {
+      max-width: 290px;
+}
+aside.page-include-view h3 {
       padding: 15px 30px;
-    }
-
-    aside.page-include-view ul {
+}
+aside.page-include-view ul {
       list-style: none;
       margin: 0;
       padding: 0;
       width: 100%;
       display: inline-block;
-    }
-
-    aside.page-include-view ul li {
+}
+aside.page-include-view ul li {
       width: 100%;
       background-color: rgba(255,255,255,0.2);
       padding: 15px 30px;
       display: inline-block;
-    }
-    
-    .menu-management-view button.add {
+}
+.menu-management-view button.add {
         background-color: green;
         color: #FFF;
         border: none;
@@ -373,9 +361,8 @@ export default {
         cursor: pointer;
         margin-top: 10px;
         display: inline-block;
-      }
-
-    aside.page-include-view ul li:nth-of-type(odd) {
+}
+aside.page-include-view ul li:nth-of-type(odd) {
       background-color: rgba(255,255,255,0.4);
-    }
+}
 </style>

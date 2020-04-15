@@ -1,13 +1,13 @@
 <template>
   <div class="home">
     <header>
-      Frontend Header
+      <a href="/">Frontend Header</a>
     </header>
     <nav>
       <div class="container">
       <ul>
         <li v-for="item in menuitems">
-          <router-link :to="{ path: item.url, params: {menuid: item.id }}">{{ item.name }}</router-link>
+          <a v-bind:href="item.url">{{ item.name }}</a>
         </li>
       </ul>
       </div>

@@ -30,7 +30,7 @@
 
 <script>
 import Menu from '@/components/management/Menu.vue'
-import { db } from '../../firebase/db.js'
+import { db, pagesRef } from '../../firebase/db.js'
 
 let pageID = null;
 
@@ -59,48 +59,10 @@ export default {
   },
   firestore() {
     return {
-      page: db.collection("pages").doc(this.$router.app._route.params.id),
+      page: pagesRef.doc(this.$router.app._route.params.id),
     }
   }
 }
-
-
-/*
-// @ is an alias to /src
-import Menu from '@/components/management/Menu.vue'
-import db from '../../firebase/db.js'
-
-// Set page id to null before initializing it later down at created
-let pageID = null;
-
-
-export default {
-  name: 'Page',
-  components: {
-    Menu
-  },
-  data () {
-    return {
-      page: [],
-    }
-  },
-  methods: {
-      async editField(id) {
-        const editText = this.page[0].title.trim();
-  		await db.collection('pages').doc(id).set({
-			title: editText
-		})      
-      }
-  },
-  created() {
-    pageID = this.$router.app._route.params.id;
-    console.log(pageID);
-  },
-  firebase: {
-    page: db.ref('pages')
-  }
-}^
-*/
 </script>
 
 <style>

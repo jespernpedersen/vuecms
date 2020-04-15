@@ -15,3 +15,5 @@ const db = firebaseApp.firestore()
 const pagesRef = db.collection("pages")
 const menusRef = db.collection("menus")
 const blocksRef = db.collection("blocks")
+
+export { pagesRef, menusRef, blocksRef, db }
