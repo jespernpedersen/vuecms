@@ -137,8 +137,7 @@ export default {
             let newMenuItemRef = String(newMenuItemId);
 
             // Create our slug based on page.tite as lowercase and replacing spaces with dashes
-            let slug = page.title
-            slug = slug.replace(/\s+/g, '-').toLowerCase()
+            slug = page.title.replace(/\s+/g, '-').toLowerCase()
 
             // Update Database
             menuItemRef.doc(newMenuItemRef).set({
@@ -150,8 +149,7 @@ export default {
           })
         }
         else {
-            let slug = page.title
-            slug = slug.replace(/\s+/g, '-').toLowerCase()
+            slug = page.title.replace(/\s+/g, '-').toLowerCase()
             // Update Database
             menuItemRef.doc("0").set({
               "id": newMenuItemRef,
@@ -169,12 +167,12 @@ export default {
 
       // Only allow these field types, this avoids people manipulating our database
       if(fieldtype == "name") {
-        db.collection("menus").doc(menu_id).collection("items").doc(item_id).update({
+        menusRef.doc(menu_id).collection("items").doc(item_id).update({
           name: fieldvalue
         })
       }
       else if(fieldtype == "url") {
-        db.collection("menus").doc(menu_id).collection("items").doc(item_id).update({
+        menusRef.doc(menu_id).collection("items").doc(item_id).update({
           url: fieldvalue
         })
       }
@@ -183,12 +181,9 @@ export default {
       console.log(item);
     },
     async newMenu(newMenuText) {
-        console.log(newMenuText);
         // Get newest ID from firebase and increment by one
         menusRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
-            // New data
-
             // We need to set the id to be an integer as we get it as an string from firebase
             let newMenuId = Number(doc.id) + 1;
 
