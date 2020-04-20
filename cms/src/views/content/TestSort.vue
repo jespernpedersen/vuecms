@@ -2,57 +2,63 @@
   <div class="menu-management-view">
     <Menu></Menu>
     <div class="content">
-        <div class="fluid container">
-            <div class="form-group form-group-lg panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Sortable control</h3>
-            </div>
-            <div class="panel-body">
-                <div class="checkbox">
-                <label><input type="checkbox" v-model="editable">Enable drag and drop</label>
+        <h1>Menu</h1>
+        <p>This is where I will edit menu and change its order</p>
+        <form v-on:submit.prevent="newMenu(newMenuText)">
+          <input v-model="newMenuText" placeholder="Type in the name for your new menu" /> 
+          <button class="add"> Add New Menu</button>
+        </form>
+        <nav class="all-menu">
+          <nav v-for="menu in menus" :key="menu['.key']" class="menu">
+            <h4 class="menu-name">{{ menu.name }}</h4>
+            <ul>
+              <li v-for="item in menu.items" @click="selected = String(menu.id) + String(item.id)" :class="{expanded:selected == String(menu.id) + String(item.id)}">
+                <div class="menu-item-content">
+                <strong>Item Name: </strong><span class="menu-name">{{ item.name }}</span>
                 </div>
-                <button type="button" class="btn btn-default" @click="SaveMenu(menus, defaultMenus)">Save Menus</button>
-
-            </div>
-            </div>
-            
-            
-            <nav v-for="menu in menus" :key="menu['.key']" class="menu">
-                <div class="col-md-6">
-                <h2 style="text-align: left">{{ menu.name }}</h2>
-                <draggable class="list-group" tag="ul" v-model="menu.items" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
-                    <transition-group type="transition" :name="'flip-list'">
-                    <li class="list-group-item" v-for="item in menu.items" :key="item.order">
-                        {{ item.name }}
-                        <span class="number"> {{item.order }} </span>
-                    </li>
-                    </transition-group>
-                </draggable>
-                <pre style="text-align: left">{{ menu }}</pre>
+                <unicon name="angle-down" v-if="selected != String(menu.id) + String(item.id)" />
+                <unicon name="angle-up" v-if="selected == String(menu.id) + String(item.id)" />
+                <div class="expanded-item">
+                  <div class="menu-option">
+                    <label>Menu Title</label>
+                    <input v-model="item.name" placeholder="Name of the menu item" @keydown.enter="editMenuItem(menu.id, item.id, 'name', item.name)"/>
+                  </div>
+                  <div class="menu-option">
+                    <label>URL-shortlink</label>
+                    <input v-model="item.url" placeholder="This is the link that will be shown in the address bar"  @keydown.enter="editMenuItem(menu.id, item.id, 'url', item.url)" />
+                  </div>
                 </div>
-            </nav>
-        </div>
+              </li>
+            </ul>
+          </nav>
+        </nav>
     </div>
     <aside class="page-include-view">
-        <h3>Pages</h3>
-        <ul>
-            <li class="list-group-item" v-for="page in pages" :key="page['.key']" @click="addMenuItem(page, menus[0])">{{ page.title }}</li>
-        </ul>
+    <h3>Pages</h3>
+      <ul>
+        <li v-for="page in pages" :key="page['.key']" @click="addMenuItem(page, menus[0])">{{ page.title }}</li>
+      </ul>
     </aside>
   </div>
 </template>
 
 <script>
+// @ is an alias to /src
 import Menu from '@/components/management/Menu.vue'
-import draggable from "vuedraggable";
 import { db, menusRef, pagesRef } from '../../firebase/db.js'
+import draggable from 'vuedraggable'
+
+
 
 // Get Menu Data
 let getMenus = [];
-let getDefaultMenus = [];
 
+// Get Page Data
 let visiblePagesRef = pagesRef.where("published", "==", true);
 
+
+
+// Function for querying all subcollections - this will be used to get every menu item inside multiple menus
 
 // All our menus
 menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
@@ -86,8 +92,8 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
         let itemsArray = {
           id: item.id,
           name: item.name,
-          url: item.url,
-          order: item.order
+          order: item.order,
+          url: item.url
         }
 
         // Add menu items to object
@@ -97,301 +103,136 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
   });
 });
 
-// All our menus
-menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
-  // Get Every First Level Documents (i.e. menus)
-  querySnapshot.forEach(function(doc) {
-    // Get data
-    let menu = doc.data();
-    // Main Collection
-
-    let menuArray = {
-      id: menu.id,
-      name: menu.name,
-      // We start with empty items, and later add them down
-      items: []
-    }
-
-    // Add menu to object
-    getDefaultMenus.push(menuArray);
-
-    // Menu Items
-    menusRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
-      // Set ID of the menu's items we will sort by
-      let this_menu = doc.id;
-
-      // For every menu item, we push them to our object configured by our menu id
-      subquerySnapshot.forEach(function(subdoc) {
-        // Get item data
-        let item = subdoc.data();
-
-        // Construct data
-        let itemsArray = {
-          id: item.id,
-          name: item.name,
-          url: item.url,
-          order: item.order
-        }
-
-        // Add menu items to object
-        getDefaultMenus[doc.id]['items'].push(itemsArray);
-      });
-    });
-  });
-});
-
 export default {
-  name: "hello",
+  name: 'Menu_Management',
   components: {
-    Menu, draggable
+    Menu
   },
-  data() {
+  data () {
     return {
       menus: getMenus,
-      defaultMenus: getDefaultMenus,
       pages: [],
-      editable: true,
-      isDragging: false,
-      delayedDragging: false
-    };
+      newMenuText: null,
+      selected: undefined
+    }
   },
   methods: {
-    orderList() {
-      this.list = this.list.sort((one, two) => {
-        return one.order - two.order;
-      });
-    },
-    onMove({ relatedContext, draggedContext }) {
-      const relatedElement = relatedContext.element;
-      const draggedElement = draggedContext.element;
-      return (
-        (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
-      );
-    },
-    async SaveMenu(menus, defaultMenus) {
-        // menus = current object
-        // oldmenus = old object
+    async addMenuItem(page, menu) {
+      // Disclaimer: Placeholder that the menu chosen is first menu
+      let menuItemRef = menusRef.doc("1").collection("items");
 
-        let hasDeleted = false;
+      console.log(menuItemRef)
 
-        // Because of incompatiblity between menus, we will start by deleting the old way of things and then insert it
-        // We have to delete per document, instead of collection per Firestore
-        defaultMenus.forEach(function(defaultMenu) {
-            // Delete
-            let menu = defaultMenu['items']
-            let menuid = defaultMenu.id
-            menu.forEach(function(item) {
-                menusRef.doc(String(menuid)).collection("items").doc(String(item.id)).delete()
-                hasDeleted = true
+        // Get Last Menu ID and increment
+        menuItemRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
+          // If there are no menu items, we cannot increment it, so if the menu is empty, we will start at 0
+          if(querySnapshot.size != 0 ) {
+            querySnapshot.forEach(function(doc) {
+              // Convert to integer so we can increment it
+              let newMenuItemId = Number(doc.id) + 1;
+              // Convert it to string so we can use it in Firebase
+              let newMenuItemRef = String(newMenuItemId);
+
+              // Create our slug based on page.tite as lowercase and replacing spaces with dashes
+              let slug = page.title.replace(/\s+/g, '-').toLowerCase()
+
+              // Update Database
+              menuItemRef.doc(newMenuItemRef).set({
+                "id": newMenuItemId,
+                "name": page.title,
+                "url": slug,
+                "order": newMenuItemId,
+                "reference": page.id
+              })
+              // Vuefire doesn't allow for dynamic adding of subcollections without page reload, so we will force it here
+              menu.items.push({
+                  "id": newMenuItemId,
+                  "name": page.title,
+                  "url": slug,
+                  "order": newMenuItemId,
+                  "reference": page.id
+              })
+
             })
+          }
+          else {
+              let slug = page.title.replace(/\s+/g, '-').toLowerCase()
+              // Update Database
+              menuItemRef.doc("0").set({
+                "id": 0,
+                "name": page.title,
+                "url": slug,
+                "order": 0,
+                "reference": page.id
+              })
+              
+              // Vuefire doesn't allow for dynamic adding of subcollections without page reload, so we will force it here     
+              menu.items.push({
+                  "id": 0,
+                  "name": page.title,
+                  "url": slug,
+                  "order": 0,
+                  "reference": page.id
+              })
+          }
         })
+    },
+    async editMenuItem(menuid, itemid, fieldtype, fieldvalue) {
+      // Convert ids of menus to strings for usage in Firebase
+      let menu_id = String(menuid)
+      let item_id = String(itemid)
 
-        if(hasDeleted == true) {
-            menus.forEach(function(menu) {
-                menu.items.forEach(function(item) {
-                    let menuID = String(menu.id)
-                    menu.items.forEach(function(item) {
-                        let itemID = String(item.id)
-                        menusRef.doc(menuID).collection("items").doc(itemID).set({
-                            "id": item.id,
-                            "name": item.name,
-                            "order": item.order,
-                            "url": item.url
-                        })
-                        hasDeleted = false
-                    })
-                })
-            })
-        }
-        else {
-            alert("Nothing to save")
-        }
-    },
-  },
-  computed: {
-    dragOptions() {
-      return {
-        animation: 0,
-        group: "description",
-        disabled: !this.editable,
-        ghostClass: "ghost"
-      };
-    },
-  },
-  watch: {
-    isDragging(newValue) {
-      if (newValue) {
-        this.delayedDragging = true;
-        return;
+      // Only allow these field types, this avoids people manipulating our database
+      if(fieldtype == "name") {
+        menusRef.doc(menu_id).collection("items").doc(item_id).update({
+          name: fieldvalue
+        })
       }
-      this.$nextTick(() => {
-        this.delayedDragging = false;
-      });
-    }
+      else if(fieldtype == "url") {
+        menusRef.doc(menu_id).collection("items").doc(item_id).update({
+          url: fieldvalue
+        })
+      }
+    },
+    async debug(item) {
+      console.log(item);
+    },
+    async newMenu(newMenuText) {
+        // Get newest ID from firebase and increment by one
+        menusRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            // We need to set the id to be an integer as we get it as an string from firebase
+            let newMenuId = Number(doc.id) + 1;
+
+            // However the id for ref still needs to be a string
+            let newmenusRef = String(newMenuId);
+
+            // Firebase Call
+            menusRef.doc(newmenusRef).set({
+              "id": newMenuId,
+              "name": newMenuText,
+            })
+          })
+        });
+    },
   },
   firestore() {    
     return {
       pages: visiblePagesRef
     }
   },
-};
+  watch: {
+    // Subscribe to changes made to menu
+  }
+}
 </script>
 
 <style>
-.fluid.container {
-    padding-top: 50px;
-}
 
-.col-md-3 {
-    width: 25%;
-    float: left;
-    padding-right: 15px;
-    padding-left: 15px;
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
-
-.col-md-6 {
-    width: 50%;
-    float: left;
-    padding-right: 15px;
-    padding-left: 15px;
-}
-
-.flip-list-move {
-  transition: transform 0.5s;
-}
-
-.number {
-    background-color: #222;
-    color: white;
-    float: right;
-    border-radius: 100%;
-    padding: 5px;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-}
-
-.no-move {
-  transition: transform 0s;
-}
-
-.ghost {
-  opacity: 0.5;
-  background: #c8ebfb;
-}
-
-.panel {
-    margin-bottom: 20px;
-    background-color: #fff;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-}
-
-.panel-heading {
-    padding: 10px 15px;
-    border-bottom: 1px solid transparent;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-
-.btn {
-    display: inline-block;
-    padding: 6px 12px;
-    margin-bottom: 0;
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 1.42857143;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -ms-touch-action: manipulation;
-    touch-action: manipulation;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-image: none;
-    border: 1px solid transparent;
-    border-radius: 4px;
-}
-
-pre {
-    display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 13px;
-    line-height: 1.42857143;
-    color: #333;
-    word-break: break-all;
-    word-wrap: break-word;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-top: 30px;
-}
-
-.btn-default {
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
-}
-
-.radio, .checkbox {
-    position: relative;
-    display: block;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.panel-body {
-    padding: 15px;
-}
-
-.panel-default > .panel-heading {
-    color: #333;
-    background-color: #f5f5f5;
-    border-color: #ddd;
-}
-
-.list-group {
-  min-height: 20px;
-  list-style: none;
-  text-align: left;
-}
-
-.list-group-item {
-    position: relative;
-    display: block;
-    padding: 10px 15px;
-    margin-bottom: -1px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    color: #222;
-}
-
-.list-group-item:first-child {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-}
-
-.list-group-item {
-    cursor: move;
-}
-
-.list-group-item {
-  cursor: move;
-}
-
-.list-group-item i {
-  cursor: pointer;
-}
-
 .menu-management-view{
       min-height: calc(100vh);
       display: -webkit-box;
@@ -428,11 +269,26 @@ pre {
       padding: 15px;
       list-style: none;
 }
+.menu-management-view input {
+      padding: 10px;
+      margin-right: 10px;
+      width: 250px;
+}
 .menu-management-view form {
       text-align: left;
-} 
-
-
+}
+.menu-management-view .menu ul li {
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 1px solid #CCC;
+      width: 100%;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      -webkit-transition: 0.3s ease-in-out;
+      transition: 0.3s ease-in-out;
+      cursor: pointer;
+      padding: 0;
+}
 .menu-management-view strong {
       margin-right: 5px;
 }
@@ -487,15 +343,14 @@ pre {
         text-align: left;
 }
 
-
     /* Page List, should maybe its own component */
 aside.page-include-view {
       min-width: 290px;
       padding-top: 32px;
+      background-color: #333;
       color: #FFF;
       text-align: left;
       max-width: 290px;
-      color: #222;
 }
 aside.page-include-view h3 {
       padding: 15px 30px;
@@ -507,6 +362,12 @@ aside.page-include-view ul {
       width: 100%;
       display: inline-block;
 }
+aside.page-include-view ul li {
+      width: 100%;
+      background-color: rgba(255,255,255,0.2);
+      padding: 15px 30px;
+      display: inline-block;
+}
 .menu-management-view button.add {
         background-color: green;
         color: #FFF;
@@ -515,5 +376,8 @@ aside.page-include-view ul {
         cursor: pointer;
         margin-top: 10px;
         display: inline-block;
+}
+aside.page-include-view ul li:nth-of-type(odd) {
+      background-color: rgba(255,255,255,0.4);
 }
 </style>
