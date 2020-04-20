@@ -30,6 +30,13 @@ const my_routes = [{
     },
 
     {
+        path: '/management/test',
+        name: 'Test',
+        component: () =>
+            import ( /* webpackChunkName: "about" */ '../views/content/TestSort.vue')
+    },
+
+    {
         path: '/management/content/pages/:id/',
         name: 'Content Management System',
         component: () =>

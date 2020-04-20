@@ -12,11 +12,6 @@
           <nav v-for="menu in menus" :key="menu['.key']" class="menu">
             <h4 class="menu-name">{{ menu.name }}</h4>
             <ul>
-              <li v-if="menu.id == 0">
-                <div class="menu-item-content">
-                  <strong>Frontpage [Default]</strong>
-                </div>
-              </li>
               <li v-for="item in menu.items" @click="selected = String(menu.id) + String(item.id)" :class="{expanded:selected == String(menu.id) + String(item.id)}">
                 <div class="menu-item-content">
                 <strong>Item Name: </strong><span class="menu-name">{{ item.name }}</span>
@@ -51,6 +46,8 @@
 // @ is an alias to /src
 import Menu from '@/components/management/Menu.vue'
 import { db, menusRef, pagesRef } from '../../firebase/db.js'
+import draggable from 'vuedraggable'
+
 
 
 // Get Menu Data
@@ -58,7 +55,6 @@ let getMenus = [];
 
 // Get Page Data
 let visiblePagesRef = pagesRef.where("published", "==", true);
-let menuitems = collection("items")
 
 
 
@@ -83,7 +79,7 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
     getMenus.push(menuArray);
 
     // Menu Items
-    menusRef.doc(doc.id).menuitems.get().then(function(subquerySnapshot) {
+    menusRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
       // Set ID of the menu's items we will sort by
       let this_menu = doc.id;
 
@@ -96,6 +92,7 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
         let itemsArray = {
           id: item.id,
           name: item.name,
+          order: item.order,
           url: item.url
         }
 
@@ -122,12 +119,13 @@ export default {
   methods: {
     async addMenuItem(page, menu) {
       // Disclaimer: Placeholder that the menu chosen is first menu
-      let menuItemRef = menusRef.doc("0").menuitems;
+      let menuItemRef = menusRef.doc("1").collection("items");
+
+      console.log(menuItemRef)
 
         // Get Last Menu ID and increment
         menuItemRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
           // If there are no menu items, we cannot increment it, so if the menu is empty, we will start at 0
-          
           if(querySnapshot.size != 0 ) {
             querySnapshot.forEach(function(doc) {
               // Convert to integer so we can increment it
@@ -143,6 +141,7 @@ export default {
                 "id": newMenuItemId,
                 "name": page.title,
                 "url": slug,
+                "order": newMenuItemId,
                 "reference": page.id
               })
               // Vuefire doesn't allow for dynamic adding of subcollections without page reload, so we will force it here
@@ -150,6 +149,7 @@ export default {
                   "id": newMenuItemId,
                   "name": page.title,
                   "url": slug,
+                  "order": newMenuItemId,
                   "reference": page.id
               })
 
@@ -159,11 +159,21 @@ export default {
               let slug = page.title.replace(/\s+/g, '-').toLowerCase()
               // Update Database
               menuItemRef.doc("0").set({
-                "id": newMenuItemRef,
+                "id": 0,
                 "name": page.title,
                 "url": slug,
+                "order": 0,
                 "reference": page.id
-              })     
+              })
+              
+              // Vuefire doesn't allow for dynamic adding of subcollections without page reload, so we will force it here     
+              menu.items.push({
+                  "id": 0,
+                  "name": page.title,
+                  "url": slug,
+                  "order": 0,
+                  "reference": page.id
+              })
           }
         })
     },
@@ -174,12 +184,12 @@ export default {
 
       // Only allow these field types, this avoids people manipulating our database
       if(fieldtype == "name") {
-        menusRef.doc(menu_id).menuitems.doc(item_id).update({
+        menusRef.doc(menu_id).collection("items").doc(item_id).update({
           name: fieldvalue
         })
       }
       else if(fieldtype == "url") {
-        menusRef.doc(menu_id).menuitems.doc(item_id).update({
+        menusRef.doc(menu_id).collection("items").doc(item_id).update({
           url: fieldvalue
         })
       }
@@ -201,7 +211,6 @@ export default {
             menusRef.doc(newmenusRef).set({
               "id": newMenuId,
               "name": newMenuText,
-              "items": []
             })
           })
         });
