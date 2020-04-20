@@ -1,43 +1,49 @@
 <template>
-  <div class="fluid container">
-    <div class="form-group form-group-lg panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Sortable control</h3>
-      </div>
-      <div class="panel-body">
-        <div class="checkbox">
-          <label><input type="checkbox" v-model="editable">Enable drag and drop</label>
-        </div>
-        <button type="button" class="btn btn-default" @click="SaveMenu(menus, defaultMenus)">Save Menus</button>
+  <div class="menu-management-view">
+    <Menu></Menu>
+    <div class="content">
+        <div class="fluid container">
+            <div class="form-group form-group-lg panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Sortable control</h3>
+            </div>
+            <div class="panel-body">
+                <div class="checkbox">
+                <label><input type="checkbox" v-model="editable">Enable drag and drop</label>
+                </div>
+                <button type="button" class="btn btn-default" @click="SaveMenu(menus, defaultMenus)">Save Menus</button>
 
-      </div>
-    </div>
-    
-    
-    <nav v-for="menu in menus" :key="menu['.key']" class="menu">
-        <div class="col-md-3">
-        {{ menu.name }}
-        <draggable class="list-group" tag="ul" v-model="menu.items" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
-            <transition-group type="transition" :name="'flip-list'">
-            <li class="list-group-item" v-for="item in menu.items" :key="item.order">
-                {{ item.name }}
-                <span class="number"> {{item.order }} </span>
-            </li>
-            </transition-group>
-        </draggable>
+            </div>
+            </div>
+            
+            
+            <nav v-for="menu in menus" :key="menu['.key']" class="menu">
+                <div class="col-md-6">
+                <h2 style="text-align: left">{{ menu.name }}</h2>
+                <draggable class="list-group" tag="ul" v-model="menu.items" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+                    <transition-group type="transition" :name="'flip-list'">
+                    <li class="list-group-item" v-for="item in menu.items" :key="item.order">
+                        {{ item.name }}
+                        <span class="number"> {{item.order }} </span>
+                    </li>
+                    </transition-group>
+                </draggable>
+                <pre style="text-align: left">{{ menu }}</pre>
+                </div>
+            </nav>
         </div>
-    </nav>
-
-    <div class="list-group col-md-6">
-      <pre>{{ menus[0] }}</pre>
     </div>
-    <div class="list-group col-md-6">
-      <pre>{{ menus[1] }}</pre>
-    </div>
+    <aside class="page-include-view">
+        <h3>Pages</h3>
+        <ul>
+            <li class="list-group-item" v-for="page in pages" :key="page['.key']" @click="addMenuItem(page, menus[0])">{{ page.title }}</li>
+        </ul>
+    </aside>
   </div>
 </template>
 
 <script>
+import Menu from '@/components/management/Menu.vue'
 import draggable from "vuedraggable";
 import { db, menusRef, pagesRef } from '../../firebase/db.js'
 
@@ -45,16 +51,7 @@ import { db, menusRef, pagesRef } from '../../firebase/db.js'
 let getMenus = [];
 let getDefaultMenus = [];
 
-const message = [
-  "vue.draggable",
-  "draggable",
-  "component",
-  "for",
-  "vue.js 2.0",
-  "based",
-  "on",
-  "Sortablejs"
-];
+let visiblePagesRef = pagesRef.where("published", "==", true);
 
 
 // All our menus
@@ -146,16 +143,13 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
 export default {
   name: "hello",
   components: {
-    draggable
+    Menu, draggable
   },
   data() {
     return {
       menus: getMenus,
       defaultMenus: getDefaultMenus,
-      list: message.map((name, index) => {
-        return { name, order: index + 1, fixed: false };
-      }),
-      list2: [],
+      pages: [],
       editable: true,
       isDragging: false,
       delayedDragging: false
@@ -212,54 +206,6 @@ export default {
         else {
             alert("Nothing to save")
         }
-
-      /*
-      // Disclaimer: Placeholder that the menu chosen is first menu
-      let menuItemRef = menusRef.doc("0").collection("items");
-
-        // Get Last Menu ID and increment
-        menuItemRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
-          // If there are no menu items, we cannot increment it, so if the menu is empty, we will start at 0
-          
-          if(querySnapshot.size != 0 ) {
-            querySnapshot.forEach(function(doc) {
-              // Convert to integer so we can increment it
-              let newMenuItemId = Number(doc.id) + 1;
-              // Convert it to string so we can use it in Firebase
-              let newMenuItemRef = String(newMenuItemId);
-
-              // Create our slug based on page.tite as lowercase and replacing spaces with dashes
-              let slug = page.title.replace(/\s+/g, '-').toLowerCase()
-
-              // Update Database
-              menuItemRef.doc(newMenuItemRef).set({
-                "id": newMenuItemId,
-                "name": page.title,
-                "url": slug,
-                "reference": page.id
-              })
-              // Vuefire doesn't allow for dynamic adding of subcollections without page reload, so we will force it here
-              menu.items.push({
-                  "id": newMenuItemId,
-                  "name": page.title,
-                  "url": slug,
-                  "reference": page.id
-              })
-
-            })
-          }
-          else {
-              let slug = page.title.replace(/\s+/g, '-').toLowerCase()
-              // Update Database
-              menuItemRef.doc("0").set({
-                "id": newMenuItemRef,
-                "name": page.title,
-                "url": slug,
-                "reference": page.id
-              })     
-          }
-        })
-    */
     },
   },
   computed: {
@@ -271,12 +217,6 @@ export default {
         ghostClass: "ghost"
       };
     },
-    listString() {
-      return JSON.stringify(this.list, null, 2);
-    },
-    list2String() {
-      return JSON.stringify(this.list2, null, 2);
-    }
   },
   watch: {
     isDragging(newValue) {
@@ -287,6 +227,11 @@ export default {
       this.$nextTick(() => {
         this.delayedDragging = false;
       });
+    }
+  },
+  firestore() {    
+    return {
+      pages: visiblePagesRef
     }
   },
 };
@@ -388,6 +333,7 @@ pre {
     background-color: #f5f5f5;
     border: 1px solid #ccc;
     border-radius: 4px;
+    margin-top: 30px;
 }
 
 .btn-default {
@@ -426,6 +372,7 @@ pre {
     margin-bottom: -1px;
     background-color: #fff;
     border: 1px solid #ddd;
+    color: #222;
 }
 
 .list-group-item:first-child {
@@ -443,5 +390,130 @@ pre {
 
 .list-group-item i {
   cursor: pointer;
+}
+
+.menu-management-view{
+      min-height: calc(100vh);
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+}
+.menu-management-view .content {
+        -webkit-box-flex: 1;
+            -ms-flex: 1 auto;
+                flex: 1 auto;
+        background-color: #ebebeb;
+        padding-left: 350px;
+        padding-top: 50px;
+        padding-right: 30px;
+        min-height: 100%;
+}
+.menu-management-view  .all-menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 30px;
+      width: 100%;
+}
+.menu-management-view .menu {
+      margin: 30px 0;
+      background-color: #CCC;
+      text-align: left;
+}
+.menu-management-view .menu h4 {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.3);
+      padding: 20px;
+}
+.menu-management-view .menu ul {
+      padding: 15px;
+      list-style: none;
+}
+.menu-management-view form {
+      text-align: left;
+} 
+
+
+.menu-management-view strong {
+      margin-right: 5px;
+}
+.menu-management-view .menu ul li .menu-option:not(:first-child) {
+      margin-top: 10px;
+}
+.menu-management-view .menu ul li.expanded {
+      padding-bottom: 170px;
+      -webkit-transition: 0.3s ease-in-out;
+      transition: 0.3s ease-in-out;
+}
+.menu-management-view .menu label {
+      font-style: italic;
+      font-size: 14px;
+      margin-bottom: 5px;
+      display: inline-block;
+      width: 100%;
+}
+.menu-management-view .menu ul li input {
+      width: 100%;
+}
+.menu-management-view .expanded-item {
+      width: 100%;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      padding: 10px;
+}
+.menu-management-view .menu-item-content {
+      float: left;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      
+      padding: 10px;
+}
+.menu-management-view .menu ul li .unicon {
+      position: absolute;
+      right: 5px;
+      top: 7px;
+}
+.menu-management-view .debug {
+      padding: 3px;
+      margin-right: 5px;
+}
+.menu-management-view h1,
+    .menu-management-view h3,
+    .menu-management-view p {
+        text-align: left;
+}
+
+
+    /* Page List, should maybe its own component */
+aside.page-include-view {
+      min-width: 290px;
+      padding-top: 32px;
+      color: #FFF;
+      text-align: left;
+      max-width: 290px;
+      color: #222;
+}
+aside.page-include-view h3 {
+      padding: 15px 30px;
+}
+aside.page-include-view ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      display: inline-block;
+}
+.menu-management-view button.add {
+        background-color: green;
+        color: #FFF;
+        border: none;
+        padding: 12px 20px;
+        cursor: pointer;
+        margin-top: 10px;
+        display: inline-block;
 }
 </style>
