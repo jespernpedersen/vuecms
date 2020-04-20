@@ -58,6 +58,7 @@ let getMenus = [];
 
 // Get Page Data
 let visiblePagesRef = pagesRef.where("published", "==", true);
+let menuitems = collection("items")
 
 
 
@@ -82,7 +83,7 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
     getMenus.push(menuArray);
 
     // Menu Items
-    menusRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
+    menusRef.doc(doc.id).menuitems.get().then(function(subquerySnapshot) {
       // Set ID of the menu's items we will sort by
       let this_menu = doc.id;
 
@@ -121,7 +122,7 @@ export default {
   methods: {
     async addMenuItem(page, menu) {
       // Disclaimer: Placeholder that the menu chosen is first menu
-      let menuItemRef = menusRef.doc("0").collection("items");
+      let menuItemRef = menusRef.doc("0").menuitems;
 
         // Get Last Menu ID and increment
         menuItemRef.orderBy("id", "desc").limit(1).get().then(function(querySnapshot) {
@@ -173,12 +174,12 @@ export default {
 
       // Only allow these field types, this avoids people manipulating our database
       if(fieldtype == "name") {
-        menusRef.doc(menu_id).collection("items").doc(item_id).update({
+        menusRef.doc(menu_id).menuitems.doc(item_id).update({
           name: fieldvalue
         })
       }
       else if(fieldtype == "url") {
-        menusRef.doc(menu_id).collection("items").doc(item_id).update({
+        menusRef.doc(menu_id).menuitems.doc(item_id).update({
           url: fieldvalue
         })
       }
