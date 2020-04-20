@@ -5,6 +5,7 @@
         <div class="fluid container">
             <nav class="col-md-4">
                 <h2 style="text-align: left">Pages</h2>
+                <p>These items comes from your page list, you can add them to each of your menus by dragging them</p>
                 <draggable class="list-group" tag="ul" v-model="pages" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
                     <transition-group type="transition" :name="'flip-list'">
                     <li class="list-group-item" v-for="page in pages" :key="page.order">
@@ -61,10 +62,10 @@ pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
 
         // Construct data
         let pagesArray = {
-          id: pageData.id, // id
-          name: pageData.title, // title
-          url: slug, // title to slug
-          order: pageData.id // id
+          id: pageData.id,
+          name: pageData.title,
+          url: slug,
+          order: pageData.id
         }
 
         // Add menu items to object

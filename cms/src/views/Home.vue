@@ -6,7 +6,7 @@
     <nav>
       <div class="container">
       <ul>
-        <li v-for="item in menuitems">
+        <li v-for="item in menuitems" :key="item.order">
           <a v-bind:href="item.url">{{ item.name }}</a>
         </li>
       </ul>
