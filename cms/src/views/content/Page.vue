@@ -25,8 +25,6 @@
 import Menu from '@/components/management/Menu.vue'
 import { db, pagesRef } from '../../firebase/db.js'
 
-let pageID = null;
-
 export default {
   name: 'Page',
   components: {
