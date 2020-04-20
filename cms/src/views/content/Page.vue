@@ -40,10 +40,14 @@ export default {
   methods: {
       editField(fieldType, field) {
         if(fieldType == "title") {
-            db.collection("pages").doc(this.$router.app._route.params.id).update({
-                title: this.page.title
-            })
-            console.log(field);
+          pagesRef.doc(this.$router.app._route.params.id).update({
+            title: this.page.title
+          })
+        }
+        else if(fieldType == "content") {
+          pagesRef.doc(this.$router.app._route.params.id).update({
+            content: this.page.content
+          })
         }
         else {
             alert("Error. Could not find field");
