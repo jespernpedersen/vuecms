@@ -6,12 +6,12 @@
             <nav class="col-md-4">
                 <h2 style="text-align: left">Pages</h2>
                 <p>These items comes from your page list, you can add them to each of your menus by dragging them</p>
-                <draggable class="list-group" tag="ul" v-model="pages" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+                <draggable class="list-group" tag="ul" v-model="pages" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false, updateItemOrder">
                     <transition-group type="transition" :name="'flip-list'">
-                    <li class="list-group-item" v-for="page in pages" :key="page.order">
-                        {{ page.name }}
-                        <span class="number"> {{ page.order }} </span>
-                    </li>
+                      <li class="list-group-item" v-for="page in pages" :key="page.order">
+                          {{ page.name }}
+                          <span class="number"> {{ page.order }} </span>
+                      </li>
                     </transition-group>
                 </draggable>
                 <!-- <pre style="text-align: left">{{ pages }}</pre> -->
@@ -55,17 +55,17 @@ let visiblePagesRef = pagesRef.where("published", "==", true);
 
 pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
     querySnapshot.forEach(function(doc) {
-        let pageData = doc.data();
+        let page = doc.data();
         // console.log(pageData)
 
         let slug = pageData.title.replace(/\s+/g, '-').toLowerCase()
 
         // Construct data
         let pagesArray = {
-          id: pageData.id,
-          name: pageData.title,
+          id: page.id,
+          name: page.title,
           url: slug,
-          order: pageData.id
+          order: page.id
         }
 
         // Add menu items to object
@@ -176,6 +176,9 @@ export default {
     };
   },
   methods: {
+    updateItemOrder() {
+      console.log("Hello")
+    },
     onMove({ relatedContext, draggedContext }) {
       const relatedElement = relatedContext.element;
       const draggedElement = draggedContext.element;
@@ -220,6 +223,7 @@ export default {
             })
         }
         else {
+            // If this happens, it means our notification box was shown frontend-wise, when it was not supposed to
             alert("Nothing to save")
         }
         this.unsavedChanges = false
@@ -244,6 +248,7 @@ export default {
       this.$nextTick(() => {
         this.delayedDragging = false;
         
+        // Once have unsaved changes when we move an item, we should show the notification save box.
         this.unsavedChanges = true
       });
     }
