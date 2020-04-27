@@ -28,7 +28,7 @@
         <h2>Global Settings</h2>
         <ul>
             <li>Internal Title: {{ block.title }}</li>
-            <li>Visibility State: <span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
+            <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
             <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
         </ul>
     </aside>
