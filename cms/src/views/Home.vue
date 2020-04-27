@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <header v-if="header[0]" v-bind:style="{ backgroundColor: header[0].bgcolor }">
+    <header v-if="header[0]" v-bind:style="{ backgroundColor: header[0].bgcolor, color: header[0].textcolor }">
       <a href="/">Frontend Header</a>
     </header>
     <nav>
@@ -17,15 +17,9 @@
         <h1>{{ page.title }}</h1>
         <p>{{ page.content }}</p>
       </div>
-      <section v-for="block in blocks" :key="block.id" v-bind:style="{ backgroundColor: block.bgcolor }">
-        <div v-if="block.container" class="container">
+      <section v-for="block in blocks" :key="block.id" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+        <div v-bind:class="{ container: block.container}">
           <h3>{{ block.title }}</h3>
-          <pre>
-            {{ block }}
-          </pre>
-        </div>
-        <div v-if="!block.container" class="fluid-container">
-          <h3>{{ block.title }}</h3>  
           <pre>
             {{ block }}
           </pre>
@@ -83,6 +77,10 @@ export default {
 
 .home header {
   padding: 30px 0;
+}
+
+.home header a {
+  color: inherit;
 }
 
 .home .title {

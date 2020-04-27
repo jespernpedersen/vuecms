@@ -4,7 +4,7 @@
     <div class="content">
 
         <div class="fluid container">
-            <section v-bind:style="{ backgroundColor: block.bgcolor }">
+            <section v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
                 <h1>
                     {{ block.title }}
                 </h1>
@@ -27,9 +27,11 @@
     <aside class="global-settings">
         <h2>Global Settings</h2>
         <ul>
-            <li>Internal Title: {{ block.title }}</li>
+            <li>Block Title: {{ block.title }}</li>
             <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
             <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
+            <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
+            <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
         </ul>
     </aside>
   </div>
@@ -52,7 +54,6 @@ export default {
   },
   methods: {
       notifyChanges() {
-          console.log("Hi Jes!")
           this.unsavedChanges = true
       },
       async SaveBlock(block) {
@@ -65,7 +66,9 @@ export default {
              bgimage: block.bgimage,
              columns: block.columns,
              published: block.published,
-             title: block.title 
+             title: block.title,
+             container: block.container,
+             textcolor: block.textcolor
         })
         // We want to hide the notification of unsaved changes when we have saved to database
         this.unsavedChanges = false
@@ -101,7 +104,7 @@ export default {
 
     aside.global-settings {
         min-width: 300px;
-        padding-top: 50px;
+        padding-top: 30px;
         box-sizing: border-box;
     }
 

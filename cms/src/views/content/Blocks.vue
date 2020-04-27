@@ -6,8 +6,25 @@
         <button class="add" @click="newBlock()">Add New Block</button>
         <h1>Featured Blocks</h1>
         
-        <div class="v-table" v-if="header[0]">
-          <section class="row">
+        <div class="v-table">
+        
+          <div class="table-header">
+            <div class="select-all">
+            </div>
+            <div class="page-id">
+              ID
+            </div>
+            <div class="page-publish">
+              Type
+            </div>
+            <div class="page-title">
+              Block Title
+            </div>
+            <div class="page-actions">
+              Actions
+            </div>
+          </div>
+          <section class="row" v-if="header[0]">
               <div class="select">
               </div>
               <div class="page-id">
@@ -46,7 +63,6 @@
         <div class="v-table">
           <div class="table-header">
             <div class="select-all">
-              
                 <input type="checkbox" /> Select All
             </div>
             <div class="page-id">
@@ -56,7 +72,7 @@
               Published
             </div>
             <div class="page-title">
-              Internal Title
+              Block Title
             </div>
             <div class="page-actions">
               Actions
@@ -126,7 +142,9 @@ export default {
               "bgcolor": '#ccc',
               "columns": 1,
               "published": false,
-              "title": "A New Block"
+              "title": "A New Block",
+              "container": true,
+              "textcolor": "#fff"
             })
           })
         });
