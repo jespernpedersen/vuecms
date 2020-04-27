@@ -56,7 +56,7 @@ export default {
     return {
       pages: pagesRef.where("featured", "==", true),
       menuitems: menuItemsRef,
-      blocks: blocksRef.where("blocktype", "==", "content"),
+      blocks: blocksRef.where("blocktype", "==", "content").where("published", "==", true),
       header: blocksRef.where("blocktype", "==", "header"),
       footer: blocksRef.where("blocktype", "==", "footer")
     }
