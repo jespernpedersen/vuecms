@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <header>
+    <header v-if="header[0]" v-bind:style="{ backgroundColor: header[0].bgcolor }">
       <a href="/">Frontend Header</a>
     </header>
     <nav>
@@ -16,21 +16,23 @@
       <div class="container">
         <h1>{{ page.title }}</h1>
         <p>{{ page.content }}</p>
-        
-        <pre>
-          {{ blocks }}
-        </pre>
       </div>
       <section v-for="block in blocks" :key="block.id" v-bind:style="{ backgroundColor: block.bgcolor }">
         <div v-if="block.container" class="container">
           <h3>{{ block.title }}</h3>
+          <pre>
+            {{ block }}
+          </pre>
         </div>
         <div v-if="!block.container" class="fluid-container">
-          <h3>{{ block.title }}</h3>
+          <h3>{{ block.title }}</h3>  
+          <pre>
+            {{ block }}
+          </pre>
         </div>
       </section>
     </main>
-    <footer>
+    <footer v-if="footer[0]" v-bind:style="{ backgroundColor: footer[0].bgcolor }">
       Frontend Footer
     </footer>
   </div>
@@ -60,7 +62,9 @@ export default {
     return {
       pages: pagesRef.where("featured", "==", true),
       menuitems: menuItemsRef,
-      blocks: blocksRef
+      blocks: blocksRef.where("blocktype", "==", "content"),
+      header: blocksRef.where("blocktype", "==", "header"),
+      footer: blocksRef.where("blocktype", "==", "footer")
     }
   }
 }
@@ -78,9 +82,7 @@ export default {
 }
 
 .home header {
-  background-color: teal;
   padding: 30px 0;
-  color: #FFF;
 }
 
 .home .title {
@@ -106,11 +108,10 @@ export default {
 
 
 /* temp */
-section {
-    height: 150px;
+.home section {
+    min-height: 150px;
     background-color: #FFF;
     padding: 15px;
-    margin: 30px 0; 
     text-align: left;
     color: #FFF;
 }

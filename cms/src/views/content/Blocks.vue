@@ -4,7 +4,45 @@
     <div class="content">
     
         <button class="add" @click="newBlock()">Add New Block</button>
-        <h1>Blocks</h1>
+        <h1>Featured Blocks</h1>
+        
+        <div class="v-table" v-if="header[0]">
+          <section class="row">
+              <div class="select">
+              </div>
+              <div class="page-id">
+                {{ header[0].id }}
+              </div>
+              <div class="page-published">
+                  <strong>Header Block</strong>
+              </div>
+              <div class="page-title">
+                {{ header[0].title }}
+              </div>
+              <div class="page-edit">
+                <a v-bind:href="'/management/content/blocks/' + header[0].id">Edit</a>
+              </div>
+          </section>
+          
+          <section class="row" v-if="footer[0]">
+              <div class="select">
+              </div>
+              <div class="page-id">
+                {{ footer[0].id }}
+              </div>
+              <div class="page-published">
+                  <strong>Footer Block</strong>
+              </div>
+              <div class="page-title">
+                {{ footer[0].title }}
+              </div>
+              <div class="page-edit">
+                <a v-bind:href="'/management/content/blocks/' + footer[0].id">Edit</a>
+              </div>
+          </section>
+        </div>
+        
+        <h2 style="text-align: left">Content Blocks</h2>
         <div class="v-table">
           <div class="table-header">
             <div class="select-all">
@@ -45,10 +83,6 @@
                 <a v-bind:href="'/management/content/blocks/' + block.id">Edit</a>
               </div>
           </section>
-          
-              <pre>
-                {{ block }}
-              </pre>
           </div>
         </div>
     </div>
@@ -67,6 +101,8 @@ export default {
   data () {
     return {
       blocks: [],
+      header: [],
+      footer: []
     }
   },
   methods: {
@@ -85,9 +121,9 @@ export default {
             // Firebase Call
             blocksRef.doc(newBlockRef).set({
               "id": newBlockId,
-              "block-type": 'content',
-              "background-image": '',
-              "background-color": '#ccc',
+              "blocktype": 'content',
+              "bgimage": '',
+              "bgcolor": '#ccc',
               "columns": 1,
               "published": false,
               "title": "A New Block"
@@ -113,7 +149,9 @@ export default {
   },
   firestore() {
     return {
-      blocks: blocksRef
+      blocks: blocksRef.where("blocktype", "==", "content"),
+      header: blocksRef.where("blocktype", "==", "header"),
+      footer: blocksRef.where("blocktype", "==", "footer"),
     }
   }
 }
@@ -248,33 +286,4 @@ export default {
     }
 
     
-
-.notification {
-    position: absolute;
-    max-width: 900px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    bottom: -15%;
-    transition: 0.3s ease-in-out;
-    background-color: rgba(0,0,0,0.4);
-    padding: 15px;
-    border-radius: 8px;
-    color: #FFF;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.notification .btn {
-    background-color: #42b853;
-    border-color: #42b853;
-    padding: 5px 20px;
-    font-size: 16px;
-    color:  #FFF;
-}
-
-.active .notification {
-    bottom: 2%;
-}
 </style>

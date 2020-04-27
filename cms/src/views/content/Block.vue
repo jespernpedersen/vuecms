@@ -19,7 +19,7 @@
             <div v-bind:class="{ active: unsavedChanges}">
                 <div class="notification">
                     <h3 style="text-align: center;">You've unsaved changes!</h3>
-                    <button type="button" class="btn btn-default" @click="SaveBlock(menus, defaultMenus)">Save Menus</button>
+                    <button type="button" class="btn btn-default" @click="SaveBlock(block)">Save Menus</button>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
         <ul>
             <li>Internal Title: {{ block.title }}</li>
             <li>Visibility State: <span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
-            <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" /></li>
+            <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
         </ul>
     </aside>
   </div>
@@ -51,43 +51,39 @@ export default {
     }
   },
   methods: {
-      /*
-      editField(fieldType, field) {
-        if(fieldType == "title") {
-          blocksRef.doc(this.$router.app._route.params.id).update({
-            title: this.page.title
-          })
-        }
-        else if(fieldType == "content") {
-          blocksRef.doc(this.$router.app._route.params.id).update({
-            content: this.page.content
-          })
-        }
-        else {
-            alert("Error. Could not find field");
-        }
+      notifyChanges() {
+          console.log("Hi Jes!")
+          this.unsavedChanges = true
+      },
+      async SaveBlock(block) {
+        // Firebase wants document ref always to be a string, so we will need to convert it
+        let blockId = String(block.id)
+
+        // Construct what we want to be able to change/update
+        blocksRef.doc(blockId).update({
+             bgcolor: block.bgcolor,
+             bgimage: block.bgimage,
+             columns: block.columns,
+             published: block.published,
+             title: block.title 
+        })
+        // We want to hide the notification of unsaved changes when we have saved to database
+        this.unsavedChanges = false
       }
-      */
   },
   firestore() {
     return {
       block: blocksRef.doc(this.$router.app._route.params.id),
     }
   },
-  computed: {
-      sectionStyle() {
-          return {
-              "background-color": '#222'
-          }
-      }
-  }
 }
 </script>
 
 <style>
     .blocks-view {
-      min-height: calc(100vh - 35px);
-      display: flex;
+        min-height: 100vh;
+        display: flex;
+        padding-top: 34px;
     }
     .blocks-view .content {
         flex: 1 0 auto;
@@ -96,8 +92,6 @@ export default {
         padding-top: 50px;
         padding-right: 30px;
     }
-    
-
     .blocks-view section {
         height: 200px;
         padding: 30px;
