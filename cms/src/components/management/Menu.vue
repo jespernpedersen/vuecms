@@ -34,7 +34,7 @@
                 <span>Menu Management</span>               
             </router-link>
         </li>
-        <li class="disabled">
+        <li>
             <router-link to="/management/content/blocks">
                 <unicon name="cube" />
                 <span>Blocks</span>               
