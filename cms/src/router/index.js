@@ -42,6 +42,13 @@ const my_routes = [{
             import ( /* webpackChunkName: "about" */ '../views/content/Blocks.vue')
     },
     {
+        path: '/management/content/blocks/:id/',
+        name: 'Block',
+        component: () =>
+            import ( /* webpackChunkName: "about" */ '../views/content/Block.vue')
+    },
+
+    {
         path: '/management/content/banner',
         name: 'Banner',
         component: () =>

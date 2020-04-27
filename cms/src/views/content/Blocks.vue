@@ -246,4 +246,35 @@ export default {
       width: 100%;
       text-align: left;
     }
+
+    
+
+.notification {
+    position: absolute;
+    max-width: 900px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    bottom: -15%;
+    transition: 0.3s ease-in-out;
+    background-color: rgba(0,0,0,0.4);
+    padding: 15px;
+    border-radius: 8px;
+    color: #FFF;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification .btn {
+    background-color: #42b853;
+    border-color: #42b853;
+    padding: 5px 20px;
+    font-size: 16px;
+    color:  #FFF;
+}
+
+.active .notification {
+    bottom: 2%;
+}
 </style>

@@ -16,7 +16,19 @@
       <div class="container">
         <h1>{{ page.title }}</h1>
         <p>{{ page.content }}</p>
+        
+        <pre>
+          {{ blocks }}
+        </pre>
       </div>
+      <section v-for="block in blocks" :key="block.id" v-bind:style="{ backgroundColor: block.bgcolor }">
+        <div v-if="block.container" class="container">
+          <h3>{{ block.title }}</h3>
+        </div>
+        <div v-if="!block.container" class="fluid-container">
+          <h3>{{ block.title }}</h3>
+        </div>
+      </section>
     </main>
     <footer>
       Frontend Footer
@@ -25,7 +37,7 @@
 </template>
 
 <script>
-import { db } from '../firebase/db.js'
+import { db, blocksRef, pagesRef } from '../firebase/db.js'
 // Get Menu Items
 var menuItemsRef = db.collection("menus").doc("0").collection("items");
 
@@ -36,7 +48,8 @@ export default {
   data () {
     return {
       pages: [],
-      menus: []
+      menus: [],
+      blocks: []
     }
   },
   methods: {
@@ -45,8 +58,9 @@ export default {
   },
   firestore() {
     return {
-      pages: db.collection("pages").where("featured", "==", true),
-      menuitems: menuItemsRef
+      pages: pagesRef.where("featured", "==", true),
+      menuitems: menuItemsRef,
+      blocks: blocksRef
     }
   }
 }
@@ -88,6 +102,17 @@ export default {
 
 .home nav {
   padding: 20px 0;
+}
+
+
+/* temp */
+section {
+    height: 150px;
+    background-color: #FFF;
+    padding: 15px;
+    margin: 30px 0; 
+    text-align: left;
+    color: #FFF;
 }
 
 .home nav ul {
@@ -133,7 +158,6 @@ export default {
 }
 
 .home main {
-  padding: 30px;
 }
 
 .home h1 {

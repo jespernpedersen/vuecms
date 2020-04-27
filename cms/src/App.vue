@@ -40,4 +40,10 @@
     }
   }
 }
+
+
+    pre {
+      width: 100%;
+      text-align: left;
+    }
 </style>
