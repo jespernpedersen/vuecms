@@ -1,5 +1,10 @@
 <template>
-  <div class="home">
+  <div class="home" >
+    <div class="banner" v-bind:class="{ active: status[0].published}" v-bind:style="{ backgroundColor: status[0].bgcolor, color: status[0].textcolor }">
+      <div v-if="status[0].published">
+        {{ status[0].title }}
+      </div>
+    </div>
     <header v-if="header[0]" v-bind:style="{ backgroundColor: header[0].bgcolor, color: header[0].textcolor }">
       <a href="/">Frontend Header</a>
     </header>
@@ -56,6 +61,7 @@ export default {
     return {
       pages: pagesRef.where("featured", "==", true),
       menuitems: menuItemsRef,
+      status: blocksRef.where("blocktype", "==", "banner"),
       blocks: blocksRef.where("blocktype", "==", "content").where("published", "==", true),
       header: blocksRef.where("blocktype", "==", "header"),
       footer: blocksRef.where("blocktype", "==", "footer")
@@ -102,6 +108,19 @@ export default {
 
 .home nav {
   padding: 20px 0;
+}
+
+.banner {
+  height: 0px;
+  transition: 0.3s ease-in-out;
+  margin-top: -34px;
+  
+  padding: 15px 0;
+}
+
+.banner.active {
+  height: auto;
+  margin-top: 0;
 }
 
 

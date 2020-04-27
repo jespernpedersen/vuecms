@@ -47,12 +47,11 @@ const my_routes = [{
         component: () =>
             import ( /* webpackChunkName: "about" */ '../views/content/Block.vue')
     },
-
     {
         path: '/management/content/banner',
         name: 'Banner',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/content/Banner.vue')
+            import ( /* webpackChunkName: "about" */ '../views/content/StatusBlock.vue')
     },
     {
         path: '/management/content/menu',

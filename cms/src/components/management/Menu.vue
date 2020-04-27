@@ -22,16 +22,17 @@
 
     <!-- View for Content Submenu -->
     <ul class="level-second content-menu" v-if="menuview === 'content-menu'">
+    
+        <li>
+            <router-link to="/management/content/banner">
+                <unicon name="comment-alt-exclamation" />
+                <span>Status Banner</span>               
+            </router-link>
+        </li>
         <li>
             <router-link to="/management/content/pages">
                 <unicon name="window-restore" />
                 <span>Pages</span>
-            </router-link>
-        </li>
-        <li>
-            <router-link to="/management/content/menu">
-                <unicon name="list-ul" />
-                <span>Menu Management</span>               
             </router-link>
         </li>
         <li>
@@ -40,10 +41,10 @@
                 <span>Blocks</span>               
             </router-link>
         </li>
-        <li class="disabled">
-            <router-link to="/management/content/banner">
-                <unicon name="comment-alt-exclamation" />
-                <span>Status Banner</span>               
+        <li>
+            <router-link to="/management/content/menu">
+                <unicon name="list-ul" />
+                <span>Menu Management</span>               
             </router-link>
         </li>
     </ul>
