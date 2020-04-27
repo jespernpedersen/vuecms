@@ -8,6 +8,8 @@
                 <h1>
                     {{ block.title }}
                 </h1>
+                <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
+                </textarea>
                 <div v-for="index in block.columns">
                     Column
                 </div>
@@ -68,7 +70,8 @@ export default {
              published: block.published,
              title: block.title,
              container: block.container,
-             textcolor: block.textcolor
+             textcolor: block.textcolor,
+             textcontent: block.textcontent
         })
         // We want to hide the notification of unsaved changes when we have saved to database
         this.unsavedChanges = false
@@ -100,6 +103,33 @@ export default {
         padding: 30px;
         text-align: left;
         color: #FFF;
+    }
+
+    .blocks-view textarea {
+        width: 100%;
+        background-color: transparent;
+        border: none;
+          --placeholder-color: #f0f;
+        color: var(--placeholder-color);
+        font-size: 16px;
+        font-family: inherit;
+        outline: none;
+    }
+
+    .blocks-view textarea::-webkit-input-placeholder {
+        color: inherit !important;
+    }
+    
+    .blocks-view textarea:-moz-placeholder { /* Firefox 18- */
+        color: inherit !important;  
+    }
+    
+    .blocks-view textarea::-moz-placeholder {  /* Firefox 19+ */
+        color: inherit !important;  
+    }
+    
+    .blocks-view textarea:-ms-input-placeholder {  
+        color: inherit !important;  
     }
 
     aside.global-settings {

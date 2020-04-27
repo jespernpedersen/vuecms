@@ -25,9 +25,7 @@
       <section v-for="block in blocks" :key="block.id" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
         <div v-bind:class="{ container: block.container}">
           <h3>{{ block.title }}</h3>
-          <pre>
-            {{ block }}
-          </pre>
+          <p v-if="block.textcontent">{{ block.textcontent }}</p>
         </div>
       </section>
     </main>
