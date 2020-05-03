@@ -17,6 +17,7 @@
     "vue-firestore": "^0.3.30",
     "vue-router": "^3.1.5",
     "vue-unicons": "^2.1.0",
+    "vue-upload-image": "^1.1.5",
     "vuedraggable": "^2.23.2",
     "vuefire": "^2.2.2"
   },
