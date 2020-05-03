@@ -1,6 +1,11 @@
 <template>
-  <div class="home">
-    <header>
+  <div class="home" >
+    <div class="banner" v-bind:class="{ active: status[0].published}" v-bind:style="{ backgroundColor: status[0].bgcolor, color: status[0].textcolor }">
+      <div v-if="status[0].published">
+        {{ status[0].title }}
+      </div>
+    </div>
+    <header v-if="header[0]" v-bind:style="{ backgroundColor: header[0].bgcolor, color: header[0].textcolor }">
       <a href="/">Frontend Header</a>
     </header>
     <nav>
@@ -17,15 +22,21 @@
         <h1>{{ page.title }}</h1>
         <p>{{ page.content }}</p>
       </div>
+      <section v-for="block in blocks" :key="block.id" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+        <div v-bind:class="{ container: block.container}">
+          <h3>{{ block.title }}</h3>
+          <p v-if="block.textcontent">{{ block.textcontent }}</p>
+        </div>
+      </section>
     </main>
-    <footer>
+    <footer v-if="footer[0]" v-bind:style="{ backgroundColor: footer[0].bgcolor }">
       Frontend Footer
     </footer>
   </div>
 </template>
 
 <script>
-import { db } from '../firebase/db.js'
+import { db, blocksRef, pagesRef } from '../firebase/db.js'
 // Get Menu Items
 var menuItemsRef = db.collection("menus").doc("0").collection("items");
 
@@ -36,7 +47,8 @@ export default {
   data () {
     return {
       pages: [],
-      menus: []
+      menus: [],
+      blocks: []
     }
   },
   methods: {
@@ -45,8 +57,12 @@ export default {
   },
   firestore() {
     return {
-      pages: db.collection("pages").where("featured", "==", true),
-      menuitems: menuItemsRef
+      pages: pagesRef.where("featured", "==", true),
+      menuitems: menuItemsRef,
+      status: blocksRef.where("blocktype", "==", "banner"),
+      blocks: blocksRef.where("blocktype", "==", "content").where("published", "==", true),
+      header: blocksRef.where("blocktype", "==", "header"),
+      footer: blocksRef.where("blocktype", "==", "footer")
     }
   }
 }
@@ -64,9 +80,11 @@ export default {
 }
 
 .home header {
-  background-color: teal;
   padding: 30px 0;
-  color: #FFF;
+}
+
+.home header a {
+  color: inherit;
 }
 
 .home .title {
@@ -88,6 +106,29 @@ export default {
 
 .home nav {
   padding: 20px 0;
+}
+
+.banner {
+  height: 0px;
+  transition: 0.3s ease-in-out;
+  margin-top: -34px;
+  
+  padding: 15px 0;
+}
+
+.banner.active {
+  height: auto;
+  margin-top: 0;
+}
+
+
+/* temp */
+.home section {
+    min-height: 150px;
+    background-color: #FFF;
+    padding: 15px;
+    text-align: left;
+    color: #FFF;
 }
 
 .home nav ul {
@@ -133,7 +174,6 @@ export default {
 }
 
 .home main {
-  padding: 30px;
 }
 
 .home h1 {

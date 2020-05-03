@@ -30,13 +30,6 @@ const my_routes = [{
     },
 
     {
-        path: '/management/test',
-        name: 'Test',
-        component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/content/TestSort.vue')
-    },
-
-    {
         path: '/management/content/pages/:id/',
         name: 'Content Management System',
         component: () =>
@@ -49,10 +42,16 @@ const my_routes = [{
             import ( /* webpackChunkName: "about" */ '../views/content/Blocks.vue')
     },
     {
+        path: '/management/content/blocks/:id/',
+        name: 'Block',
+        component: () =>
+            import ( /* webpackChunkName: "about" */ '../views/content/Block.vue')
+    },
+    {
         path: '/management/content/banner',
         name: 'Banner',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/content/Banner.vue')
+            import ( /* webpackChunkName: "about" */ '../views/content/StatusBlock.vue')
     },
     {
         path: '/management/content/menu',
