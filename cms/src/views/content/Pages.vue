@@ -132,7 +132,7 @@ export default {
           querySnapshot.forEach(function(doc) {
             // We don't include the current page to be removed
               if(doc.id != id) {
-                var nonFrontpage = pageRef.doc(doc.id);
+                var nonFrontpage = pagesRef.doc(doc.id);
 
                 return nonFrontpage.update({
                     featured: false

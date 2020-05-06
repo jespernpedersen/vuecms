@@ -53,6 +53,7 @@ export default {
   },
   methods: {
     async getPage() {
+      // UNDERPAGES
       // First we get the page from router
       if(this.$router.app._route.params.page != undefined) {
         console.log(this.$router.app._route.params.page)
@@ -83,10 +84,14 @@ export default {
               
                 // Page Block Data
                 pagesRef.doc(String(docData.id)).collection("blocks").get().then(function(blocks) {
-                  // For every block and if the block object is empty, so we don't duplicate content
+                  // For every block
+                  // If we have already inserted data, don't do this again
                   if(getPage[0].blocks == '') {
                     blocks.forEach(function(block) {
-                      getPage[0].blocks.push(block.data())
+                      let blockData = block.data()
+                      if(blockData.published != false) {
+                        getPage[0].blocks.push(blockData)
+                      }
                     })
                   }
                 })
@@ -99,6 +104,7 @@ export default {
           })
         })
       }
+      // FRONTPAGE
       else {
         let routeId = 0;
         // Page Meta Data
@@ -117,11 +123,13 @@ export default {
            // Page Block Data
             pagesRef.doc(String(PageID)).collection("blocks").get().then(function(blocks) {
               // For every block
-              // If the object is empty
+              // If we have already inserted data, don't do this again
               if(getPage[0].blocks == '') {
                 blocks.forEach(function(block) {
-                  // If we have already inserted data, don't do this again
-                    getPage[0].blocks.push(block.data())
+                  let blockData = block.data()
+                  if(blockData.published != false) {
+                    getPage[0].blocks.push(blockData)
+                  }
                 })
               }
             })

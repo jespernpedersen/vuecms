@@ -16,7 +16,7 @@
                   <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
                   <li @click="EditSettings(i)">Edit Section Settings</li>
                 </div>
-                <section v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+                <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
                     <h2 v-if="block.showtitle">{{ block.title }}</h2>
                     <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
                     </textarea>
@@ -188,6 +188,10 @@ export default {
       padding: 10px 15px;
       font-weight: bold;
       background-color: #FFF;
+    }
+
+    section.disabled {
+      opacity: 0.2;
     }
 
     .v-table .row {
