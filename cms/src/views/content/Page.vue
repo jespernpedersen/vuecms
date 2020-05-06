@@ -9,15 +9,24 @@
             @keydown.enter="editField('title', this)"
             />
         </div>
-        <div class="field">
-            <label>Content</label>
-            <textarea
-                v-model="page.content"
-                @keydown.enter="editField('content')"
-            ></textarea>
-        </div>
         <!-- Block System -->
+        <div class="all-blocks"  style="text-align: left" v-for="block in blocks">
         
+            <section v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+                <h1>
+                    {{ block.title }}
+                </h1>
+                <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
+                </textarea>
+                <div v-for="index in block.columns">
+                </div>
+            </section>
+        </div>
+        
+          <pre>
+            {{ blocks }}
+          </pre>
+          <button class="btn" @click="AddSection(blocks, blocks[blocks.length - 1].id)">Add New Section</button>
     </div>
   </div>
 </template>
@@ -34,6 +43,7 @@ export default {
   data () {
     return {
       pages: [],
+      blocks: []
     }
   },
   methods: {
@@ -51,11 +61,26 @@ export default {
         else {
             alert("Error. Could not find field");
         }
+      },
+      AddSection(blocks, lastkey) {
+        console.log(lastkey)
+        pagesRef.doc(this.$router.app._route.params.id).collection("blocks").doc("2").set({
+          id: 2,
+          bgcolor: "#222",
+          bgimage: "",
+          blocktype: "content",
+          columns: 1,
+          container: true,
+          published: true,
+          textcolor: "#ffffff",
+          title: "New Section"
+        })
       }
   },
   firestore() {
     return {
       page: pagesRef.doc(this.$router.app._route.params.id),
+      blocks: pagesRef.doc(this.$router.app._route.params.id).collection("blocks")
     }
   }
 }
@@ -142,19 +167,6 @@ export default {
 
     .v-table .row:not(:last-child) {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    input,
-    textarea {
-        display: inline-block;
-        margin: 5px 0;
-        padding: 10px;
-        vertical-align: middle;
-        width: 50%;
-    }
-
-    textarea {
-        min-height: 900px;
     }
 
     input.title {
