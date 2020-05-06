@@ -20,56 +20,63 @@ const my_routes = [{
             import ( /* webpackChunkName: "about" */ '../views/Page.vue')
     },
 
+    // Login Router
+    {
+        path: 'login',
+        name: 'Login',
+        component: () =>
+            import ('../views/login/Login.vue')
+    },
 
     // Backend Routers
     {
         path: '/management/content/pages',
         name: 'Content Management System',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/content/Pages.vue')
+            import ('../views/content/Pages.vue')
     },
 
     {
         path: '/management/content/pages/:id/',
         name: 'Content Management System',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/content/Page.vue')
+            import ('../views/content/Page.vue')
     },
     {
         path: '/management/content/blocks',
         name: 'Blocks',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/content/Blocks.vue')
+            import ('../views/content/Blocks.vue')
     },
     {
         path: '/management/content/blocks/:id/',
         name: 'Block',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/content/Block.vue')
+            import ('../views/content/Block.vue')
     },
     {
         path: '/management/content/banner',
         name: 'Banner',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/content/StatusBlock.vue')
+            import ('../views/content/StatusBlock.vue')
     },
     {
         path: '/management/content/menu',
         name: 'Menu_Management',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/content/Menumanagement.vue')
+            import ('../views/content/Menumanagement.vue')
     },
     {
         path: '/management/people/customers',
         name: 'Menu_Management',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/people/Customers.vue')
+            import ('../views/people/Customers.vue')
     },
     {
         path: '/management/people/accounts',
         name: 'Menu_Management',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/people/Accounts.vue')
+            import ('../views/people/Accounts.vue')
     }
 ]
 
