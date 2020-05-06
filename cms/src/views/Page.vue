@@ -13,10 +13,11 @@
       </div>
     </nav>
     <main>
-      <div class="container">
-        <h1>{{ pages[0].title }}</h1>
-        <p>{{ pages[0].content }}</p>
-      </div>
+      <section v-for="block in pages[0].blocks" :key="block.id" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+        <div v-bind:class="{ container: block.container}">
+          <p v-if="block.textcontent">{{ block.textcontent }}</p>
+        </div>
+      </section>
     </main>
     <footer>
       Frontend Footer
@@ -47,30 +48,90 @@ export default {
   methods: {
     async getPage() {
       // First we get the page from router
-      let routeId = this.$router.app._route.params.page;
+      if(this.$router.app._route.params.page != undefined) {
+        console.log(this.$router.app._route.params.page)
+        let routeId = this.$router.app._route.params.page;
+        // Then we filter through database for the menu item that is equal to our route page
+        let menu = menusRef.doc("0").collection("items").where("url", "==", routeId)
+        menu.limit(1).get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+            if(doc.exists) {
+              // Then we get the data from the menu
+              let menu_data = doc.data()
+              // Then we sort through pages using the reference to page ids from menu to get the page content
 
-      // Then we filter through database for the menu item that is equal to our route page
-      let menu = menusRef.doc("0").collection("items").where("url", "==", routeId)
-      menu.limit(1).get().then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
-          if(doc.exists) {
-            // Then we get the data from the menu
-            let menu_data =  doc.data()
+              // Page Meta Data
+              pagesRef.doc(String(menu_data.reference)).get().then(function(document) {
+                let docData = document.data();
 
-            // Then we sort through pages using the reference to page ids from menu to get the page content
-            pagesRef.where("id", "==", menu_data.reference).get().then(function(subQuerySnapshot) {
-              subQuerySnapshot.forEach(function(subdoc) {
-                // We put the content of the page into the variable Array
-                getPage.push(subdoc.data())
+                // Only output information we need
+                let DocumentData = {
+                  "id": docData.id,
+                  "title": docData.title,
+                  // This is our blocks
+                  "blocks": []
+                }
+
+                // Push to our object
+                getPage.push(DocumentData)
+                
+              
+                // Page Block Data
+                pagesRef.doc(String(docData.id)).collection("blocks").get().then(function(blocks) {
+                  // For every block
+                  blocks.forEach(function(block) {
+                    getPage[0].blocks.push(block.data())
+                  })
+                })
+              })
+            }
+            // If document doesn't exist, it will return this error
+            else {
+              alert("Document doesn't exist")
+            }
+          })
+        })
+      }
+      else {
+        let routeId = 0;
+        // Page Meta Data
+        pagesRef.where("featured", "==", true).limit(1).get().then(function(query) {
+          query.forEach(function(document) {
+            let docData = document.data();
+
+            let DocumentData = {
+              "id": docData.id,
+              "title": docData.title,
+              // This is our blocks
+              "blocks": []
+            }
+            let PageID = docData.id
+            getPage.push(DocumentData)
+           // Page Block Data
+            pagesRef.doc(String(PageID)).collection("blocks").get().then(function(blocks) {
+              // For every block
+              blocks.forEach(function(block) {
+                getPage[0].blocks.push(block.data())
               })
             })
+          })
+          /*
+          let blocks = ["Test"];
+          let docData = document.data();
+          
+          // Only output information we need
+          let DocumentData = {
+            "id": docData.id,
+            "title": docData.title,
+            // This is our blocks
+            "blocks": []
           }
-          // If document doesn't exist, it will return this error
-          else {
-            alert("Document doesn't exist")
-          }
+
+          // Push to our object
+            getPage.push(DocumentData)
+          */
         })
-      })
+      }
     }
   },
   firestore() {
@@ -143,7 +204,11 @@ export default {
 
 main {
   text-align: left;
-  padding: 30px;
+}
+
+section {
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
 
 .page nav ul li:not(:last-of-type) {

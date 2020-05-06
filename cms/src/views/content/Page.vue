@@ -17,15 +17,13 @@
                   <li @click="EditSettings(i)">Edit Section Settings</li>
                 </div>
                 <section v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
-                    <h1>
-                        {{ block.title }}
-                    </h1>
                     <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
                     </textarea>
                 </section>
                 <aside class="section-settings">
                   <div class="settings-inner">
-                      <ul>
+                      <ul> 
+                          <li>Block Title: <input v-model="block.title" type="text" @change="notifyChanges()"/></li>
                           <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
                           <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
                           <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
@@ -35,9 +33,9 @@
             </div>
           </div>
           
-          <button class="btn" @click="AddSection(blocks, blocks[blocks.length - 1].id)">Add New Section</button>
-      </div>
-      <div class="fluid container">
+          <button class="btn" @click="AddSection(blocks)">Add New Section</button>
+
+          
           <div v-bind:class="{ active: unsavedChanges}">
               <div class="notification">
                   <h3 style="text-align: center;">You've unsaved changes!</h3>
@@ -45,7 +43,7 @@
               </div>
           </div>
         </div>
-    </div>
+      </div>
   </div>
 </template>
 
@@ -102,19 +100,43 @@ export default {
       notifyChanges() {
           this.unsavedChanges = true
       },
-      AddSection(blocks, lastkey) {
-        pagesRef.doc(this.$router.app._route.params.id).collection("blocks").doc("2").set({
-          id: 2,
-          bgcolor: "#222",
-          bgimage: "",
-          blocktype: "content",
-          columns: 1,
-          container: true,
-          published: true,
-          textcolor: "#ffffff",
-          title: "New Section",
-          textcontent: ""
-        })
+      AddSection(blocks) {
+        // New ID
+        if(blocks != '') {
+          let NewSectionID = blocks[blocks.length - 1].id + 1;
+          // New ID as String, Firestore uses string instead of numbers as identifiers
+          let NewSectionIDString = String(NewSectionID)
+          // Construct data
+          pagesRef.doc(this.$router.app._route.params.id).collection("blocks").doc(NewSectionIDString).set({
+            id: NewSectionID,
+            bgcolor: "#222",
+            bgimage: "",
+            blocktype: "content",
+            columns: 1,
+            container: true,
+            published: true,
+            textcolor: "#ffffff",
+            title: "New Section",
+            textcontent: ""
+          })
+        }
+        else {         
+            pagesRef.doc(this.$router.app._route.params.id).collection("blocks").doc("0").set({
+            id: 0,
+            bgcolor: "#222",
+            bgimage: "",
+            blocktype: "content",
+            columns: 1,
+            container: true,
+            published: true,
+            textcolor: "#ffffff",
+            title: "New Section",
+            textcontent: ""
+            })
+        }
+
+
+
       }
   },
   firestore() {
@@ -137,6 +159,7 @@ export default {
         padding-left: 350px;
         padding-top: 50px;
         padding-right: 30px;
+        min-height: 100vh;
     }
 
     .pages-view h1 {
@@ -290,7 +313,7 @@ export default {
 
 
 .notification {
-    position: absolute;
+    position: fixed;
     max-width: 900px;
     left: 50%;
     transform: translate(-50%, 0);
@@ -325,22 +348,30 @@ export default {
 
 
     aside.section-settings {
-        min-width: 300px;
-        padding-top: 30px;
+        width: 300px;
         box-sizing: border-box;
-        position: absolute;
-        top: 4px;
+        position: fixed;
+        top: 0px;
         right: 0;
-        min-height: 100vh;
+        height: 100%;
         overflow: hidden;
+    }
+
+    aside.section-settings input {
+      max-width: 300px;
+      -webkit-appearance: none;
+      border: none;
+      background-color: transparent;
     }
 
     aside.section-settings .settings-inner {
         background-color: #fff;
-        min-height: 100vh;
+        height: 100%;
         position: relative;
         transform: translate(100%, 0);
         transition: 0.3s ease-in-out;
+        
+        padding-top: 30px;
     }
 
     .active aside.section-settings {

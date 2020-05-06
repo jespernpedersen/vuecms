@@ -56,16 +56,16 @@ let visiblePagesRef = pagesRef.where("published", "==", true);
 pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
     querySnapshot.forEach(function(doc) {
         let page = doc.data();
-        // console.log(pageData)
 
-        let slug = pageData.title.replace(/\s+/g, '-').toLowerCase()
+        let slug = page.title.replace(/\s+/g, '-').toLowerCase()
 
         // Construct data
         let pagesArray = {
           id: page.id,
           name: page.title,
           url: slug,
-          order: page.id
+          order: page.id,
+          reference: page.id
         }
 
         // Add menu items to object
@@ -106,7 +106,8 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
           id: item.id,
           name: item.name,
           url: item.url,
-          order: item.order
+          order: item.order,
+          reference: item.id
         }
 
         // Add menu items to object
@@ -149,7 +150,8 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
           id: item.id,
           name: item.name,
           url: item.url,
-          order: item.order
+          order: item.order,
+          reference: item.id
         }
 
         // Add menu items to object
@@ -215,7 +217,8 @@ export default {
                             "id": item.id,
                             "name": item.name,
                             "order": item.order,
-                            "url": item.url
+                            "url": item.url,
+                            "reference": item.id
                         })
                         hasDeleted = false
                     })
