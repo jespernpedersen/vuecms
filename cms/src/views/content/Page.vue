@@ -56,7 +56,8 @@ export default {
     }
   },
   methods: {
-      SavePage(blocks) {
+      async SavePage(blocks) {
+        // Set page id
         let pageID = this.$router.app._route.params.id;
         blocks.forEach(function(block) {
           // Change Doc ID to String
@@ -73,7 +74,9 @@ export default {
              textcolor: block.textcolor,
              textcontent: block.textcontent            
           })
-        })
+        })  
+        // Hide notification once we have saved
+        this.unsavedChanges = false
       },
       notifyChanges() {
           this.unsavedChanges = true
@@ -94,10 +97,6 @@ export default {
         }
       },
       AddSection(blocks, lastkey) {
-        
-
-          console.log(this.$router.app._route.params.id)
-        /*
         pagesRef.doc(this.$router.app._route.params.id).collection("blocks").doc("2").set({
           id: 2,
           bgcolor: "#222",
@@ -109,7 +108,6 @@ export default {
           textcolor: "#ffffff",
           title: "New Section"
         })
-        */
       }
   },
   firestore() {

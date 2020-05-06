@@ -12,9 +12,6 @@
                     Column
                 </div>
             </section>
-            <pre>
-                {{ block[0] }}
-            </pre>
         
             <div v-bind:class="{ active: unsavedChanges}">
                 <div class="notification">

@@ -93,6 +93,18 @@ export default {
               "slug": "placeholder",
               "title": "Placeholder title"
             })
+            // Create First Section
+            pagesRef.doc(newPageRef).collection("blocks").doc("0").set({
+              "id": 0,
+              bgcolor: "#222",
+              bgimage: "",
+              blocktype: "content",
+              columns: 1,
+              container: true,
+              published: false,
+              textcolor: "#ffffff",
+              title: "First Section"
+            })
           })
         });
     },
