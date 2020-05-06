@@ -71,17 +71,18 @@ export default {
                   // This is our blocks
                   "blocks": []
                 }
-
                 // Push to our object
                 getPage.push(DocumentData)
                 
               
                 // Page Block Data
                 pagesRef.doc(String(docData.id)).collection("blocks").get().then(function(blocks) {
-                  // For every block
-                  blocks.forEach(function(block) {
-                    getPage[0].blocks.push(block.data())
-                  })
+                  // For every block and if the block object is empty, so we don't duplicate content
+                  if(getPage[0].blocks == '') {
+                    blocks.forEach(function(block) {
+                      getPage[0].blocks.push(block.data())
+                    })
+                  }
                 })
               })
             }
@@ -110,26 +111,15 @@ export default {
            // Page Block Data
             pagesRef.doc(String(PageID)).collection("blocks").get().then(function(blocks) {
               // For every block
-              blocks.forEach(function(block) {
-                getPage[0].blocks.push(block.data())
-              })
+              // If the object is empty
+              if(getPage[0].blocks == '') {
+                blocks.forEach(function(block) {
+                  // If we have already inserted data, don't do this again
+                    getPage[0].blocks.push(block.data())
+                })
+              }
             })
           })
-          /*
-          let blocks = ["Test"];
-          let docData = document.data();
-          
-          // Only output information we need
-          let DocumentData = {
-            "id": docData.id,
-            "title": docData.title,
-            // This is our blocks
-            "blocks": []
-          }
-
-          // Push to our object
-            getPage.push(DocumentData)
-          */
         })
       }
     }
@@ -147,7 +137,7 @@ export default {
 
 <style>
 .page {
-  min-height: calc(100vh - 35px);
+  min-height: calc(100vh - 34px);
   display: flex;
   flex-direction: column;
 }
@@ -192,14 +182,14 @@ export default {
   padding: 0;
 }
 
-.page nav ul li {
+.page nav ul li a {
   
   border: 1px solid #000;
   padding: 15px;
 }
 
 .page {
-  margin-top: 35px;
+  margin-top: 34px;
 }
 
 main {

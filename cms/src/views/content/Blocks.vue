@@ -102,6 +102,9 @@
           </div>
         </div>
     </div>
+    
+    
+  <div class="version">Control Seat Alpha 0.4.1</div>
   </div>
 </template>
 

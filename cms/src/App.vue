@@ -23,6 +23,13 @@
   min-height: calc(100vh - 34px);
 }
 
+.version {
+  position: absolute;
+  opacity: 0.6;
+  bottom: 15px;
+  right: 15px;
+}
+
 #nav {
   padding: 8px;
   background-color: #222;
@@ -38,6 +45,15 @@
     &.router-link-exact-active {
       color: #42b983;
     }
+  }
+}
+
+nav {
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
   }
 }
 

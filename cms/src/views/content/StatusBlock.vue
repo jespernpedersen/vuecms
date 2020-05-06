@@ -31,6 +31,9 @@
             <li>Text Color: {{ block.textcolor }} <input v-model="block[0].textcolor" type="color" @change="notifyChanges()"/></li>
         </ul>
     </aside>
+    
+    
+  <div class="version">Control Seat Alpha 0.4.1</div>
   </div>
 </template>
 

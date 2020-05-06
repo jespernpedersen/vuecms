@@ -25,7 +25,7 @@
                       <ul> 
                           <li>Block Title: <input v-model="block.title" type="text" @change="notifyChanges()"/></li>
                           <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
-                          <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
+            <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
                           <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
                       </ul>
                   </div>
@@ -44,6 +44,9 @@
           </div>
         </div>
       </div>
+      
+    
+  <div class="version">Control Seat Alpha 0.4.1</div>
   </div>
 </template>
 
@@ -357,7 +360,7 @@ export default {
         overflow: hidden;
     }
 
-    aside.section-settings input {
+    aside.section-settings input[type="text"] {
       max-width: 300px;
       -webkit-appearance: none;
       border: none;
