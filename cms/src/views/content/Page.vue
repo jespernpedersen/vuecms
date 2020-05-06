@@ -6,36 +6,46 @@
           <div class="field">
               <label>Title</label>
               <input type="text" class="title"
-              v-model="page.title"
-              @keydown.enter="editField('title', this)"
+              v-model="page.title" @change="notifyChanges()"
               />
           </div>
           <!-- Block System -->
-          <div class="all-blocks blocks-view"  style="text-align: left" v-for="block in blocks">
-              <div class="section-toolbar">
-                Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span>
-              </div>
-              <section v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
-                  <h1>
-                      {{ block.title }}
-                  </h1>
-                  <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
-                  </textarea>
-              </section>
+          <div class="all-blocks blocks-view"  style="text-align: left">
+            <div v-for="(block, i) in blocks" :key="i" :class="{ active: i === activeSection}">
+                <div class="section-toolbar">
+                  <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
+                  <li @click="EditSettings(i)">Edit Section Settings</li>
+                </div>
+                <section v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+                    <h1>
+                        {{ block.title }}
+                    </h1>
+                    <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
+                    </textarea>
+                </section>
+                <aside class="section-settings">
+                  <div class="settings-inner">
+                      <ul>
+                          <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
+                          <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
+                          <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
+                      </ul>
+                  </div>
+                </aside>
+            </div>
           </div>
+          
+          <button class="btn" @click="AddSection(blocks, blocks[blocks.length - 1].id)">Add New Section</button>
+      </div>
+      <div class="fluid container">
           <div v-bind:class="{ active: unsavedChanges}">
               <div class="notification">
                   <h3 style="text-align: center;">You've unsaved changes!</h3>
                   <button type="button" class="btn btn-default" @click="SavePage(blocks)">Save Page</button>
               </div>
           </div>
-          <pre>
-            {{ blocks }}
-          </pre>
-          <button class="btn" @click="AddSection(blocks, blocks[blocks.length - 1].id)">Add New Section</button>
         </div>
     </div>
-    
   </div>
 </template>
 
@@ -52,13 +62,24 @@ export default {
     return {
       pages: [],
       blocks: [],
-      unsavedChanges: false
+      unsavedChanges: false,
+      activeSection: null,
     }
   },
   methods: {
+      async EditSettings (i) {
+        this.activeSection = i;
+      },
       async SavePage(blocks) {
         // Set page id
         let pageID = this.$router.app._route.params.id;
+
+        // Update page variables
+        pagesRef.doc(pageID).update({
+          title: this.page.title
+        })
+
+        // Save Blocks
         blocks.forEach(function(block) {
           // Change Doc ID to String
           let blockID = String(block.id);
@@ -81,21 +102,6 @@ export default {
       notifyChanges() {
           this.unsavedChanges = true
       },
-      editField(fieldType, field) {
-        if(fieldType == "title") {
-          pagesRef.doc(this.$router.app._route.params.id).update({
-            title: this.page.title
-          })
-        }
-        else if(fieldType == "content") {
-          pagesRef.doc(this.$router.app._route.params.id).update({
-            content: this.page.content
-          })
-        }
-        else {
-            alert("Error. Could not find field");
-        }
-      },
       AddSection(blocks, lastkey) {
         pagesRef.doc(this.$router.app._route.params.id).collection("blocks").doc("2").set({
           id: 2,
@@ -106,7 +112,8 @@ export default {
           container: true,
           published: true,
           textcolor: "#ffffff",
-          title: "New Section"
+          title: "New Section",
+          textcontent: ""
         })
       }
   },
@@ -173,6 +180,18 @@ export default {
     .page-publish,
     .page-published {
       text-align: left;
+    }
+
+    .section-toolbar {
+      list-style: none;
+    }
+
+    .section-toolbar li {
+      display: inline-block;
+    }
+
+    .section-toolbar li:not(:first-of-type) {
+      margin-left: 30px;
     }
 
     .page-id {
@@ -266,9 +285,10 @@ export default {
 
     .fluid.container {
     min-height: 100%;
-    position: relative;
     overflow: hidden;
 }
+
+
 .notification {
     position: absolute;
     max-width: 900px;
@@ -297,4 +317,58 @@ export default {
 .active .notification {
     bottom: 2%;
 }
+
+.all-blocks {
+  overflow: hidden;
+}
+
+
+
+    aside.section-settings {
+        min-width: 300px;
+        padding-top: 30px;
+        box-sizing: border-box;
+        position: absolute;
+        top: 4px;
+        right: 0;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
+    aside.section-settings .settings-inner {
+        background-color: #fff;
+        min-height: 100vh;
+        position: relative;
+        transform: translate(100%, 0);
+        transition: 0.3s ease-in-out;
+    }
+
+    .active aside.section-settings {
+        z-index: 5;
+    }
+
+    .active aside.section-settings .settings-inner {
+        transform: translate(0, 0);
+    }
+
+
+
+    aside.section-settings ul {
+        list-style: none;
+        text-align: left;
+    }
+
+    aside.section-settings ul li {
+        padding: 15px 30px;
+        color: #000;
+        background-color: rgba(0,0,0,0.2);
+    }
+
+    aside.section-settings h2 {
+        margin-bottom: 25px;
+    }
+
+    aside.section-settings ul li:nth-of-type(odd) {
+        background-color: rgba(0,0,0,0.3);
+    }
 </style>
