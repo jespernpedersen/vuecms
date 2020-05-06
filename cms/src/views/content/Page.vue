@@ -17,6 +17,7 @@
                   <li @click="EditSettings(i)">Edit Section Settings</li>
                 </div>
                 <section v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+                    <h2 v-if="block.showtitle">{{ block.title }}</h2>
                     <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
                     </textarea>
                 </section>
@@ -24,8 +25,9 @@
                   <div class="settings-inner">
                       <ul> 
                           <li>Block Title: <input v-model="block.title" type="text" @change="notifyChanges()"/></li>
+                          <li>Show Title on Block <input v-model="block.showtitle" type="checkbox" @change="notifyChanges()"></li>
                           <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
-            <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
+                          <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
                           <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
                       </ul>
                   </div>
@@ -92,6 +94,7 @@ export default {
              columns: block.columns,
              published: block.published,
              title: block.title,
+             showtitle: block.showtitle,
              container: block.container,
              textcolor: block.textcolor,
              textcontent: block.textcontent            
@@ -120,6 +123,7 @@ export default {
             published: true,
             textcolor: "#ffffff",
             title: "New Section",
+            showtitle: false,
             textcontent: ""
           })
         }
@@ -134,6 +138,7 @@ export default {
             published: true,
             textcolor: "#ffffff",
             title: "New Section",
+            showtitle: false,
             textcontent: ""
             })
         }

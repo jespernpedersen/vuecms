@@ -20,6 +20,7 @@
     <main>
       <section v-for="block in pages[0].blocks" :key="block.id" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
         <div v-bind:class="{ container: block.container}">
+          <h2 v-if="block.showtitle">{{ block.title }}</h2>
           <p v-if="block.textcontent">{{ block.textcontent }}</p>
         </div>
       </section>
@@ -157,8 +158,6 @@ export default {
   padding: 30px 0;
   color: #FFF;
 }
-
-
 
 .banner {
   height: 0px;
