@@ -5,12 +5,9 @@
 
         <div class="fluid container">
             <section v-bind:style="{ backgroundColor: block[0].bgcolor, color: block[0].textcolor }">
-                <h1>
+                <h1 style="text-align: center">
                     {{ block[0].title }}
                 </h1>
-                <div v-for="index in block[0].columns">
-                    Column
-                </div>
             </section>
         
             <div v-bind:class="{ active: unsavedChanges}">
@@ -103,7 +100,7 @@ export default {
     }
 
     aside.global-settings {
-        min-width: 300px;
+        width: 300px;
         padding-top: 30px;
         box-sizing: border-box;
     }

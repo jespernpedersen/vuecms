@@ -1,5 +1,10 @@
 <template>
   <div class="page">
+    <div class="banner" v-bind:class="{ active: status[0].published}" v-bind:style="{ backgroundColor: status[0].bgcolor, color: status[0].textcolor }">
+      <div v-if="status[0].published">
+        {{ status[0].title }}
+      </div>
+    </div>
     <header>
       <a href="/">Frontend Header</a>
     </header>
@@ -26,7 +31,7 @@
 </template>
 
 <script>
-import { db, pagesRef, menusRef } from '../firebase/db.js'
+import { db, pagesRef, menusRef, blocksRef } from '../firebase/db.js'
 
 // Get Menu Items
 var menuItemsRef = menusRef.doc("0").collection("items");
@@ -126,7 +131,8 @@ export default {
   },
   firestore() {
     return {
-      menuitems: menuItemsRef
+      menuitems: menuItemsRef,
+      status: blocksRef.where("blocktype", "==", "banner"),
     }
   },
   mounted() {
@@ -151,6 +157,21 @@ export default {
   padding: 30px 0;
   color: #FFF;
 }
+
+
+
+.banner {
+  height: 0px;
+  transition: 0.3s ease-in-out;
+  margin-top: -34px;
+  padding: 15px 0;
+}
+
+.banner.active {
+  height: auto;
+  margin-top: 0;
+}
+
 
 .page .title {
   text-align: center;
