@@ -11,28 +11,34 @@
           </div>
           <!-- Block System -->
           <div class="all-blocks">
-            <div v-for="(block, i) in blocks" :key="i" :class="{ active: i === activeSection}">
-                <div class="section-toolbar">
-                  <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
-                  <li @click="EditSettings(i)">Edit Section Settings</li>
+            <draggable class="section-list" tag="div" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+                <transition-group type="transition" :name="'flip-list'">
+                  <div v-for="(block, i) in blocks" :key="i" :class="{ active: i === activeSection}">
+                    <div class="section-toolbar">
+                      <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
+                      <li @click="EditSettings(i)">Edit Section Settings</li>
+                      <li class="move">Move</li>
+                      <li>Order: {{ block.order }}</li>
+                    </div>
+                    <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+                        <h2 v-if="block.showtitle">{{ block.title }}</h2>
+                        <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
+                        </textarea>
+                    </section>  
+                    <aside class="section-settings">
+                      <div class="settings-inner">
+                          <ul> 
+                              <li>Block Title: <input v-model="block.title" type="text" @change="notifyChanges()"/></li>
+                              <li>Show Title on Block <input v-model="block.showtitle" type="checkbox" @change="notifyChanges()"></li>
+                              <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
+                              <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
+                              <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
+                          </ul>
+                      </div>
+                    </aside>
                 </div>
-                <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
-                    <h2 v-if="block.showtitle">{{ block.title }}</h2>
-                    <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
-                    </textarea>
-                </section>
-                <aside class="section-settings">
-                  <div class="settings-inner">
-                      <ul> 
-                          <li>Block Title: <input v-model="block.title" type="text" @change="notifyChanges()"/></li>
-                          <li>Show Title on Block <input v-model="block.showtitle" type="checkbox" @change="notifyChanges()"></li>
-                          <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
-                          <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
-                          <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
-                      </ul>
-                  </div>
-                </aside>
-            </div>
+                </transition-group>
+            </draggable>
           </div>
           
           <button class="btn" @click="AddSection(blocks)">Add New Section</button>
@@ -54,22 +60,33 @@
 
 <script>
 import Menu from '@/components/management/Menu.vue'
+import draggable from "vuedraggable"
 import { db, pagesRef } from '../../firebase/db.js'
 
 export default {
   name: 'Page',
   components: {
-    Menu
+    Menu, draggable
   },
   data () {
     return {
       pages: [],
       blocks: [],
       unsavedChanges: false,
+      editable: true,
+      isDragging: false,
+      delayedDragging: false,
       activeSection: null,
     }
   },
   methods: {
+      onMove({ relatedContext, draggedContext }) {
+        const relatedElement = relatedContext.element;
+        const draggedElement = draggedContext.element;
+        return (
+          (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+        );
+      },
       async EditSettings (i) {
         this.activeSection = i;
       },
@@ -97,11 +114,14 @@ export default {
              showtitle: block.showtitle,
              container: block.container,
              textcolor: block.textcolor,
-             textcontent: block.textcontent            
+             textcontent: block.textcontent, 
+             order: block.order        
           })
         })  
         // Hide notification once we have saved
         this.unsavedChanges = false
+        // Hide Settings once we have saved
+        this.activeSection = null
       },
       notifyChanges() {
           this.unsavedChanges = true
@@ -124,9 +144,11 @@ export default {
             textcolor: "#ffffff",
             title: "New Section",
             showtitle: false,
-            textcontent: ""
+            textcontent: "",
+            order: NewSectionID
           })
         }
+        // If no sections exist
         else {         
             pagesRef.doc(this.$router.app._route.params.id).collection("blocks").doc("0").set({
             id: 0,
@@ -139,13 +161,42 @@ export default {
             textcolor: "#ffffff",
             title: "New Section",
             showtitle: false,
-            textcontent: ""
+            textcontent: "",
+            order: 0
             })
         }
 
 
 
       }
+  },
+  computed: {
+    dragOptions() {
+      return {
+        animation: 0,
+        group: "description",
+        disabled: !this.editable,
+        ghostClass: "ghost"
+      };
+    },
+  },
+  watch: {
+    isDragging(newValue) {
+      if (newValue) {
+        this.delayedDragging = true;
+        return;
+      }
+      this.$nextTick(() => {
+        this.delayedDragging = false;
+        
+        // Once have unsaved changes when we move an item, we should show the notification save box.
+        this.unsavedChanges = true
+
+        this.blocks.map(function(block, index) {
+          block.order = index;
+        })
+      });
+    }
   },
   firestore() {
     return {
@@ -257,6 +308,10 @@ export default {
 
     .page-published span.false {
       background-color: red;
+    }
+
+    .move {
+      cursor: move;
     }
     
     .select-all,
