@@ -2,33 +2,38 @@
   <div class="menu-management-view">
     <Menu></Menu>
     <div class="content">
-        <div class="fluid container">
-            <nav class="col-md-4">
-                <h2 style="text-align: left">Pages</h2>
-                <p>These items comes from your page list, you can add them to each of your menus by dragging them</p>
-                <draggable class="list-group" tag="ul" v-model="pages" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false, updateItemOrder">
-                    <transition-group type="transition" :name="'flip-list'">
-                      <li class="list-group-item" v-for="page in pages" :key="page.order">
-                          {{ page.name }}
-                          <span class="number"> {{ page.order }} </span>
-                      </li>
-                    </transition-group>
-                </draggable>
-                <!-- <pre style="text-align: left">{{ pages }}</pre> -->
-            </nav>
+        <div class="content-inner">
+        <div class="panel two-third-layout">
+            <div class="page-list">
+              <nav>
+                  <h2 style="text-align: left">Pages</h2>
+                  <p>These items comes from your page list, you can add them to each of your menus by dragging them</p>
+                  <draggable class="list-group" tag="ul" v-model="pages" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false, updateItemOrder">
+                      <transition-group type="transition" :name="'flip-list'">
+                        <li class="list-group-item" v-for="page in pages" :key="page.order">
+                            {{ page.name }}
+                            <span class="number"> {{ page.order }} </span>
+                        </li>
+                      </transition-group>
+                  </draggable>
+                  <!-- <pre style="text-align: left">{{ pages }}</pre> -->
+              </nav>
+            </div>
             
-            <nav v-for="menu in menus" :key="menu['.key']" class="col-md-4">
-                <h2 style="text-align: left">{{ menu.name }}</h2>
-                <draggable class="list-group" tag="ul" v-model="menu.items" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
-                    <transition-group type="transition" :name="'flip-list'">
-                    <li class="list-group-item" v-for="item in menu.items" :key="item.order">
-                        {{ item.name }}
-                        <span class="number"> {{item.order }} </span>
-                    </li>
-                    </transition-group>
-                </draggable>
-                <!-- <pre style="text-align: left">{{ menu }}</pre> -->
-            </nav>
+            <div class="menu-list">
+              <nav v-for="menu in menus" :key="menu['.key']">
+                  <h2 style="text-align: left">{{ menu.name }}</h2>
+                  <draggable class="list-group" tag="ul" v-model="menu.items" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+                      <transition-group type="transition" :name="'flip-list'">
+                      <li class="list-group-item" v-for="item in menu.items" :key="item.order">
+                          {{ item.name }}
+                          <span class="number"> {{item.order }} </span>
+                      </li>
+                      </transition-group>
+                  </draggable>
+              </nav>
+            </div>
+          </div>
             <div v-bind:class="{ active: unsavedChanges}">
               <div class="notification">
                   <h3 style="text-align: center;">You've unsaved changes!</h3>
@@ -73,6 +78,8 @@ pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
 
         // Add menu items to object
         getpageMenu.push(pagesArray);
+
+
     })
 })
 
@@ -115,6 +122,11 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
 
         // Add menu items to object
         getMenus[doc.id]['items'].push(itemsArray);
+
+        // Output it based on item order
+        getMenus[doc.id]['items'].map(function(item, index) {
+            item.order = index;
+        })
       });
     });
   });
@@ -191,6 +203,14 @@ export default {
         (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
       );
     },
+    ReOrderItems(oldIndex, newIndex) {
+      // move the item in the underlying array
+      this.list.splice(newIndex, 0, this.list.splice(oldIndex, 1)[0]);
+      // update order properties based on position in array
+      this.list.forEach(function(item, index){
+        item.order = index;
+      });
+    },
     async SaveMenu(menus, defaultMenus) {
         // menus = current object
         // oldmenus = old object
@@ -256,6 +276,16 @@ export default {
         
         // Once have unsaved changes when we move an item, we should show the notification save box.
         this.unsavedChanges = true
+
+        // Update menu item array
+        this.menus.forEach(function(menu) {
+          menu.items.map(function(item, index) {
+            item.order = index;
+          })
+        })
+        this.pages.map(function(page, index) {
+          page.order = index;
+        })
       });
     }
   },
@@ -267,25 +297,15 @@ export default {
     padding-top: 50px;
 }
 
-.col-md-3 {
-    width: 25%;
-    float: left;
-    padding-right: 15px;
-    padding-left: 15px;
+.page-list {
+  background-color: #FFF;
+  padding: 30px;
 }
 
-.col-md-4 {
-    width: 33%;
-    float: left;
-    padding-right: 15px;
-    padding-left: 15px;
-}
-
-.col-md-6 {
-    width: 50%;
-    float: left;
-    padding-right: 15px;
-    padding-left: 15px;
+.content-inner {
+  min-height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .flip-list-move {
@@ -308,6 +328,39 @@ export default {
 
 .no-move {
   transition: transform 0s;
+}
+
+.two-third-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-column-gap: 30px;
+}
+
+.page-list {
+  border-radius: 20px;
+}
+
+.page-list p {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.menu-list {
+  background-color: #FFF;
+  border-radius: 20px;
+  padding: 30px;
+}
+
+.menu-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 30px;
+}
+
+.menu-list nav {
+  padding: 30px;
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 20px;
 }
 
 .ghost {
@@ -556,10 +609,16 @@ aside.page-include-view ul {
 
 /* Unsaved Changes */
 
-.fluid.container {
-    min-height: 100%;
+.panel {
     position: relative;
     overflow: hidden;
+    background-color: transparent;
+}
+
+
+
+.column-5 {
+  width: 50%;
 }
 
 .notification {
