@@ -1,5 +1,5 @@
 <template>
-  <div class="blocks-view">
+  <div class="blocks-view status-view">
     <Menu></Menu>
     <div class="content">
 
@@ -84,6 +84,7 @@ export default {
         min-height: 100vh;
         display: flex;
         padding-top: 34px;
+        flex-direction: row;
     }
     .blocks-view .content {
         flex: 1 0 auto;
