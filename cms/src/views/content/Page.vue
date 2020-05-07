@@ -10,7 +10,7 @@
               />
           </div>
           <!-- Block System -->
-          <div class="all-blocks blocks-view"  style="text-align: left">
+          <div class="all-blocks">
             <div v-for="(block, i) in blocks" :key="i" :class="{ active: i === activeSection}">
                 <div class="section-toolbar">
                   <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
@@ -170,6 +170,10 @@ export default {
         min-height: 100vh;
     }
 
+    .blocks-view {
+      flex-direction: column;
+    }
+
     .pages-view h1 {
         text-align: left;
     }
@@ -280,18 +284,18 @@ export default {
         display: inline-block;
     }
 
-    .blocks-view section {
+    .all-blocks section {
         height: 200px;
         padding: 30px;
         text-align: left;
         color: #FFF;
     }
 
-    .blocks-view section {
+    .all-blocks section {
       margin-bottom: 15px;
     }
 
-    .blocks-view textarea {
+    .all-blocks textarea {
         width: 100%;
         background-color: transparent;
         border: none;
@@ -302,19 +306,19 @@ export default {
         outline: none;
     }
 
-    .blocks-view textarea::-webkit-input-placeholder {
+    .all-blocks textarea::-webkit-input-placeholder {
         color: inherit !important;
     }
     
-    .blocks-view textarea:-moz-placeholder { /* Firefox 18- */
+    .all-blocks textarea:-moz-placeholder { /* Firefox 18- */
         color: inherit !important;  
     }
     
-    .blocks-view textarea::-moz-placeholder {  /* Firefox 19+ */
+    .all-blocks textarea::-moz-placeholder {  /* Firefox 19+ */
         color: inherit !important;  
     }
     
-    .blocks-view textarea:-ms-input-placeholder {  
+    .all-blocks textarea:-ms-input-placeholder {  
         color: inherit !important;  
     }
 
