@@ -1,11 +1,11 @@
 <template>
 <div class="element-button">
     <div class="setting-text">
-        <input v-model="text" class="button" input="text" />
+        <input v-model="text" class="button" input="text"  @change="callChanges(text, link, blockid, elementid)"/>
     </div>                        
     <div class="setting-link expanded">
         <label>Link: </label>
-        <input v-model="link" type="text" />
+        <input v-model="link" type="text" @change="callChanges(text, link, blockid, elementid)" />
     </div>
 </div>
 </template>
@@ -13,7 +13,12 @@
 
 export default {
   name: 'ElementButton',
-  props: ['text', 'link']
+  props: ['text', 'link', 'blockid', 'elementid'],
+  methods: {
+      callChanges(text, link, blockid, elementid) {
+          this.$emit("update-element", { type: "button", element_text: text, element_link: link, blockid: blockid, elementid: elementid});
+      }
+  }
 }
 </script>
 

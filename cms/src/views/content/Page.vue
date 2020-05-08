@@ -23,11 +23,25 @@
                     <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
                         <h2 v-if="block.showtitle">{{ block.title }}</h2>          
                         <div v-for="element in block.elements" style="text-align: left">
-                          <pre>{{ element }}</pre>
-                          <ElementText v-if="element.type == 'text'" :blockid="block.id" :text="element.text" @update-text="updateText"></ElementText>
-                          <!--
-                          <ElementButton v-if="element.type == 'button'" :text="element.button_text" :link="element.button_link" @updated="notifyChanges()"></ElementButton>
-                          -->
+                          <ElementText 
+                            v-if="element.type == 'text'" 
+                            :elementid="element.id" 
+                            :blockid="block.id" 
+                            :text="element.text" 
+                            @update-element="UpdateElement"
+                            @delete-element="DeleteElement"
+                          >
+                          </ElementText>
+                          <ElementButton 
+                            v-if="element.type == 'button'" 
+                            :elementid="element.id" 
+                            :blockid="block.id" 
+                            :text="element.button_text" 
+                            :link="element.button_link" 
+                            @update-element="UpdateElement"
+                            @delete-element="DeleteElement"
+                          >
+                          </ElementButton>
                         </div>
                         <div class="element-library" style="text-align: left">
                           <button @click="AddElement(block.id, 'text')">Add Text</button>
@@ -95,7 +109,7 @@ export default {
     }
   },
   methods: {
-      onMove({ relatedContext, draggedContext }) {
+      async onMove({ relatedContext, draggedContext }) {
         const relatedElement = relatedContext.element;
         const draggedElement = draggedContext.element;
         return (
@@ -117,6 +131,12 @@ export default {
         // Here we got the different element types
         this.notifyChanges()
       },
+      async DeleteElement(content) {
+        let element = this.blocks[content.blockid].elements
+        element.splice(content.elementid)
+        // There are new changes
+        this.notifyChanges()
+      },
       ElementTemplate(elementID, elementtype, section) {
           if(elementtype == "text") {
             let element = {
@@ -136,11 +156,27 @@ export default {
             section.elements.push(element)
           }
       },
-      async updateText(content) {
+      async UpdateElement(content) {
         let blockID = content.blockid
-        let text = content.element_text
+        let elementID = content.elementid
+        let element = this.blocks[blockID].elements[elementID]
 
-        console.log(this.blocks[blockID].elements)
+        // If Text Element
+        if(content.type == "text") {
+          let text = content.element_text
+          element.text = text;
+        }
+        // If Button Element
+        else if(content.type == "button") {
+          let text = content.element_text
+          let link = content.element_link
+
+          element.button_text = text;
+          element.button_link = link;
+        }
+        
+        // There are new changes
+        this.notifyChanges()
       },
       async EditSettings (i) {
         this.activeSection = i;
@@ -157,9 +193,7 @@ export default {
         // Save Blocks
         blocks.forEach(function(block) {
           // Change Doc ID to String
-          let blockID = String(block.id);
-
-          console.log(block.elements)
+          let blockID = String(block.id)
 
           // Construct Data to Update
           pagesRef.doc(pageID).collection("blocks").doc(blockID).update({
@@ -181,10 +215,10 @@ export default {
         // Hide Settings once we have saved
         this.activeSection = null
       },
-      notifyChanges() {
+      async notifyChanges() {
           this.unsavedChanges = true
       },
-      AddSection(blocks) {
+      async AddSection(blocks) {
         // New ID
         if(blocks != '') {
           let NewSectionID = blocks[blocks.length - 1].id + 1;
