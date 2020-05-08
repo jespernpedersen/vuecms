@@ -201,7 +201,7 @@ export default {
   firestore() {
     return {
       page: pagesRef.doc(this.$router.app._route.params.id),
-      blocks: pagesRef.doc(this.$router.app._route.params.id).collection("blocks")
+      blocks: pagesRef.doc(this.$router.app._route.params.id).collection("blocks").orderBy("order")
     }
   }
 }

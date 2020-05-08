@@ -5,9 +5,10 @@
             <unicon name="layer-group" />
             <span>Content</span>
         </li>
-        <li class="disabled">
-            <unicon name="images" />
-            <span>Media Library</span>
+        <li>
+            <router-link to="/management/content/upload">
+                <unicon name="images" />
+            </router-link>
         </li>
         
         <li class="disabled" v-on:click="menuview = 'user-menu'">
