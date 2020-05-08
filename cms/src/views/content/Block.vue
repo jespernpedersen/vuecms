@@ -10,9 +10,6 @@
                 </h1>
                 <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
                 </textarea>
-                <div v-for="index in block.columns">
-                    Column
-                </div>
             </section>
             <pre>
                 {{ block }}
