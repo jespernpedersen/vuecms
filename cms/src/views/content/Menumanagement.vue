@@ -86,50 +86,52 @@ pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
 // All our menus
 menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
   // Get Every First Level Documents (i.e. menus)
-  querySnapshot.forEach(function(doc) {
-    // Get data
-    let menu = doc.data();
-    // Main Collection
+  if(getMenus.length == 0) {
+    querySnapshot.forEach(function(doc) {
+      // Get data
+      let menu = doc.data();
+      // Main Collection
 
-    let menuArray = {
-      id: menu.id,
-      name: menu.name,
-      // We start with empty items, and later add them down
-      items: []
-    }
+      let menuArray = {
+        id: menu.id,
+        name: menu.name,
+        // We start with empty items, and later add them down
+        items: []
+      }
 
-    // Add menu to object
-    getMenus.push(menuArray);
+      // Add menu to object
 
-    // Menu Items
-    menusRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
-      // Set ID of the menu's items we will sort by
-      let this_menu = doc.id;
+      getMenus.push(menuArray);
 
-      // For every menu item, we push them to our object configured by our menu id
-      subquerySnapshot.forEach(function(subdoc) {
-        // Get item data
-        let item = subdoc.data();
+      // Menu Items
+      menusRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
+        // Set ID of the menu's items we will sort by
+        let this_menu = doc.id;
 
-        // Construct data
-        let itemsArray = {
-          id: item.id,
-          name: item.name,
-          url: item.url,
-          order: item.order,
-          reference: item.id
+        // For every menu item, we push them to our object configured by our menu id
+        if(getMenus[doc.id]['items'].length == 0) { 
+          subquerySnapshot.forEach(function(subdoc) {
+            // Get item data
+            let item = subdoc.data();
+
+            // Construct data
+            let itemsArray = {
+              id: item.id,
+              name: item.name,
+              url: item.url,
+              order: item.order,
+              reference: item.id
+            }
+            getMenus[doc.id]['items'].push(itemsArray);
+            // Output it based on item order
+            getMenus[doc.id]['items'].map(function(item, index) {
+              item.order = index;
+            })
+          });
         }
-
-        // Add menu items to object
-        getMenus[doc.id]['items'].push(itemsArray);
-
-        // Output it based on item order
-        getMenus[doc.id]['items'].map(function(item, index) {
-            item.order = index;
-        })
       });
     });
-  });
+  }
 });
 
 // All our old menus
