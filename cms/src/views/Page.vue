@@ -11,9 +11,11 @@
     <nav>
       <div class="container">
       <ul>
-        <li v-for="item in menuitems">
-          <a v-bind:href="item.url">{{ item.name }}</a>
-        </li>
+        <transition-group type="transition" :name="'flip-list'">
+          <li v-for="item in menuitems" :key="item.order">
+            <a v-bind:href="item.url">{{ item.name }}</a>
+          </li>
+        </transition-group>
       </ul>
       </div>
     </nav>
@@ -140,7 +142,7 @@ export default {
   },
   firestore() {
     return {
-      menuitems: menuItemsRef,
+      menuitems: menuItemsRef.orderBy("order"),
       status: blocksRef.where("blocktype", "==", "banner"),
     }
   },
@@ -201,7 +203,7 @@ export default {
   padding: 20px 0;
 }
 
-.page nav ul {
+.page nav ul span {
   display: flex;
   color: #222;
   width: 100%;
