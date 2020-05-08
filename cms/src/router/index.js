@@ -26,7 +26,7 @@ const my_routes = [{
         path: '/management/content/upload',
         name: 'Content Management System',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/content/FileUpload.vue')
+            import ( /* webpackChunkName: "about" */ '../views/content/Library.vue')
     },
     {
         path: '/management/content/pages',

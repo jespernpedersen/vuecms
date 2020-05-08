@@ -2,7 +2,6 @@
   <div class="file-component-view">
     <!-- File Upload -->
         <div class="upload-file">
-            <p>Upload an image to Firebase:</p>
             <input type="file" @change="previewImage" accept="image/*" >
         </div>
         <div class="upload-progress">
@@ -41,7 +40,7 @@ export default {
       },
         onUpload(){
             this.picture=null;
-            const uploadRef = storageRef.ref(`${this.imageData.name}`).put(this.imageData);
+            const uploadRef = storageRef.ref(`images/${this.imageData.name}`).put(this.imageData);
             
             uploadRef.on(`state_changed`,snapshot=>{
                 this.uploadValue = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
@@ -61,5 +60,15 @@ export default {
     /* File Upload */
     img.preview {
         width: 200px;
+    }
+
+    .file-component-view {
+        background-color: rgba(255, 255, 255, 0.6);
+        padding: 20px;
+    }
+
+    .file-component-view input[type="file"] {
+        background-color: transparent;
+        border: none;
     }
 </style>
