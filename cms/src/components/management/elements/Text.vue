@@ -3,7 +3,8 @@
         <ul class="settings">
             <li class="delete" @click="DeleteElement(blockid, elementid)">Delete</li>
         </ul>
-        <input type="text"  placeholder="Start med at skrive ved at klikke her" v-model="text" @change="UpdateElement(text, blockid, elementid)">
+        <textarea type="text"  placeholder="Start med at skrive ved at klikke her" v-model="text" @change="UpdateElement(text, blockid, elementid)">
+        </textarea>
     </div>
 </template>
 <script>
@@ -41,7 +42,7 @@ export default {
     .element-text {
         margin-bottom: 10px;
     }
-    .element-text input {
+    .element-text textarea {
         white-space: pre-wrap;
         font-size: 16px;
         color: inherit;
@@ -51,6 +52,8 @@ export default {
         background-image: none;
         transition: 0.3s ease-in-out;
         padding: 10px 0;
+        height: auto;
+        -webkit-appearance: none;
     }
     .settings {
         opacity: 0;
@@ -64,24 +67,24 @@ export default {
     .element-text:hover .settings {
         opacity: 1;
     }
-    .element-text input:focus {
+    .element-text textarea:focus {
         padding: 30px;
         outline: none;
         border-left: 3px solid rgba(255, 255, 255, 0.9)
     }
-    .element-text input::-webkit-input-placeholder {
+    .element-text textarea::-webkit-textarea-placeholder {
         color: inherit !important;
     }
     
-    .element-text input:-moz-placeholder { /* Firefox 18- */
+    .element-text textarea:-moz-placeholder { /* Firefox 18- */
         color: inherit !important;  
     }
     
-    .element-text input::-moz-placeholder {  /* Firefox 19+ */
+    .element-text textarea::-moz-placeholder {  /* Firefox 19+ */
         color: inherit !important;  
     }
     
-    .element-text input:-ms-input-placeholder {  
+    .element-text textarea:-ms-textarea-placeholder {  
         color: inherit !important;  
     }
 </style>

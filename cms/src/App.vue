@@ -31,6 +31,12 @@
     color: #FFF;
 }
 
+.container {
+    max-width: 1199px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #nav {
   padding: 8px;
   background-color: #222;

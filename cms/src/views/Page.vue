@@ -1,7 +1,7 @@
 <template>
   <div class="page">
-    <div class="banner" v-bind:class="{ active: status[0].published}" v-bind:style="{ backgroundColor: status[0].bgcolor, color: status[0].textcolor }">
-      <div v-if="status[0].published">
+    <div class="banner" v-if="status[0].published" v-bind:class="{ active: status[0].published}" v-bind:style="{ backgroundColor: status[0].bgcolor, color: status[0].textcolor }">
+      <div>
         {{ status[0].title }}
       </div>
     </div>
@@ -23,7 +23,18 @@
       <section v-for="block in pages[0].blocks" :key="block.id" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
         <div v-bind:class="{ container: block.container}">
           <h2 v-if="block.showtitle">{{ block.title }}</h2>
-          <p v-if="block.textcontent">{{ block.textcontent }}</p>
+          <div v-for="element in block.elements" :key="element.id" v-bind:class="element.type + '-element'">
+            <Paragraph
+              v-if="element.type == 'text'"
+              :text="element.text" 
+            >
+            </Paragraph>
+            <ButtonLink
+              v-if="element.type == 'button'"
+              :text="element.button_text"
+              :link="element.button_link" >
+            </ButtonLink>
+          </div>
         </div>
       </section>
     </main>
@@ -36,6 +47,10 @@
 <script>
 import { db, pagesRef, menusRef, blocksRef } from '../firebase/db.js'
 
+// Elements
+import Paragraph from '@/components/frontend/elements/Paragraph.vue'
+import ButtonLink from '@/components/frontend/elements/Button.vue'
+
 // Get Menu Items
 var menuItemsRef = menusRef.doc("0").collection("items");
 
@@ -46,6 +61,7 @@ let getPage = [];
 export default {
   name: 'Page',
   components: {
+    Paragraph, ButtonLink
   },
   data () {
     return {
@@ -201,6 +217,7 @@ export default {
 
 .page nav {
   padding: 20px 0;
+  background-color: burlywood;
 }
 
 .page nav ul span {
@@ -210,6 +227,10 @@ export default {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.text-element + .text-element {
+  margin-top: 30px;
 }
 
 .page nav ul li a {
@@ -239,12 +260,6 @@ section {
   background-color: #222;
   padding: 30px 0;
   color: #FFF;
-}
-
-.container {
-  max-width: 1199px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 </style>

@@ -61,7 +61,7 @@
           </div>
           
           <button class="btn" @click="AddSection(blocks)">Add New Section</button>
-
+          <button class="btn" @click="AddSavedSection(blocks)">Add Saved Section</button>
           
           <div v-bind:class="{ active: unsavedChanges}">
               <div class="notification">
@@ -85,8 +85,8 @@ import { db, pagesRef } from '../../firebase/db.js'
 
 
 // Elements
-import ElementText from '@/components/elements/Text.vue'
-import ElementButton from '@/components/elements/Button.vue'
+import ElementText from '@/components/management/elements/Text.vue'
+import ElementButton from '@/components/management/elements/Button.vue'
 
 export default {
   name: 'Page',
@@ -249,9 +249,9 @@ export default {
             elements: []
             })
         }
-
-
-
+      },
+      async AddSavedSection(blocks) {
+        console.log("Hi!")
       }
   },
   computed: {
@@ -439,7 +439,6 @@ export default {
         width: 100%;
         background-color: transparent;
         border: none;
-        color: #FFF;
         font-size: 16px;
         font-family: inherit;
         outline: none;
