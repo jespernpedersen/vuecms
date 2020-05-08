@@ -21,9 +21,15 @@
                       <li>Order: {{ block.order }}</li>
                     </div>
                     <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
-                        <h2 v-if="block.showtitle">{{ block.title }}</h2>
-                        <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
-                        </textarea>
+                        <h2 v-if="block.showtitle">{{ block.title }}</h2>          
+                        <div v-for="element in block.elements" style="text-align: left">
+                          <ElementText v-if="element.type == 'text'" :text="element.text"></ElementText>
+                          <ElementButton v-if="element.type == 'button'" :text="element.button_text" :link="element.button_link"></ElementButton>
+                        </div>
+                        <div class="element-library" style="text-align: left">
+                          <button @click="AddElement(block.id, 'text')">Add Text</button>
+                          <button @click="AddElement(block.id, 'button')">Add Button</button>
+                        </div>
                     </section>  
                     <aside class="section-settings">
                       <div class="settings-inner">
@@ -54,19 +60,25 @@
       </div>
       
     
-  <div class="version">Control Seat Alpha 0.4.1</div>
+  <div class="version">Control Seat Alpha 0.4.2</div>
   </div>
 </template>
 
 <script>
 import Menu from '@/components/management/Menu.vue'
+import Upload from '@/components/management/Upload.vue'
 import draggable from "vuedraggable"
 import { db, pagesRef } from '../../firebase/db.js'
+
+
+// Elements
+import ElementText from '@/components/elements/Text.vue'
+import ElementButton from '@/components/elements/Button.vue'
 
 export default {
   name: 'Page',
   components: {
-    Menu, draggable
+    Menu, draggable, Upload, ElementText, ElementButton
   },
   data () {
     return {
@@ -86,6 +98,27 @@ export default {
         return (
           (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
         );
+      },
+      async AddElement(blockid, elementtype) {
+        // Get Section we're adding to
+        let section = this.blocks[blockid]
+
+        // Here we got the different element types
+        if(elementtype == "text") {
+          let element = {
+            type: "text",
+            text: "This is some text"
+          }
+          section.elements.push(element)
+        }
+        if(elementtype == "button") {
+          let element = {
+            type: "button",
+            button_text: "Button Text",
+            button_link: "where-should-this-go"
+          }
+          section.elements.push(element)
+        }
       },
       async EditSettings (i) {
         this.activeSection = i;
@@ -115,7 +148,8 @@ export default {
              container: block.container,
              textcolor: block.textcolor,
              textcontent: block.textcontent, 
-             order: block.order        
+             order: block.order,
+             elements: []       
           })
         })  
         // Hide notification once we have saved
@@ -145,7 +179,8 @@ export default {
             title: "New Section",
             showtitle: false,
             textcontent: "",
-            order: NewSectionID
+            order: NewSectionID,
+            elements: []
           })
         }
         // If no sections exist
@@ -162,7 +197,8 @@ export default {
             title: "New Section",
             showtitle: false,
             textcontent: "",
-            order: 0
+            order: 0,
+            elements: []
             })
         }
 
@@ -340,7 +376,7 @@ export default {
     }
 
     .all-blocks section {
-        height: 200px;
+        min-height: 200px;
         padding: 30px;
         text-align: left;
         color: #FFF;
@@ -354,8 +390,7 @@ export default {
         width: 100%;
         background-color: transparent;
         border: none;
-          --placeholder-color: #f0f;
-        color: var(--placeholder-color);
+        color: #FFF;
         font-size: 16px;
         font-family: inherit;
         outline: none;
@@ -375,6 +410,20 @@ export default {
     
     .all-blocks textarea:-ms-input-placeholder {  
         color: inherit !important;  
+    }
+
+    .element-library {
+      display: flex;
+      margin-bottom: 50px;
+    }
+    .element-library button {
+      height: 50px;
+      width: 150px;
+      cursor: pointer;
+    }
+
+    .element-library button + button {
+      margin-left: 30px;
     }
 
     .fluid.container {
