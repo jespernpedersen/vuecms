@@ -22,14 +22,12 @@
                     </div>
                     <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
                         <h2 v-if="block.showtitle">{{ block.title }}</h2>          
-                        <div v-for="element in block.elements" style="text-align: left">
+                        <div v-for="element in block.elements" :key="element.id" style="text-align: left">
                           <ElementText 
                             v-if="element.type == 'text'" 
                             :elementid="element.id" 
                             :blockid="block.id" 
                             :text="element.text" 
-                            @update-element="UpdateElement"
-                            @delete-element="DeleteElement"
                           >
                           </ElementText>
                           <ElementButton 
@@ -37,9 +35,7 @@
                             :elementid="element.id" 
                             :blockid="block.id" 
                             :text="element.button_text" 
-                            :link="element.button_link" 
-                            @update-element="UpdateElement"
-                            @delete-element="DeleteElement"
+                            :link="element.button_link"
                           >
                           </ElementButton>
                         </div>
@@ -129,12 +125,6 @@ export default {
           this.ElementTemplate(elementID, elementtype, section)
         }
         // Here we got the different element types
-        this.notifyChanges()
-      },
-      async DeleteElement(content) {
-        let element = this.blocks[content.blockid].elements
-        element.splice(content.elementid)
-        // There are new changes
         this.notifyChanges()
       },
       ElementTemplate(elementID, elementtype, section) {
@@ -435,6 +425,7 @@ export default {
 
     .all-blocks section {
         min-height: 200px;
+        transition: 0.3s ease-in-out;
         padding: 30px;
         text-align: left;
         color: #FFF;

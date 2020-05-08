@@ -3,8 +3,7 @@
         <ul class="settings">
             <li class="delete" @click="DeleteElement(blockid, elementid)">Delete</li>
         </ul>
-        <input type="text"  placeholder="Start med at skrive ved at klikke her" v-model="text" @change="callChanges(text, blockid, elementid)">
-        </input>
+        <input type="text"  placeholder="Start med at skrive ved at klikke her" v-model="text" @change="UpdateElement(text, blockid, elementid)">
     </div>
 </template>
 <script>
@@ -13,11 +12,26 @@ export default {
   name: 'ElementText',
   props: ['text', 'blockid', 'elementid'],
   methods: {
-      callChanges(text, blockid, elementid) {
-          this.$emit("update-element", { type: "text", element_text: text, blockid: blockid, elementid: elementid})
+      UpdateElement(text, blockid, elementid) {
+        // Get Parent
+        let parent = this.$parent.$parent.$parent;  
+        let blocks = parent.blocks
+        let element = blocks[blockid].elements[elementid]
+        // Update Element Text
+        element.text = text;
+        // Notify New Changes
+        parent.notifyChanges()
       },
       DeleteElement(blockid, elementid) {
-          this.$emit("delete-element", {blockid: blockid, elementid: elementid })
+        // Get Parent
+        let parent = this.$parent.$parent.$parent;
+        // Get All Blocks
+        let blocks = parent.blocks
+        // Get the Specific Element
+        let element = blocks[blockid].elements;
+        // Delete
+        element.splice(elementid)
+        parent.notifyChanges()
       }
   }
 }
@@ -30,7 +44,7 @@ export default {
     .element-text input {
         white-space: pre-wrap;
         font-size: 16px;
-        color: #FFF;
+        color: inherit;
         background-color: transparent;
         -webkit-appearance: none;
         border: none;
@@ -56,18 +70,18 @@ export default {
         border-left: 3px solid rgba(255, 255, 255, 0.9)
     }
     .element-text input::-webkit-input-placeholder {
-        color: #FFF !important;
+        color: inherit !important;
     }
     
     .element-text input:-moz-placeholder { /* Firefox 18- */
-        color: #FFF !important;  
+        color: inherit !important;  
     }
     
     .element-text input::-moz-placeholder {  /* Firefox 19+ */
-        color: #FFF !important;  
+        color: inherit !important;  
     }
     
     .element-text input:-ms-input-placeholder {  
-        color: #FFF !important;  
+        color: inherit !important;  
     }
 </style>
