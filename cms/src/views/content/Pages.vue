@@ -56,7 +56,7 @@
     </div>
     
     
-  <div class="version">Control Seat Alpha 0.4.1</div>
+  <div class="version">Control Seat Alpha 0.4.2</div>
   </div>
 </template>
 

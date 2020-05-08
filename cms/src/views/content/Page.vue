@@ -23,8 +23,11 @@
                     <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
                         <h2 v-if="block.showtitle">{{ block.title }}</h2>          
                         <div v-for="element in block.elements" style="text-align: left">
-                          <ElementText v-if="element.type == 'text'" :text="element.text"></ElementText>
-                          <ElementButton v-if="element.type == 'button'" :text="element.button_text" :link="element.button_link"></ElementButton>
+                          <pre>{{ element }}</pre>
+                          <ElementText v-if="element.type == 'text'" :blockid="block.id" :text="element.text" @update-text="updateText"></ElementText>
+                          <!--
+                          <ElementButton v-if="element.type == 'button'" :text="element.button_text" :link="element.button_link" @updated="notifyChanges()"></ElementButton>
+                          -->
                         </div>
                         <div class="element-library" style="text-align: left">
                           <button @click="AddElement(block.id, 'text')">Add Text</button>
@@ -103,23 +106,41 @@ export default {
         // Get Section we're adding to
         let section = this.blocks[blockid]
 
+        if(section.elements.length == 0) {
+          let elementID = 0
+          this.ElementTemplate(elementID, elementtype, section)
+        }
+        else {
+          let elementID = section.elements[section.elements.length - 1].id + 1
+          this.ElementTemplate(elementID, elementtype, section)
+        }
         // Here we got the different element types
-        if(elementtype == "text") {
-          let element = {
-            type: "text",
-            text: "This is some text"
-          }
-          section.elements.push(element)
-        }
-        if(elementtype == "button") {
-          let element = {
-            type: "button",
-            button_text: "Button Text",
-            button_link: "where-should-this-go"
-          }
-          section.elements.push(element)
-        }
         this.notifyChanges()
+      },
+      ElementTemplate(elementID, elementtype, section) {
+          if(elementtype == "text") {
+            let element = {
+              id: elementID,
+              type: "text",
+              text: ""
+            }
+            section.elements.push(element)
+          }
+          if(elementtype == "button") {
+            let element = {
+              id: elementID,
+              type: "button",
+              button_text: "Button Text",
+              button_link: "where-should-this-go"
+            }
+            section.elements.push(element)
+          }
+      },
+      async updateText(content) {
+        let blockID = content.blockid
+        let text = content.element_text
+
+        console.log(this.blocks[blockID].elements)
       },
       async EditSettings (i) {
         this.activeSection = i;
@@ -137,6 +158,8 @@ export default {
         blocks.forEach(function(block) {
           // Change Doc ID to String
           let blockID = String(block.id);
+
+          console.log(block.elements)
 
           // Construct Data to Update
           pagesRef.doc(pageID).collection("blocks").doc(blockID).update({
