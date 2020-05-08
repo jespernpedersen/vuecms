@@ -119,6 +119,7 @@ export default {
           }
           section.elements.push(element)
         }
+        this.notifyChanges()
       },
       async EditSettings (i) {
         this.activeSection = i;
@@ -149,7 +150,7 @@ export default {
              textcolor: block.textcolor,
              textcontent: block.textcontent, 
              order: block.order,
-             elements: []       
+             elements: block.elements     
           })
         })  
         // Hide notification once we have saved
