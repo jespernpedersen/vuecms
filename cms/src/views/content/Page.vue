@@ -14,47 +14,49 @@
             <draggable class="section-list" tag="div" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
                 <transition-group type="transition" :name="'flip-list'">
                   <div v-for="(block, i) in blocks" :key="i" :class="{ active: i === activeSection}">
-                    <div class="section-toolbar">
-                      <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
-                      <li @click="EditSettings(i)">Edit Section Settings</li>
-                      <li class="move">Move</li>
-                      <li>Order: {{ block.order }}</li>
-                    </div>
-                    <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
-                        <h2 v-if="block.showtitle">{{ block.title }}</h2>          
-                        <div v-for="element in block.elements" :key="element.id" style="text-align: left">
-                          <ElementText 
-                            v-if="element.type == 'text'" 
-                            :elementid="element.id" 
-                            :blockid="block.id" 
-                            :text="element.text" 
-                          >
-                          </ElementText>
-                          <ElementButton 
-                            v-if="element.type == 'button'" 
-                            :elementid="element.id" 
-                            :blockid="block.id" 
-                            :text="element.button_text" 
-                            :link="element.button_link"
-                          >
-                          </ElementButton>
-                        </div>
-                        <div class="element-library" style="text-align: left">
-                          <button @click="AddElement(block.id, 'text')">Add Text</button>
-                          <button @click="AddElement(block.id, 'button')">Add Button</button>
-                        </div>
-                    </section>  
-                    <aside class="section-settings">
-                      <div class="settings-inner">
-                          <ul> 
-                              <li>Block Title: <input v-model="block.title" type="text" @change="notifyChanges()"/></li>
-                              <li>Show Title on Block <input v-model="block.showtitle" type="checkbox" @change="notifyChanges()"></li>
-                              <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
-                              <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
-                              <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
-                          </ul>
+                    <div class="block" v-bind:class="{ saved: block.saved}" >
+                      <div class="section-toolbar">
+                        <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
+                        <li @click="EditSettings(i)">Edit Section Settings</li>
+                        <li class="move">Move</li>
+                        <li>Order: {{ block.order }}</li>
                       </div>
-                    </aside>
+                      <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+                          <h2 v-if="block.showtitle">{{ block.title }}</h2>          
+                          <div v-for="element in block.elements" :key="element.id" style="text-align: left">
+                            <ElementText 
+                              v-if="element.type == 'text'" 
+                              :elementid="element.id" 
+                              :blockid="block.id" 
+                              :text="element.text" 
+                            >
+                            </ElementText>
+                            <ElementButton 
+                              v-if="element.type == 'button'" 
+                              :elementid="element.id" 
+                              :blockid="block.id" 
+                              :text="element.button_text" 
+                              :link="element.button_link"
+                            >
+                            </ElementButton>
+                          </div>
+                          <div class="element-library" style="text-align: left">
+                            <button @click="AddElement(block.id, 'text')">Add Text</button>
+                            <button @click="AddElement(block.id, 'button')">Add Button</button>
+                          </div>
+                      </section>  
+                      <aside class="section-settings">
+                        <div class="settings-inner">
+                            <ul> 
+                                <li>Block Title: <input v-model="block.title" type="text" @change="notifyChanges()"/></li>
+                                <li>Show Title on Block <input v-model="block.showtitle" type="checkbox" @change="notifyChanges()"></li>
+                                <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
+                                <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
+                                <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
+                            </ul>
+                        </div>
+                      </aside>
+                    </div>
                 </div>
                 </transition-group>
             </draggable>
@@ -78,15 +80,21 @@
 </template>
 
 <script>
+// Overall Components
 import Menu from '@/components/management/Menu.vue'
-import Upload from '@/components/management/Upload.vue'
-import draggable from "vuedraggable"
-import { db, pagesRef } from '../../firebase/db.js'
 
+// Data
+import { db, pagesRef, blocksRef } from '../../firebase/db.js'
+
+// Helper frameworks
+import draggable from "vuedraggable"
 
 // Elements
 import ElementText from '@/components/management/elements/Text.vue'
 import ElementButton from '@/components/management/elements/Button.vue'
+import Upload from '@/components/management/Upload.vue'
+
+let SavedBlockRef = blocksRef.where("blocktype", '==', "content")
 
 export default {
   name: 'Page',
@@ -179,26 +187,44 @@ export default {
         pagesRef.doc(pageID).update({
           title: this.page.title
         })
-
         // Save Blocks
         blocks.forEach(function(block) {
           // Change Doc ID to String
           let blockID = String(block.id)
-
           // Construct Data to Update
-          pagesRef.doc(pageID).collection("blocks").doc(blockID).update({
-             bgcolor: block.bgcolor,
-             bgimage: block.bgimage,
-             columns: block.columns,
-             published: block.published,
-             title: block.title,
-             showtitle: block.showtitle,
-             container: block.container,
-             textcolor: block.textcolor,
-             textcontent: block.textcontent, 
-             order: block.order,
-             elements: block.elements     
-          })
+          if(block.saved) {
+            let blockID = String(block.id)
+            let reference = String(block.reference)
+
+            blocksRef.doc(String(reference)).update({
+              bgcolor: block.bgcolor,
+              bgimage: block.bgimage,
+              published: block.published,
+              title: block.title,
+              showtitle: block.showtitle,
+              container: block.container,
+              textcolor: block.textcolor,
+              elements: block.elements
+            })
+            pagesRef.doc(pageID).collection("blocks").doc(blockID).update({
+              order: block.order
+            })
+          }
+          else {
+            pagesRef.doc(pageID).collection("blocks").doc(blockID).update({
+              bgcolor: block.bgcolor,
+              bgimage: block.bgimage,
+              columns: block.columns,
+              published: block.published,
+              title: block.title,
+              showtitle: block.showtitle,
+              container: block.container,
+              textcolor: block.textcolor,
+              textcontent: block.textcontent, 
+              order: block.order,
+              elements: block.elements     
+            })
+          }
         })  
         // Hide notification once we have saved
         this.unsavedChanges = false
@@ -228,7 +254,8 @@ export default {
             showtitle: false,
             textcontent: "",
             order: NewSectionID,
-            elements: []
+            elements: [],
+            saved: false
           })
         }
         // If no sections exist
@@ -246,12 +273,83 @@ export default {
             showtitle: false,
             textcontent: "",
             order: 0,
-            elements: []
+            elements: [],
+            saved: false
             })
         }
       },
       async AddSavedSection(blocks) {
-        console.log("Hi!")
+        // New ID
+        if(blocks != '') {
+          let NewSectionID = blocks[blocks.length - 1].id + 1;
+          let NewSectionIDString = String(NewSectionID)
+          // Construct Saved Data
+          pagesRef.doc(this.$router.app._route.params.id).collection("blocks").doc(NewSectionIDString).set({
+            id: NewSectionID,
+            order: NewSectionID,
+            saved: true,
+            reference: 7
+          })
+          
+          this.getSavedBlocks()
+        }
+        // If no sections exist
+        else {
+          let NewSectionID = 0;
+          let NewSectionIDString = String(NewSectionID)
+          // Construct Saved Data
+          pagesRef.doc(this.$router.app._route.params.id).collection("blocks").doc(NewSectionIDString).set({
+            id: NewSectionID,
+            order: NewSectionID,
+            saved: true,
+            reference: 7
+          })
+          this.getSavedBlocks()
+        }
+      },
+      async getSavedBlocks() {
+        console.log("Pls")
+        let pageID = this.$router.app._route.params.id
+        let blockRef = pagesRef.doc(pageID).collection("blocks").orderBy("order").where("saved", "==", true)
+        let blocks = this.blocks
+        blockRef.get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(block) {
+            if(block.exists) {
+              // Get Data
+              let defaultBlock = block.data()
+              let SavedBlockRef = blocksRef.where("id", "==", defaultBlock.reference).limit(1)
+
+              SavedBlockRef.get().then(function(subquerySnapshot) {
+                subquerySnapshot.forEach(function(savedBlock) {
+                  if(savedBlock.exists) {
+                    // The data we got
+                    // The data we will submit
+                    let savedBlock_data = savedBlock.data()
+
+                    let SavedBlockStructure = {
+                      "id": defaultBlock.id,
+                      "order": defaultBlock.order,
+                      "saved": defaultBlock.saved,
+                      "reference": defaultBlock.reference,
+                      "title": savedBlock_data.title,
+                      "bgcolor": savedBlock_data.bgcolor,
+                      "bgimage": savedBlock_data.bgimage,
+                      "blocktype": savedBlock_data.blocktype,
+                      "container": savedBlock_data.container,
+                      "elements": savedBlock_data.elements,
+                      "published": savedBlock_data.published,
+                      "showtitle": savedBlock_data.showtitle,
+                      "textcolor": savedBlock_data.textcolor,
+                      "title": savedBlock_data.title
+                    }
+
+                    blocks.push(SavedBlockStructure)
+                  }
+                })
+              })
+            }
+          })
+        })
       }
   },
   computed: {
@@ -285,8 +383,11 @@ export default {
   firestore() {
     return {
       page: pagesRef.doc(this.$router.app._route.params.id),
-      blocks: pagesRef.doc(this.$router.app._route.params.id).collection("blocks").orderBy("order")
+      blocks: pagesRef.doc(this.$router.app._route.params.id).collection("blocks").orderBy("order").where("saved", "==", false)
     }
+  },
+  mounted() {
+    this.getSavedBlocks();
   }
 }
 </script>
@@ -569,5 +670,9 @@ export default {
 
     aside.section-settings ul li:nth-of-type(odd) {
         background-color: rgba(0,0,0,0.3);
+    }
+
+    .block.saved section {
+      border: 5px groove yellow;
     }
 </style>

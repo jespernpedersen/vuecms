@@ -74,7 +74,6 @@ export default {
       // UNDERPAGES
       // First we get the page from router
       if(this.$router.app._route.params.page != undefined) {
-        console.log(this.$router.app._route.params.page)
         let routeId = this.$router.app._route.params.page;
         // Then we filter through database for the menu item that is equal to our route page
         let menu = menusRef.doc("0").collection("items").where("url", "==", routeId)
