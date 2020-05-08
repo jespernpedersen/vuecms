@@ -1,7 +1,5 @@
 <template>
   <div class="pages-view">
-    <Menu></Menu>
-    <div class="content">
         <!-- File Upload -->
         <upload></upload>
         <div class="image-library">
@@ -9,7 +7,6 @@
                 <img v-bind:src="image.path" />
             </figure>
         </div>
-    </div>
   </div>
 </template>
 
@@ -22,7 +19,7 @@ import { db, storageRef } from '../../firebase/db.js'
 let getImages = [];
 
 export default {
-  name: 'FileUpload',
+  name: 'ImageLibrary',
   components: {
     Menu, Upload
   },
@@ -66,21 +63,6 @@ export default {
 </script>
 
 <style>
-    .pages-view {
-      min-height: calc(100vh - 35px);
-      display: flex;
-    }
-    .pages-view .content {
-        flex: 1 0 auto;
-        background-color: #ebebeb;
-        padding-left: 350px;
-        padding-top: 50px;
-        padding-right: 30px;
-        min-height: 100vh;
-    }
-    .pages-view h1 {
-        text-align: left;
-    }
     /* File Upload */
     img.preview {
         width: 200px;
@@ -96,8 +78,11 @@ export default {
     }
 
     .image-library figure {
-        border: 1px solid #CCC;
+        border: 2px solid #CCC;
         padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .image-library img {

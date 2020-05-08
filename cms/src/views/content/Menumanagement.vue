@@ -4,8 +4,8 @@
     <div class="content">
         <div class="fluid container">
             <nav class="col-md-4">
-                <h2 style="text-align: left">Pages</h2>
-                <p>These items comes from your page list, you can add them to each of your menus by dragging them</p>
+                <h2 style="text-align: left">Pages</h2>                  
+                <p>These items comes from your page list, you can add them to each of your menus by dragging them to a menu</p>
                 <draggable class="list-group" tag="ul" v-model="pages" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false, updateItemOrder">
                     <transition-group type="transition" :name="'flip-list'">
                       <li class="list-group-item" v-for="page in pages" :key="page.order">
