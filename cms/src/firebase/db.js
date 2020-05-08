@@ -1,5 +1,6 @@
 import { firebase } from "@firebase/app"
 import "@firebase/firestore"
+import 'firebase/storage';
 
 const firebaseApp = firebase.initializeApp({
     apiKey: "a0ISjRwyJFyTT8WfZWI3ooDWlU4FldaizBx3RFRn",
@@ -15,5 +16,6 @@ const db = firebaseApp.firestore()
 const pagesRef = db.collection("pages")
 const menusRef = db.collection("menus")
 const blocksRef = db.collection("blocks")
+const storageRef = firebase.storage();
 
-export { pagesRef, menusRef, blocksRef, db }
+export { pagesRef, menusRef, blocksRef, db, storageRef }

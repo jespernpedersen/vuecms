@@ -23,6 +23,12 @@ const my_routes = [{
 
     // Backend Routers
     {
+        path: '/management/content/upload',
+        name: 'Content Management System',
+        component: () =>
+            import ( /* webpackChunkName: "about" */ '../views/content/Library.vue')
+    },
+    {
         path: '/management/content/pages',
         name: 'Content Management System',
         component: () =>

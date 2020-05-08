@@ -38,7 +38,7 @@
     </aside>
     
     
-  <div class="version">Control Seat Alpha 0.4.1</div>
+  <div class="version">Control Seat Alpha 0.4.2</div>
   </div>
 </template>
 
@@ -78,7 +78,7 @@ export default {
         })
         // We want to hide the notification of unsaved changes when we have saved to database
         this.unsavedChanges = false
-      }
+      },
   },
   firestore() {
     return {
