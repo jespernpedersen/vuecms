@@ -154,28 +154,6 @@ export default {
             section.elements.push(element)
           }
       },
-      async UpdateElement(content) {
-        let blockID = content.blockid
-        let elementID = content.elementid
-        let element = this.blocks[blockID].elements[elementID]
-
-        // If Text Element
-        if(content.type == "text") {
-          let text = content.element_text
-          element.text = text;
-        }
-        // If Button Element
-        else if(content.type == "button") {
-          let text = content.element_text
-          let link = content.element_link
-
-          element.button_text = text;
-          element.button_link = link;
-        }
-        
-        // There are new changes
-        this.notifyChanges()
-      },
       async EditSettings (i) {
         this.activeSection = i;
       },
@@ -308,7 +286,6 @@ export default {
         }
       },
       async getSavedBlocks() {
-        console.log("Pls")
         let pageID = this.$router.app._route.params.id
         let blockRef = pagesRef.doc(pageID).collection("blocks").orderBy("order").where("saved", "==", true)
         let blocks = this.blocks

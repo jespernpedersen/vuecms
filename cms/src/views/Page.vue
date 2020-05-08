@@ -103,14 +103,18 @@ export default {
                 pagesRef.doc(String(docData.id)).collection("blocks").get().then(function(blocks) {
                   // For every block
                   // If we have already inserted data, don't do this again
-                  if(getPage[0].blocks == '') {
                     blocks.forEach(function(block) {
                       let blockData = block.data()
-                      if(blockData.published != false) {
-                        getPage[0].blocks.push(blockData)
+                      console.log(blockData)
+                      if(blockData.saved) {
+                        if(blockData.published) {
+                          console.log("lies and deceit")
+                        }
+                        else {
+                          getPage[0].blocks.push(blockData)
+                        }
                       }
                     })
-                  }
                 })
               })
             }
@@ -153,7 +157,7 @@ export default {
           })
         })
       }
-    }
+    },
   },
   firestore() {
     return {
