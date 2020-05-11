@@ -41,11 +41,15 @@
                             >
                             </ElementButton>
                           </div>
-                          <div class="element-library" style="text-align: left">
-                            <button @click="AddElement(block.id, 'text')">Add Text</button>
-                            <button @click="AddElement(block.id, 'button')">Add Button</button>
-                          </div>
-                      </section>  
+                      </section> 
+                      
+                          <div class="new-elements" :class="{ active: i === activeElementSelection}">
+                            <button class="add-element" @click="showElementLibrary(i)"><unicon name="plus-circle" />Add New Element</button>
+                            <div class="element-library">
+                              <button @click="AddElement(block.id, 'text')"><unicon name="text" />Paragraph Text</button>
+                              <button @click="AddElement(block.id, 'button')"><unicon name="link" />Button Link</button>
+                            </div>
+                          </div> 
                       <aside class="section-settings">
                         <div class="settings-inner">
                             <ul> 
@@ -111,9 +115,14 @@ export default {
       isDragging: false,
       delayedDragging: false,
       activeSection: null,
+      activeElementSelection: null,
+      showImageLibrary: null
     }
   },
   methods: {
+      async showElementLibrary(i) {
+        this.activeElementSelection = i
+      },
       async onMove({ relatedContext, draggedContext }) {
         const relatedElement = relatedContext.element;
         const draggedElement = draggedContext.element;
@@ -506,15 +515,14 @@ export default {
     }
 
     .all-blocks section {
-        min-height: 200px;
         transition: 0.3s ease-in-out;
         padding: 30px;
         text-align: left;
         color: #FFF;
     }
 
-    .all-blocks section {
-      margin-bottom: 15px;
+    .all-blocks .block {
+      margin-bottom: 45px;
     }
 
     .all-blocks textarea {
@@ -540,20 +548,6 @@ export default {
     
     .all-blocks textarea:-ms-input-placeholder {  
         color: inherit !important;  
-    }
-
-    .element-library {
-      display: flex;
-      margin-bottom: 50px;
-    }
-    .element-library button {
-      height: 50px;
-      width: 150px;
-      cursor: pointer;
-    }
-
-    .element-library button + button {
-      margin-left: 30px;
     }
 
     .fluid.container {
@@ -655,5 +649,79 @@ export default {
 
     .block.saved section {
       border: 5px groove yellow;
+    }
+
+    .new-elements {
+      height: 51px;
+      overflow: hidden;
+      background-color: rgba(255, 255, 255, 1);     
+      transition: 0.3s ease-in-out;
+    }
+
+    .new-elements.active {
+      height: 118px;
+      padding-top: 10px;
+      padding-bottom: 30px;
+    }
+
+    .add-element {
+      border: none;
+      color: #000;
+      width: 100%;
+      padding: 12px 0;
+      background-color: transparent;
+      outline: none;
+    }
+    
+    .new-elements .element-library {
+      text-align: center;
+    }
+
+    input.title {
+      padding: 6px 12px;
+    }
+
+    .new-elements .element-library button {
+      background-color: transparent;
+      border: none;
+      color: #FFF;
+      display: inline-block;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 5px 20px;
+      border-radius: 20px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .new-elements .element-library button + button {
+      margin-left: 15px;
+    }
+
+    .new-elements .element-library .unicon {
+      fill: #FFF;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    .add-element .unicon {
+      vertical-align: middle;
+      color: #000;
+      fill: #000;
+      margin-right: 10px;
+    }
+
+    .add-element:before,
+    .add-element:after {
+      content: "";
+      height: 2px;
+      background-color: #000;
+      vertical-align: middle;
+      display: inline-block;
+      width: 30%;
+      margin-right: 15px;
+    }
+    .add-element:after {
+      margin-right: 0;
+      margin-left: 15px;
     }
 </style>

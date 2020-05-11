@@ -1,10 +1,13 @@
 <template>
-    <div class="element-text">    
-        <ul class="settings">
-            <li class="delete" @click="DeleteElement(blockid, elementid)">Delete</li>
-        </ul>
-        <textarea type="text"  placeholder="Start med at skrive ved at klikke her" v-model="text" @change="UpdateElement(text, blockid, elementid)">
-        </textarea>
+    <div class="element-text"> 
+        <span class="tooltip">Text</span>   
+        <div class="element">
+            <ul class="settings">
+                <li class="delete" @click="DeleteElement(blockid, elementid)">Delete</li>
+            </ul>
+            <textarea type="text"  placeholder="Start med at skrive ved at klikke her" v-model="text" @change="UpdateElement(text, blockid, elementid)">
+            </textarea>
+        </div>
     </div>
 </template>
 <script>
@@ -41,7 +44,36 @@ export default {
 <style>
     .element-text {
         margin-bottom: 10px;
+        transition: 0.3s ease-in-out;
     }
+
+    .element-text > .tooltip {
+        opacity: 0;
+        height: 0px;
+        width: 0px;
+        display: inline-block;
+        transition: 0.3s ease-in-out;
+        background-color: #FFF;
+    }
+
+    .element-text .element {
+        padding: 0;
+        transition: 0.3s ease-in-out;
+    }
+
+    .element-text:hover .element {
+        border: 3px solid #FFF;
+        padding: 15px;
+    }
+
+    .element-text:hover > .tooltip {
+        width: auto;
+        height: auto;
+        opacity: 1;
+        padding: 8px 20px;
+        color: #000;
+    }
+
     .element-text textarea {
         white-space: pre-wrap;
         font-size: 16px;

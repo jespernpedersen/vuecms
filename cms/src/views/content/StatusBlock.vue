@@ -5,9 +5,7 @@
 
         <div class="fluid container">
             <section v-bind:style="{ backgroundColor: block[0].bgcolor, color: block[0].textcolor }">
-                <h1 style="text-align: center">
-                    {{ block[0].title }}
-                </h1>
+                <input v-model="block[0].title" type="text" @change="notifyChanges()"/>
             </section>
         
             <div v-bind:class="{ active: unsavedChanges}">
@@ -94,7 +92,6 @@ export default {
         padding-right: 30px;
     }
     .blocks-view section {
-        height: 200px;
         padding: 30px;
         text-align: left;
         color: #FFF;
@@ -126,6 +123,15 @@ export default {
         background-color: rgba(0,0,0,0.3);
     }
 
+
+.status-view input {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: inherit;
+}
 
 .fluid.container {
     min-height: 100%;
