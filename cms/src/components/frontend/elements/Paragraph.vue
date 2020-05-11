@@ -1,5 +1,5 @@
-<template class="text-element">
-    <div >
+<template>
+    <div>
         <p>{{ text }} </p>
     </div>
 </template>

@@ -17,8 +17,9 @@
                     <div class="block" v-bind:class="{ saved: block.saved}" >
                       <div class="section-toolbar">
                         <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
-                        <li @click="EditSettings(i)">Edit Section Settings</li>
-                        <li class="move">Move</li>
+                        <li class="toolbar edit" @click="EditSettings(i)">Edit Section Settings</li>
+                        <li class="toolbar move">Move</li>
+                        <li class="toolbar delete" @click="DeleteSection(i)">Delete</li>
                         <li>Order: {{ block.order }}</li>
                       </div>
                       <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
@@ -154,8 +155,11 @@ export default {
             section.elements.push(element)
           }
       },
-      async EditSettings (i) {
+      async EditSettings(i) {
         this.activeSection = i;
+      },
+      async DeleteSection(blockid) {
+        pagesRef.doc(this.$router.app._route.params.id).collection("blocks").doc(String(blockid)).delete()
       },
       async SavePage(blocks) {
         // Set page id

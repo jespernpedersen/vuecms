@@ -105,12 +105,44 @@ export default {
                   // If we have already inserted data, don't do this again
                     blocks.forEach(function(block) {
                       let blockData = block.data()
-                      console.log(blockData)
                       if(blockData.saved) {
+                        let defaultBlock = blockData
+                        let reference = blockData.reference
+
+                        let SavedBlockRef = blocksRef.where("id", "==", reference).limit(1)
+
+                        SavedBlockRef.get().then(function(subquerySnapshot) {
+                          subquerySnapshot.forEach(function(savedBlock) {
+                            if(savedBlock.exists) {
+                              // Construct Data
+                              let savedBlock_data = savedBlock.data() 
+
+                              let SavedBlockStructure = {
+                                "id": defaultBlock.id,
+                                "order": defaultBlock.order,
+                                "saved": defaultBlock.saved,
+                                "reference": defaultBlock.reference,
+                                "title": savedBlock_data.title,
+                                "bgcolor": savedBlock_data.bgcolor,
+                                "bgimage": savedBlock_data.bgimage,
+                                "blocktype": savedBlock_data.blocktype,
+                                "container": savedBlock_data.container,
+                                "elements": savedBlock_data.elements,
+                                "published": savedBlock_data.published,
+                                "showtitle": savedBlock_data.showtitle,
+                                "textcolor": savedBlock_data.textcolor,
+                                "title": savedBlock_data.title
+                              }
+
+                              // Push to Object
+                              getPage[0].blocks.push(SavedBlockStructure)
+                            }
+                          })
+                        })
+
+                      }
+                      else {
                         if(blockData.published) {
-                          console.log("lies and deceit")
-                        }
-                        else {
                           getPage[0].blocks.push(blockData)
                         }
                       }

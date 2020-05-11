@@ -31,7 +31,7 @@ export default {
         // Get the Specific Element
         let element = blocks[blockid].elements;
         // Delete
-        element.splice(elementid)
+        element.splice(elementid, 1)
         parent.notifyChanges()
       }
   }
