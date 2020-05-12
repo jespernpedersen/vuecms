@@ -4,30 +4,51 @@
     <div class="content">
 
         <div class="fluid container">
-            <section v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
-                <h1>
-                    {{ block.title }}
-                </h1>
-                <textarea v-model="block.textcontent" placeholder="Type here the contents of the block" :style="{'--placeholder-color': block.textcolor }" @change="notifyChanges()">
-                </textarea>
-            </section>
-            <pre>
-                {{ block }}
-            </pre>
-        
-            <div v-bind:class="{ active: unsavedChanges}">
-                <div class="notification">
-                    <h3 style="text-align: center;">You've unsaved changes!</h3>
-                    <button type="button" class="btn btn-default" @click="SaveBlock(block)">Save Menus</button>
+            <div class="block" v-bind:class="{ saved: block.saved}" >
+                <div class="section-toolbar">
+                    <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
+                </div>
+                <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+                    <h2 v-if="block.showtitle">{{ block.title }}</h2>     
+                    <div v-for="element in block.elements" :key="element.id" style="text-align: left">
+                        <ElementText 
+                            v-if="element.type == 'text'" 
+                            :elementid="element.id" 
+                            :blockid="block.id" 
+                            :text="element.text" 
+                        >
+                        </ElementText>
+                        <ElementButton 
+                            v-if="element.type == 'button'" 
+                            :elementid="element.id" 
+                            :blockid="block.id" 
+                            :text="element.button_text" 
+                            :link="element.button_link"
+                        >
+                        </ElementButton>
+                    </div>
+                </section>
+                <div class="new-elements" :class="{ active: activeElementSelection}">
+                    <button class="add-element" @click="showElementLibrary()"><unicon name="plus-circle" />Add New Element</button>
+                    <div class="element-library">
+                        <button @click="AddElement(block.id, 'text')"><unicon name="text" />Paragraph Text</button>
+                        <button @click="AddElement(block.id, 'button')"><unicon name="link" />Button Link</button>
+                    </div>
+                </div>
+                <div v-bind:class="{ active: unsavedChanges}">
+                    <div class="notification">
+                        <h3 style="text-align: center;">You've unsaved changes!</h3>
+                        <button type="button" class="btn btn-default" @click="SaveBlock(block)">Save Block</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <aside class="global-settings">
-        <h2>Global Settings</h2>
-        <ul>
-            <li>Block Title: {{ block.title }}</li>
-            <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
+        <h2>Block Settings</h2>
+        <ul> 
+            <li>Block Title: <input v-model="block.title" type="text" @change="notifyChanges()"/></li>
+            <li>Show Title on Block <input v-model="block.showtitle" type="checkbox" @change="notifyChanges()"></li>
             <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
             <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
             <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
@@ -43,18 +64,27 @@
 import Menu from '@/components/management/Menu.vue'
 import { db, blocksRef } from '../../firebase/db.js'
 
+// Elements
+import ElementText from '@/components/management/elements/Text.vue'
+import ElementButton from '@/components/management/elements/Button.vue'
+import Upload from '@/components/management/Upload.vue'
+
 export default {
   name: 'Block',
   components: {
-    Menu
+    Menu, ElementText, ElementButton
   },
   data () {
     return {
       block: [],
-      unsavedChanges: false
+      unsavedChanges: false,
+      activeElementSelection: false,
     }
   },
   methods: {
+      async showElementLibrary(i) {
+        this.activeElementSelection = true
+      },
       notifyChanges() {
           this.unsavedChanges = true
       },
@@ -75,6 +105,40 @@ export default {
         })
         // We want to hide the notification of unsaved changes when we have saved to database
         this.unsavedChanges = false
+      },
+      async AddElement(blockid, elementtype) {
+        // Get Section we're adding to
+        let section = this.blocks[blockid]
+
+        if(section.elements.length == 0) {
+          let elementID = 0
+          this.ElementTemplate(elementID, elementtype, section)
+        }
+        else {
+          let elementID = section.elements[section.elements.length - 1].id + 1
+          this.ElementTemplate(elementID, elementtype, section)
+        }
+        // Here we got the different element types
+        this.notifyChanges()
+      },
+      ElementTemplate(elementID, elementtype, section) {
+          if(elementtype == "text") {
+            let element = {
+              id: elementID,
+              type: "text",
+              text: ""
+            }
+            section.elements.push(element)
+          }
+          if(elementtype == "button") {
+            let element = {
+              id: elementID,
+              type: "button",
+              button_text: "Button Text",
+              button_link: "where-should-this-go"
+            }
+            section.elements.push(element)
+          }
       },
   },
   firestore() {
@@ -99,21 +163,9 @@ export default {
         padding-right: 30px;
     }
     .blocks-view section {
-        height: 200px;
         padding: 30px;
         text-align: left;
         color: #FFF;
-    }
-
-    .blocks-view textarea {
-        width: 100%;
-        background-color: transparent;
-        border: none;
-          --placeholder-color: #f0f;
-        color: var(--placeholder-color);
-        font-size: 16px;
-        font-family: inherit;
-        outline: none;
     }
 
     .blocks-view textarea::-webkit-input-placeholder {
@@ -192,4 +244,88 @@ export default {
 .active .notification {
     bottom: 2%;
 }
+
+/* Toolbar */
+
+
+    .section-toolbar {
+      list-style: none;
+    }
+
+    .section-toolbar li {
+      display: inline-block;
+    }
+        .section-toolbar li:not(:first-of-type) {
+      margin-left: 30px;
+    }
+
+/* Element Library */
+
+    .new-elements {
+      height: 51px;
+      overflow: hidden;
+      background-color: rgba(255, 255, 255, 1);     
+      transition: 0.3s ease-in-out;
+    }
+
+    .new-elements.active {
+      height: 118px;
+      padding-top: 10px;
+      padding-bottom: 30px;
+    }
+    .add-element {
+      border: none;
+      color: #000;
+      width: 100%;
+      padding: 12px 0;
+      background-color: transparent;
+      outline: none;
+    }
+    
+    .new-elements .element-library {
+      text-align: center;
+    }
+    .new-elements .element-library button {
+      background-color: transparent;
+      border: none;
+      color: #FFF;
+      display: inline-block;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 5px 20px;
+      border-radius: 20px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .new-elements .element-library button + button {
+      margin-left: 15px;
+    }
+
+    .new-elements .element-library .unicon {
+      fill: #FFF;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    .add-element .unicon {
+      vertical-align: middle;
+      color: #000;
+      fill: #000;
+      margin-right: 10px;
+    }
+
+    .add-element:before,
+    .add-element:after {
+      content: "";
+      height: 2px;
+      background-color: #000;
+      vertical-align: middle;
+      display: inline-block;
+      width: 30%;
+      margin-right: 15px;
+    }
+    .add-element:after {
+      margin-right: 0;
+      margin-left: 15px;
+    }
 </style>

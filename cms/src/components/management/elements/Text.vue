@@ -86,7 +86,12 @@ export default {
         padding: 10px 0;
         height: auto;
         -webkit-appearance: none;
+  
+        font-family: inherit;
+        outline: none;      
+        width: 100%;
     }
+
     .settings {
         opacity: 0;
         transition: 0.3s ease-in-out;

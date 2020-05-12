@@ -525,31 +525,6 @@ export default {
       margin-bottom: 45px;
     }
 
-    .all-blocks textarea {
-        width: 100%;
-        background-color: transparent;
-        border: none;
-        font-size: 16px;
-        font-family: inherit;
-        outline: none;
-    }
-
-    .all-blocks textarea::-webkit-input-placeholder {
-        color: inherit !important;
-    }
-    
-    .all-blocks textarea:-moz-placeholder { /* Firefox 18- */
-        color: inherit !important;  
-    }
-    
-    .all-blocks textarea::-moz-placeholder {  /* Firefox 19+ */
-        color: inherit !important;  
-    }
-    
-    .all-blocks textarea:-ms-input-placeholder {  
-        color: inherit !important;  
-    }
-
     .fluid.container {
     min-height: 100%;
     overflow: hidden;
