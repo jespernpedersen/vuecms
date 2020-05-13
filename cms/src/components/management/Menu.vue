@@ -84,14 +84,7 @@ export default {
     }
   },
   mounted() {
-    if(this.$router.app._route.params.backendpage == "image") {
-        this.menuview = "image-menu"
-        console.log(this.menuview)
-    }
-    else if(this.$router.app._route.params.backendpage == "content") {
-        this.menuview = "content-menu"
-        console.log(this.menuview)
-    }
+    this.menuview = this.$router.app._route.params.backendpage + "-menu"
   }
 }
 </script>
