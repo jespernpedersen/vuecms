@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div id="nav" >
       <router-link to="/">Frontend</router-link> |
-      <router-link to="/management/content/pages">Backend</router-link>
+      <router-link to="/management/content/pages" :class="{ active: backendActive}">Backend</router-link>
       <div class="user">
         Welcome back, Jesper
       </div>
@@ -13,6 +13,26 @@
 
 <script>
 export default {
+  data() {
+    return {
+      backendActive: false,
+    }
+  },
+  mounted() {
+    const text = this.$router.app._route.path;
+    const regex = "management";
+    const found = text.match(regex)
+
+    if(found) {
+      this.backendActive = true
+      console.log(this.backendActive)
+    }
+    else {
+      console.log(this.$router.app._route.path)
+      this.backendActive = false
+      console.log(this.backendActive)
+    }
+  }
 }
 </script>
 
@@ -84,6 +104,10 @@ font-family: 'Open Sans', sans-serif;
       color: #f8cb5d;
     }
   }
+}
+
+#nav a.active {
+   color: #f8cb5d;
 }
 
 nav {

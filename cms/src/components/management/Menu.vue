@@ -1,12 +1,12 @@
 <template>
   <aside class="primary-cms-menu">
     <ul class="level-first">
-        <li v-on:click="menuview = 'content-menu'">
+        <li v-on:click="menuview = 'content-menu'" v-bind:class="[menuview === 'content-menu' ? 'active' : '']">
             <unicon name="layer-group" />
             <span>Content</span>
         </li>
-        <li>
-            <router-link to="/management/content/upload">
+        <li v-on:click="menuview = 'image-menu'" v-bind:class="[menuview === 'image-menu' ? 'active' : '']">
+            <router-link to="/management/image/upload">
                 <unicon name="images" />
             </router-link>
         </li>
@@ -74,12 +74,23 @@ export default {
   name: 'Menu',
   data () {
     return {
-      menuview: "content-menu"
+      contentmenu: false,
+      menuview: ''
     }
   },
   computed : {
     logo() {
       return "background-image : url('" + require('@/assets/logo.png') + "'";
+    }
+  },
+  mounted() {
+    if(this.$router.app._route.params.backendpage == "image") {
+        this.menuview = "image-menu"
+        console.log(this.menuview)
+    }
+    else if(this.$router.app._route.params.backendpage == "content") {
+        this.menuview = "content-menu"
+        console.log(this.menuview)
     }
   }
 }
@@ -127,12 +138,18 @@ a {
     width: 100%;
     text-align: center;
     display: inline-block;
-    padding: 17px 0;
+    padding: 16px 0;
     cursor: pointer;
+    transition: 0.3s ease-in-out;
 }
 
+.primary-cms-menu .level-first > li:not(.disabled):hover {  
+    background-color: rgba(255, 255, 255, 0.4); 
+}
+
+
 .primary-cms-menu > ul > li.active {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.4); 
 }
 
 .primary-cms-menu > ul > li .unicon {
