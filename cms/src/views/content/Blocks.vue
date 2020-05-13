@@ -185,8 +185,8 @@ export default {
     }
     
     .pages-view button.add {
-      background-color: green;
-      color: #FFF;
+      background-color: #f8cb5d;
+      color: #333;
       border: none;
       padding: 12px 20px;
       cursor: pointer;

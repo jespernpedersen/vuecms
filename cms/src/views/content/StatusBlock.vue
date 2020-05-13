@@ -28,7 +28,7 @@
     </aside>
     
     
-  <div class="version">Control Seat Alpha 0.4.2</div>
+  <div class="version">Control Seat Alpha 0.4.5</div>
   </div>
 </template>
 
@@ -124,13 +124,14 @@ export default {
     }
 
 
-.status-view input {
+.status-view input[type="text"]  {
     background-color: transparent;
     border: none;
     text-align: center;
     font-size: 26px;
     font-weight: bold;
     color: inherit;
+    width: 100%;
 }
 
 .fluid.container {

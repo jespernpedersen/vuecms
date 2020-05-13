@@ -44,7 +44,7 @@
     </div>
     
     
-  <div class="version">Control Seat Alpha 0.4.2</div>
+  <div class="version">Control Seat Alpha 0.4.5</div>
   </div>
 </template>
 
@@ -600,7 +600,7 @@ aside.page-include-view ul {
       display: inline-block;
 }
 .menu-management-view button.add {
-        background-color: green;
+        background-color: #f8cb5d;
         color: #FFF;
         border: none;
         padding: 12px 20px;

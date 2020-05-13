@@ -3,19 +3,46 @@
     <div id="nav">
       <router-link to="/">Frontend</router-link> |
       <router-link to="/management/content/pages">Backend</router-link>
+      <div class="user">
+        Welcome back, Jesper
+      </div>
     </div>
     <router-view/>
   </div>
 </template>
 
+<script>
+export default {
+}
+</script>
+
 <style lang="scss">
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700&display=swap');
+
+.user {
+    float: right;
+    padding-right: 20px;
+    font-size: 13px;
+    line-height: 21px;
+}
+
+.logo {
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Cairo', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -23,10 +50,14 @@
   min-height: calc(100vh - 34px);
 }
 
+#app * {
+font-family: 'Open Sans', sans-serif;
+}
+
 .version {
     position: fixed;
     opacity: 0.3;
-    bottom: 15px;
+    bottom: 21px;
     left: 88px;
     color: #FFF;
 }
@@ -38,7 +69,7 @@
 }
 
 #nav {
-  padding: 8px;
+  padding: 5px 10px 8px 10px;
   background-color: #222;
   color: #FFF;
   text-align: left;
@@ -50,7 +81,7 @@
     color: inherit;
 
     &.router-link-exact-active {
-      color: #42b983;
+      color: #f8cb5d;
     }
   }
 }

@@ -19,6 +19,7 @@
             <unicon name="cog" />
             <span>Settings</span>
         </li>
+        <div class="logo" :style="logo"></div>
     </ul>
 
     <!-- View for Content Submenu -->
@@ -75,6 +76,11 @@ export default {
     return {
       menuview: "content-menu"
     }
+  },
+  computed : {
+    logo() {
+      return "background-image : url('" + require('@/assets/logo.png') + "'";
+    }
   }
 }
 </script>
@@ -95,6 +101,7 @@ a {
 }
 
 
+
 .primary-cms-menu {
     height: 100vh;
     flex-shrink: 0;
@@ -108,9 +115,11 @@ a {
     display: flex;
     height: 100%;
     flex-basis: 65px;
-    background-color: #263238;
+    
+    background-color: #f8cb5d;
     color: #FFF;
     flex-direction: column;
+    position: relative;
 }
 
 .primary-cms-menu .level-first > li {
@@ -127,7 +136,7 @@ a {
 }
 
 .primary-cms-menu > ul > li .unicon {
-    fill: white;
+    fill: #333;
     vertical-align: middle;
 }
 
@@ -138,6 +147,10 @@ a {
 .primary-cms-menu .level-second > li  {
     transition: 0.3s ease-in-out;
     background-color: transparent;
+}
+
+.primary-cms-menu .level-second > li .unicon {
+    fill: #fff;
 }
 
 .primary-cms-menu .level-second > li .unicon {
@@ -153,7 +166,7 @@ a {
 .primary-cms-menu .level-second {
     top: 0;
     width: 255px;
-    background-color: #222;
+    background-color: #263238;
     height: 100vh;
 }
 
@@ -166,13 +179,26 @@ a {
 
 .primary-cms-menu .level-second li .router-link-active {
     background-color: rgba(255, 255, 255, 0.15);
+}
 
+.primary-cms-menu .level-second li .router-link-active .unicon {
+    fill: #f8cb5d;
 }
 
 .disabled {
     opacity: 0.3;
 }
 
+.logo {
+    position: absolute;
+    bottom: 45px;
+    height: 45px;
+    background-size: 45px auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+    display: block;
+    width: 100%;
+}
 
 
 </style>
