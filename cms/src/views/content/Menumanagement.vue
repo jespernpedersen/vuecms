@@ -62,6 +62,7 @@ let visiblePagesRef = pagesRef.where("published", "==", true);
 
 
 pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
+  if(getpageMenu.length == 0) {
     querySnapshot.forEach(function(doc) {
         let page = doc.data();
 
@@ -81,6 +82,7 @@ pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
 
 
     })
+  }
 })
 
 // All our menus
