@@ -45,6 +45,7 @@ export default {
     .element-text {
         margin-bottom: 10px;
         transition: 0.3s ease-in-out;
+        color: inherit;
     }
 
     .element-text > .tooltip {

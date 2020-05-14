@@ -43,6 +43,14 @@
                               :link="element.button_link"
                             >
                             </ElementButton>
+                            <ElementImage
+                              v-if="element.type == 'image'"
+                              :elementid="element.id"
+                              :blockid="block.id"
+                              :path="element.image_path"
+                              :name="element.name"
+                            >
+                            </ElementImage>
                           </div>
                       </section>
                           <div class="new-elements" :class="{ active: i === activeElementSelection}">
@@ -50,6 +58,7 @@
                             <div class="element-library">
                               <button @click="AddElement(block.id, 'text')"><unicon name="text" />Paragraph Text</button>
                               <button @click="AddElement(block.id, 'button')"><unicon name="link" />Button Link</button>
+                              <button @click="AddElement(block.id, 'image')"><unicon name="link" />Image</button>
                             </div>
                           </div> 
                       <aside class="section-settings">
@@ -81,7 +90,17 @@
         </div>
       </div>
       
-    
+  <Modal v-if="showModal">
+    <h3 slot="header">{{ modalheader }}</h3>
+    <div slot="body">
+      <Upload></Upload>
+      <div class="image-library">
+        <figure v-for="(image, i) in images" :key="i" >
+          <img @click="SelectImage(image.path, image.name)" v-bind:src="image.path" :title="image.name" />
+        </figure>
+      </div>
+    </div>
+  </Modal>
   <div class="version">Control Seat Alpha 0.4.5</div>
   </div>
 </template>
@@ -91,22 +110,27 @@
 import Menu from '@/components/management/Menu.vue'
 
 // Data
-import { db, pagesRef, blocksRef } from '../../firebase/db.js'
+import { db, pagesRef, blocksRef, storageRef } from '../../firebase/db.js'
 
 // Helper frameworks
 import draggable from "vuedraggable"
 
+// Helpers
+import Modal from '@/components/management/helper/Modal.vue'
+
 // Elements
 import ElementText from '@/components/management/elements/Text.vue'
 import ElementButton from '@/components/management/elements/Button.vue'
+import ElementImage from '@/components/management/elements/Image.vue'
 import Upload from '@/components/management/Upload.vue'
 
 let SavedBlockRef = blocksRef.where("blocktype", '==', "content")
+let getImages = []
 
 export default {
   name: 'Page',
   components: {
-    Menu, draggable, Upload, ElementText, ElementButton
+    Menu, draggable, Upload, ElementText, ElementButton, ElementImage, Modal
   },
   data () {
     return {
@@ -118,7 +142,10 @@ export default {
       delayedDragging: false,
       activeSection: null,
       activeElementSelection: null,
-      showImageLibrary: null
+      showImageLibrary: null,
+      showModal: false,
+      images: getImages,
+      SelectedSection: null
     }
   },
   methods: {
@@ -148,7 +175,6 @@ export default {
         this.notifyChanges()
       },
       ElementTemplate(elementID, elementtype, section) {
-        console.log(section)
           if(elementtype == "text") {
             let element = {
               id: elementID,
@@ -157,7 +183,7 @@ export default {
             }
             section.elements.push(element)
           }
-          if(elementtype == "button") {
+          else if(elementtype == "button") {
             let element = {
               id: elementID,
               type: "button",
@@ -165,6 +191,49 @@ export default {
               button_link: "where-should-this-go"
             }
             section.elements.push(element)
+          }
+          else if(elementtype == "image") {
+              this.newelementID = elementID
+              this.modalheader = "Image Library"
+              this.showModal = true;
+              this.SelectedSection = section;
+              this.RetrieveImages()
+          }
+      },
+      async SelectImage(path, title) {
+        let sectionid = this.SelectedSection.id
+        let element = {
+          id: this.newelementID,
+          type: "image",
+          name: title,
+          image_path: path
+        }
+        this.blocks[sectionid].elements.push(element)
+        this.showModal = false
+        
+      },
+      async RetrieveImages() {
+          let getImages = [];
+          // Create a reference under which you want to list
+          var listRef = storageRef.ref('images');
+              
+          // This check prevents duplicate content, we only want to retrieve data if there's nothing in our object
+          if(getImages.length == 0) {
+            listRef.listAll().then((res) => {
+                  res.items.forEach((itemRef) => {
+                    let imageName = itemRef.name
+                    listRef.child(imageName).getDownloadURL().then((url) => {
+                      let imageArray = {
+                        name: imageName,
+                        path: url
+                      }
+                      this.images.push(imageArray)
+                    });
+                  });
+              }).catch(function(error) {
+                // Uh-oh, an error occurred!
+                console.log(error)
+              })
           }
       },
       async EditSettings(i) {
@@ -718,5 +787,26 @@ export default {
     .add-element:after {
       margin-right: 0;
       margin-left: 15px;
+    }
+
+    .image-library {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 30px;
+      max-height: 70vh;
+      overflow-y: scroll;
+      padding-right: 15px;
+    }
+
+    .image-library figure {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #CCC;
+      padding: 8px;
+      cursor: pointer;
+    }
+    .image-library img {
+      max-width: 100%;
     }
 </style>

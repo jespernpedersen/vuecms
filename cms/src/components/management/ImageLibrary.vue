@@ -90,7 +90,7 @@ export default {
     .image-library {
         margin-top: 60px;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: repeat(5, 1fr);
         width: 100%;
         max-width: calc(100vw - 390px);
         grid-gap: 30px;

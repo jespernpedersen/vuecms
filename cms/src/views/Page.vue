@@ -34,6 +34,12 @@
               :text="element.button_text"
               :link="element.button_link" >
             </ButtonLink>
+            <ImageElement
+              v-if="element.type == 'image'"
+              :path="element.image_path"
+              :name="element.name"
+            >
+            </ImageElement>
           </div>
         </div>
       </section>
@@ -50,6 +56,7 @@ import { db, pagesRef, menusRef, blocksRef } from '../firebase/db.js'
 // Elements
 import Paragraph from '@/components/frontend/elements/Paragraph.vue'
 import ButtonLink from '@/components/frontend/elements/Button.vue'
+import ImageElement from '@/components/frontend/elements/Image.vue'
 
 // Get Menu Items
 var menuItemsRef = menusRef.doc("0").collection("items");
@@ -61,7 +68,7 @@ let getPage = [];
 export default {
   name: 'Page',
   components: {
-    Paragraph, ButtonLink
+    Paragraph, ButtonLink, ImageElement
   },
   data () {
     return {
