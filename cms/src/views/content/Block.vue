@@ -48,6 +48,12 @@
         <h2>Block Settings</h2>
         <ul> 
             <li>Block Title: <input v-model="block.title" type="text" @change="notifyChanges()"/></li>
+            <li>Block Type: 
+              <select v-model="block.blocktype" @change="notifyChanges()">
+                <option value="content">Content</option>
+                <option value="header">Header</option>
+                <option value="footer">Footer</option>
+              </select></li>
             <li>Show Title on Block <input v-model="block.showtitle" type="checkbox" @change="notifyChanges()"></li>
             <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
             <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
@@ -55,8 +61,7 @@
         </ul>
     </aside>
     
-    
-  <div class="version">Control Seat Alpha 0.4.2</div>
+  <div class="version">Control Seat Alpha 0.4.5</div>
   </div>
 </template>
 
@@ -95,6 +100,7 @@ export default {
         // Construct what we want to be able to change/update
         blocksRef.doc(blockId).update({
              bgcolor: block.bgcolor,
+             blocktype: block.blocktype,
              bgimage: block.bgimage,
              columns: block.columns,
              published: block.published,
@@ -108,7 +114,8 @@ export default {
       },
       async AddElement(blockid, elementtype) {
         // Get Section we're adding to
-        let section = this.blocks[blockid]
+        let section = this.block
+        console.log(section)
 
         if(section.elements.length == 0) {
           let elementID = 0

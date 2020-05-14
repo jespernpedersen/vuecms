@@ -5,8 +5,10 @@
         {{ status[0].title }}
       </div>
     </div>
-    <header>
-      <a href="/">Frontend Header</a>
+    <header v-bind:style="{ backgroundColor: header[0].bgcolor, color: header[0].textcolor }">
+      <div v-bind:class="{ container: header[0].container}">
+        <a href="/">{{ header[0].title }}</a>
+      </div>
     </header>
     <nav>
       <div class="container">
@@ -44,8 +46,10 @@
         </div>
       </section>
     </main>
-    <footer>
-      Frontend Footer
+    <footer v-bind:style="{ backgroundColor: footer[0].bgcolor, color: footer[0].textcolor }">
+      <div v-bind:class="{ container: footer[0].container}">
+        {{ footer[0].title }}
+      </div>
     </footer>
   </div>
 </template>
@@ -72,6 +76,7 @@ export default {
   },
   data () {
     return {
+      header: [],
       pages: getPage,
       menus: []
     }
@@ -201,6 +206,8 @@ export default {
   firestore() {
     return {
       menuitems: menuItemsRef.orderBy("order"),
+      header: blocksRef.where("blocktype", "==", "header").limit(1),
+      footer: blocksRef.where("blocktype", "==", "footer").limit(1),
       status: blocksRef.where("blocktype", "==", "banner"),
     }
   },

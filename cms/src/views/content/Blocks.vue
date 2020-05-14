@@ -104,7 +104,7 @@
     </div>
     
     
-  <div class="version">Control Seat Alpha 0.4.2</div>
+  <div class="version">Control Seat Alpha 0.4.5</div>
   </div>
 </template>
 
@@ -143,11 +143,11 @@ export default {
               "blocktype": 'content',
               "bgimage": '',
               "bgcolor": '#ccc',
-              "columns": 1,
               "published": false,
               "title": "A New Block",
               "container": true,
-              "textcolor": "#fff"
+              "textcolor": "#fff",
+              "elements": []
             })
           })
         });
