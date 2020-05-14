@@ -58,7 +58,7 @@
                             <div class="element-library">
                               <button @click="AddElement(block.id, 'text')"><unicon name="text" />Paragraph Text</button>
                               <button @click="AddElement(block.id, 'button')"><unicon name="link" />Button Link</button>
-                              <button @click="AddElement(block.id, 'image')"><unicon name="link" />Image</button>
+                              <button @click="AddElement(block.id, 'image')"><unicon name="image-plus" />Image</button>
                             </div>
                           </div> 
                       <aside class="section-settings">
