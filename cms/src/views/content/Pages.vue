@@ -2,7 +2,7 @@
   <div class="pages-view">
     <Menu></Menu>
     <div class="content">
-    
+        <vue-headful :title="'Pages - Control Seat CMS'"/>
         <button class="add" @click="newPage()">Add New Page</button>
         <h1>Pages</h1>
         <div class="v-table">

@@ -1,5 +1,6 @@
 <template>
   <div class="page">
+    <vue-headful :title="pages[0].title + ' - Test Site'"/>
     <div class="banner" v-if="status[0].published" v-bind:class="{ active: status[0].published}" v-bind:style="{ backgroundColor: status[0].bgcolor, color: status[0].textcolor }">
       <div>
         {{ status[0].title }}

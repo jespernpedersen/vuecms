@@ -1,5 +1,6 @@
 <template>
   <div class="library-view">
+    <vue-headful :title="'Image Library - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
         <ImageLibrary></ImageLibrary>

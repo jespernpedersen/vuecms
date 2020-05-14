@@ -2,6 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import './registerServiceWorker'
 
+import vueHeadful from 'vue-headful';
+
 // Routing
 import router from './router'
 
@@ -17,6 +19,8 @@ import VueFirestore from 'vue-firestore';
 Vue.use(VueFirestore);
 
 Vue.config.productionTip = false
+
+Vue.component('vue-headful', vueHeadful);
 
 new Vue({
     router,

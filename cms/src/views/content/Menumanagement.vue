@@ -1,5 +1,6 @@
 <template>
   <div class="menu-management-view">
+    <vue-headful :title="'Menu Management - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
         <div class="content-inner">

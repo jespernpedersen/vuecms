@@ -1,5 +1,6 @@
 <template>
   <div class="blocks-view status-view">
+    <vue-headful :title="'Status Banner - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
         <div class="status-wrapper" v-for="block in blocks" :key="block['.key']">

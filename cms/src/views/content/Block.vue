@@ -1,5 +1,7 @@
 <template>
   <div class="blocks-view">
+    
+    <vue-headful :title="block.title + ' - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
 
