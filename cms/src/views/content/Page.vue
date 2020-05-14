@@ -22,6 +22,9 @@
                         <li class="toolbar delete" @click="DeleteSection(i)">Delete</li>
                         <li>Order: {{ block.order }}</li>
                       </div>
+                      <div class="block-tooltip" v-if="block.saved">
+                        Saved Block
+                      </div>
                       <section v-bind:class="{ disabled: !block.published }" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
                           <h2 v-if="block.showtitle">{{ block.title }}</h2>          
                           <div v-for="element in block.elements" :key="element.id" style="text-align: left">
@@ -41,8 +44,7 @@
                             >
                             </ElementButton>
                           </div>
-                      </section> 
-                      
+                      </section>
                           <div class="new-elements" :class="{ active: i === activeElementSelection}">
                             <button class="add-element" @click="showElementLibrary(i)"><unicon name="plus-circle" />Add New Element</button>
                             <div class="element-library">
@@ -80,7 +82,7 @@
       </div>
       
     
-  <div class="version">Control Seat Alpha 0.4.2</div>
+  <div class="version">Control Seat Alpha 0.4.5</div>
   </div>
 </template>
 
@@ -146,6 +148,7 @@ export default {
         this.notifyChanges()
       },
       ElementTemplate(elementID, elementtype, section) {
+        console.log(section)
           if(elementtype == "text") {
             let element = {
               id: elementID,
@@ -519,10 +522,22 @@ export default {
         padding: 30px;
         text-align: left;
         color: #FFF;
+        width: 100%;
+        float: left;
+    }
+
+    .block-tooltip {
+        display: inline-block;
+        float: left;
+        background-color: #f8cb5d;
+        color: #333;
+        padding: 5px 10px;
     }
 
     .all-blocks .block {
       margin-bottom: 45px;
+      float: left;
+      width: 100%;
     }
 
     .fluid.container {
@@ -530,6 +545,9 @@ export default {
     overflow: hidden;
 }
 
+.btn + .btn {
+  margin-left: 15px;
+}
 
 .notification {
     position: fixed;
@@ -623,7 +641,7 @@ export default {
     }
 
     .block.saved section {
-      border: 5px groove yellow;
+      border: 5px solid #f8cb5d;
     }
 
     .new-elements {
@@ -631,6 +649,8 @@ export default {
       overflow: hidden;
       background-color: rgba(255, 255, 255, 1);     
       transition: 0.3s ease-in-out;
+        float: left;
+      width: 100%;
     }
 
     .new-elements.active {

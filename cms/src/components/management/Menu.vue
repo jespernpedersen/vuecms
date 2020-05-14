@@ -15,9 +15,10 @@
             <unicon name="users-alt" />
             <span>Users</span>
         </li>
-        <li class="disabled">
-            <unicon name="cog" />
-            <span>Settings</span>
+        <li>
+            <router-link to="/management/image/upload">
+                <unicon name="cog" />
+            </router-link>
         </li>
         <div class="logo" :style="logo"></div>
     </ul>

@@ -65,9 +65,7 @@ pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
   if(getpageMenu.length == 0) {
     querySnapshot.forEach(function(doc) {
         let page = doc.data();
-
         let slug = page.title.replace(/\s+/g, '-').toLowerCase()
-
         // Construct data
         let pagesArray = {
           id: page.id,
@@ -76,11 +74,8 @@ pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
           order: page.id,
           reference: page.id
         }
-
         // Add menu items to object
         getpageMenu.push(pagesArray);
-
-
     })
   }
 })

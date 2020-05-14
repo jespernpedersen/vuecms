@@ -2,32 +2,31 @@
   <div class="blocks-view status-view">
     <Menu></Menu>
     <div class="content">
-
-        <div class="fluid container">
-            <section v-bind:style="{ backgroundColor: block[0].bgcolor, color: block[0].textcolor }">
-                <input v-model="block[0].title" type="text" @change="notifyChanges()"/>
-            </section>
-        
-            <div v-bind:class="{ active: unsavedChanges}">
-                <div class="notification">
-                    <h3 style="text-align: center;">You've unsaved changes!</h3>
-                    <button type="button" class="btn btn-default" @click="SaveBlock(block[0])">Save Block</button>
+        <div class="status-wrapper" v-for="block in blocks" :key="block['.key']">
+            <div class="fluid container">
+                <section v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
+                    <input v-model="block.title" type="text" @change="notifyChanges()"/>
+                </section>
+            
+                <div v-bind:class="{ active: unsavedChanges}">
+                    <div class="notification">
+                        <h3 style="text-align: center;">You've unsaved changes!</h3>
+                        <button type="button" class="btn btn-default" @click="SaveBlock(block)">Save Block</button>
+                    </div>
                 </div>
             </div>
+                <aside class="global-settings">
+                    <h2>Settings</h2>
+                    <ul>
+                        <li>Block Title: {{ block.title }}</li>
+                        <li>Visibility State: <input v-model="block.published" type="checkbox" @change="notifyChanges()"><span v-if="block.published">Published</span><span v-if="!block.published">Unpublished</span></li>
+                        <li>Background Color: {{ block.bgcolor }} <input v-model="block.bgcolor" type="color" @change="notifyChanges()"/></li>
+                        <li>Container: <input v-model="block.container" type="checkbox" @change="notifyChanges()"></li>
+                        <li>Text Color: {{ block.textcolor }} <input v-model="block.textcolor" type="color" @change="notifyChanges()"/></li>
+                    </ul>
+                </aside>
         </div>
     </div>
-    <aside class="global-settings">
-        <h2>Global Settings</h2>
-        <ul>
-            <li>Block Title: {{ block[0].title }}</li>
-            <li>Visibility State: <input v-model="block[0].published" type="checkbox" @change="notifyChanges()"><span v-if="block[0].published">Published</span><span v-if="!block[0].published">Unpublished</span></li>
-            <li>Background Color: {{ block[0].bgcolor }} <input v-model="block[0].bgcolor" type="color" @change="notifyChanges()"/></li>
-            <li>Container: <input v-model="block[0].container" type="checkbox" @change="notifyChanges()"></li>
-            <li>Text Color: {{ block.textcolor }} <input v-model="block[0].textcolor" type="color" @change="notifyChanges()"/></li>
-        </ul>
-    </aside>
-    
-    
   <div class="version">Control Seat Alpha 0.4.5</div>
   </div>
 </template>
@@ -43,7 +42,7 @@ export default {
   },
   data () {
     return {
-      block: [],
+      blocks: [],
       unsavedChanges: false
     }
   },
@@ -71,7 +70,7 @@ export default {
   },
   firestore() {
     return {
-      block: blocksRef.where("blocktype", "==", "banner"),
+      blocks: blocksRef.where("blocktype", "==", "banner"),
     }
   },
 }
@@ -97,10 +96,20 @@ export default {
         color: #FFF;
     }
 
-    aside.global-settings {
+    aside.global-settings {    
         width: 300px;
-        padding-top: 30px;
+        padding-top: 55px;
+        -webkit-box-sizing: border-box;
+        position: absolute;
         box-sizing: border-box;
+        right: 0;
+        top: 0;
+        height: 100vh;
+        background-color: #fff;
+    }
+
+    .status-wrapper {
+        height: 100%;
     }
 
     aside.global-settings ul {
