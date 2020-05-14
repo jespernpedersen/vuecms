@@ -136,7 +136,6 @@ export default {
              title: block.title,
              container: block.container,
              textcolor: block.textcolor,
-             textcontent: block.textcontent,
              elements: block.elements
         })
         // We want to hide the notification of unsaved changes when we have saved to database
@@ -150,6 +149,7 @@ export default {
           this.ElementTemplate(elementID, elementtype, section)
         }
         else {
+          console.log(elementID)
           let elementID = section.elements[section.elements.length - 1].id + 1
           this.ElementTemplate(elementID, elementtype, section)
         }
@@ -184,7 +184,7 @@ export default {
       },
       async SelectImage(path, title) {
         let element = {
-          id: this.block.id,
+          id: this.newelementID,
           type: "image",
           name: title,
           image_path: path

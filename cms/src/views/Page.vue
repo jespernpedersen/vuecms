@@ -8,6 +8,24 @@
     <header v-bind:style="{ backgroundColor: header[0].bgcolor, color: header[0].textcolor }">
       <div v-bind:class="{ container: header[0].container}">
         <a href="/">{{ header[0].title }}</a>
+        <div v-for="element in header[0].elements" :key="element.id" v-bind:class="element.type + '-element'">
+          <Paragraph
+            v-if="element.type == 'text'"
+            :text="element.text" 
+            >
+          </Paragraph>
+          <ButtonLink
+            v-if="element.type == 'button'"
+            :text="element.button_text"
+            :link="element.button_link" >
+          </ButtonLink>
+          <ImageElement
+            v-if="element.type == 'image'"
+            :path="element.image_path"
+            :name="element.name"
+          >
+          </ImageElement>
+        </div>
       </div>
     </header>
     <nav>
@@ -49,6 +67,24 @@
     <footer v-bind:style="{ backgroundColor: footer[0].bgcolor, color: footer[0].textcolor }">
       <div v-bind:class="{ container: footer[0].container}">
         {{ footer[0].title }}
+        <div v-for="element in footer[0].elements" :key="element.id" v-bind:class="element.type + '-element'">
+          <Paragraph
+            v-if="element.type == 'text'"
+            :text="element.text" 
+            >
+          </Paragraph>
+          <ButtonLink
+            v-if="element.type == 'button'"
+            :text="element.button_text"
+            :link="element.button_link" >
+          </ButtonLink>
+          <ImageElement
+            v-if="element.type == 'image'"
+            :path="element.image_path"
+            :name="element.name"
+          >
+          </ImageElement>
+        </div>
       </div>
     </footer>
   </div>

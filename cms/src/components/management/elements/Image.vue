@@ -18,15 +18,20 @@ export default {
   props: ['path', 'name', 'blockid', 'elementid'],
   methods: {
       DeleteElement(blockid, elementid) {
-        // Get Parent
-        let parent = this.$parent.$parent.$parent;
         // Get All Blocks
-        let blocks = parent.blocks
-        // Get the Specific Element
-        let element = blocks[blockid].elements;
-        // Delete
-        element.splice(elementid, 1)
-        parent.notifyChanges()
+        if(this.$parent.$parent.$parent.blocks != undefined) {
+            let blocks = this.$parent.$parent.$parent.blocks
+            // Get the Specific Element
+            let element = blocks[blockid].elements;
+            // Delete
+            element.splice(elementid, 1)
+            this.$parent.$parent.$parent.notifyChanges()
+        }
+        else {
+            console.log(this.$parent.block)
+            this.$parent.block.elements.splice(elementid, 1)
+            this.$parent.notifyChanges()
+        }
       }
   }
 }
