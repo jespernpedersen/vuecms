@@ -1,5 +1,7 @@
 <template>
   <div class="pages-view">
+    
+    <vue-headful :title="page.title + ' - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
       <div class="fluid container">

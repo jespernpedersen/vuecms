@@ -1,5 +1,6 @@
 <template>
   <div class="pages-view">
+    <vue-headful :title="'Blocks- Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
     
