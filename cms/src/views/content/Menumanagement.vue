@@ -26,10 +26,15 @@
                   <h2 style="text-align: left">{{ menu.name }}</h2>
                   <draggable class="list-group" tag="ul" v-model="menu.items" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
                       <transition-group type="transition" :name="'flip-list'">
-                      <li class="list-group-item" v-for="item in menu.items" :key="item.order">
-                          {{ item.name }}
-                          <span class="number"> {{item.order }} </span>
-                      </li>
+                        <li class="list-group-item" v-for="item in menu.items" :key="item.order">
+                          <span v-if="item.ghost" class="ghost-item">
+                            Example Menu Item (is not shown on website)
+                          </span>
+                          <span v-if="!item.ghost"> 
+                              {{ item.name }}
+                              <span class="number"> {{item.order }} </span>
+                          </span>
+                        </li>
                       </transition-group>
                   </draggable>
               </nav>
@@ -120,7 +125,8 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
               name: item.name,
               url: item.url,
               order: item.order,
-              reference: item.id
+              reference: item.id,
+              ghost: item.ghost
             }
             getMenus[doc.id]['items'].push(itemsArray);
             // Output it based on item order
@@ -168,7 +174,8 @@ menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
           name: item.name,
           url: item.url,
           order: item.order,
-          reference: item.id
+          reference: item.id,
+          ghost: item.ghost
         }
 
         // Add menu items to object
@@ -238,13 +245,15 @@ export default {
                     let menuID = String(menu.id)
                     menu.items.forEach(function(item) {
                         let itemID = String(item.id)
-                        menusRef.doc(menuID).collection("items").doc(itemID).set({
-                            "id": item.id,
-                            "name": item.name,
-                            "order": item.order,
-                            "url": item.url,
-                            "reference": item.id
-                        })
+                        if(!item.ghost) {
+                          menusRef.doc(menuID).collection("items").doc(itemID).set({
+                              "id": item.id,
+                              "name": item.name,
+                              "order": item.order,
+                              "url": item.url,
+                              "reference": item.id,
+                          })
+                        }
                         hasDeleted = false
                     })
                 })
@@ -368,6 +377,10 @@ export default {
 .ghost {
   opacity: 0.5;
   background: #c8ebfb;
+}
+
+.ghost-item {
+  opacity: 0.3;
 }
 
 .panel {
