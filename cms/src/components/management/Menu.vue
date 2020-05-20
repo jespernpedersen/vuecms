@@ -15,7 +15,7 @@
             <unicon name="users-alt" />
             <span>Users</span>
         </li>
-        <li>
+        <li class="disabled">
             <router-link to="/management/image/upload">
                 <unicon name="cog" />
             </router-link>

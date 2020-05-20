@@ -8,7 +8,7 @@
             <div class="page-list">
               <nav>
                   <h2 style="text-align: left">Pages</h2>
-                  <p>These items comes from your page list, you can add them to each of your menus by dragging them to a menu</p>
+                  <p>These items come from your page list, you can add them to each of your menus by dragging them to a menu. Pages that are published will only be shown in this list</p>
                   <draggable class="list-group" tag="ul" v-model="pages" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false, updateItemOrder">
                       <transition-group type="transition" :name="'flip-list'">
                         <li class="list-group-item" v-for="page in pages" :key="page.order">
@@ -76,7 +76,9 @@ pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
           reference: page.id
         }
         // Add menu items to object
-        getpageMenu.push(pagesArray);
+        if(page.published) {
+          getpageMenu.push(pagesArray);
+        }
     })
   }
 })

@@ -140,7 +140,7 @@ export default {
   },
   firestore() {
     return {
-      pages: pagesRef
+      pages: pagesRef.orderBy("id")
     }
   }
 }
