@@ -7,13 +7,6 @@
         <h1>Pages</h1>
         <div class="v-table">
           <div class="table-header">
-            <div class="select-all">
-              
-                <input type="checkbox" /> Select All
-            </div>
-            <div class="page-id">
-              ID
-            </div>
             <div class="page-publish">
               Published
             </div>
@@ -28,24 +21,14 @@
             </div>
           </div>
           <section v-for="page in pages" :key="page['.key']" class="row">
-              <div class="select">
-                <input type="checkbox" />
-              </div>
-              <div class="page-id">
-                {{ page.id }}
-              </div>
-              <div class="page-published" v-if="page.published === false" @click="togglePublish(page['.key'], page.published)">
-                <span class="false"></span>
-              </div>
-              <div class="page-published" v-if="page.published === true" @click="togglePublish(page['.key'], page.published)">
-                <span class="true"></span>
+              <div class="page-published">
+                <input type="checkbox" v-model="page.published"  @click="togglePublish(page['.key'], page.published)" />
               </div>
               <div class="page-title">
                 {{ page.title }}
               </div>
               <div class="page-featured">
-                <span v-if="page.featured === false" class="false"  @click="assignFrontpage(page['.key'])"></span>
-                <span v-if="page.featured === true" class="true"></span>
+                <input type="checkbox" v-model="page.featured" @click="assignFrontpage(page['.key'])"></span>
               </div>
               <div class="page-edit">
                 <a v-bind:href="'/management/content/pages/' + page.id">Edit</a>
