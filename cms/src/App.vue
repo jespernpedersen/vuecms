@@ -2,7 +2,7 @@
   <div id="app">
     <div id="nav" >
       <router-link to="/">Website</router-link> |
-      <router-link to="/management/content/pages" :class="{ active: backendActive}">Control Panel</router-link>
+      <router-link to="/management/content/pages" :class="{ active: backendActive}">Control Seat CMS</router-link>
       <div class="user">
         Welcome back, Jesper
       </div>
