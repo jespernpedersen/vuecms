@@ -10,11 +10,6 @@
         <div class="v-table">
         
           <div class="table-header">
-            <div class="select-all">
-            </div>
-            <div class="page-id">
-              ID
-            </div>
             <div class="page-publish">
               Type
             </div>
@@ -26,11 +21,6 @@
             </div>
           </div>
           <section class="row" v-if="header[0]">
-              <div class="select">
-              </div>
-              <div class="page-id">
-                {{ header[0].id }}
-              </div>
               <div class="page-published">
                   <strong>Header Block</strong>
               </div>
@@ -43,11 +33,6 @@
           </section>
           
           <section class="row" v-if="footer[0]">
-              <div class="select">
-              </div>
-              <div class="page-id">
-                {{ footer[0].id }}
-              </div>
               <div class="page-published">
                   <strong>Footer Block</strong>
               </div>
@@ -63,12 +48,6 @@
         <h2 style="text-align: left">Content Blocks</h2>
         <div class="v-table">
           <div class="table-header">
-            <div class="select-all">
-                <input type="checkbox" /> Select All
-            </div>
-            <div class="page-id">
-              ID
-            </div>
             <div class="page-publish">
               Published
             </div>
@@ -81,17 +60,8 @@
           </div>
           <div v-for="block in blocks" :key="block['.key']">
           <section class="row">
-              <div class="select">
-                <input type="checkbox" />
-              </div>
-              <div class="page-id">
-                {{ block.id }}
-              </div>
-              <div class="page-published" v-if="block.published === false" @click="togglePublish(block['.key'], block.published)">
-                <span class="false"></span>
-              </div>
-              <div class="page-published" v-if="block.published === true" @click="togglePublish(block['.key'], block.published)">
-                <span class="true"></span>
+              <div class="page-published">
+                <input type="checkbox" v-model="block.published" @click="togglePublish(block['.key'], block.published)">
               </div>
               <div class="page-title">
                 {{ block.title }}

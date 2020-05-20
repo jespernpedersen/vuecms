@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div id="nav" >
-      <router-link to="/">Frontend</router-link> |
-      <router-link to="/management/content/pages" :class="{ active: backendActive}">Backend</router-link>
+      <router-link to="/">Website</router-link> |
+      <router-link to="/management/content/pages" :class="{ active: backendActive}">Control Seat CMS</router-link>
       <div class="user">
         Welcome back, Jesper
       </div>
@@ -43,7 +43,7 @@ export default {
 .user {
     float: right;
     padding-right: 20px;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 21px;
 }
 
