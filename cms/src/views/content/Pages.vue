@@ -25,7 +25,12 @@
                 <input type="checkbox" v-model="page.published"  @click="togglePublish(page['.key'], page.published)" />
               </div>
               <div class="page-title">
-                {{ page.title }}
+                <strong class="disabled" v-if="!page.published">
+                  {{ page.title }}
+                </strong>
+                <strong v-if="page.published">
+                  {{ page.title }}
+                </strong>
               </div>
               <div class="page-featured">
                 <input type="checkbox" v-model="page.featured" @click="assignFrontpage(page['.key'])"></span>
@@ -145,6 +150,10 @@ export default {
     .pages-view {
       min-height: calc(100vh);
       display: flex;
+    }
+
+    strong.disabled {
+      opacity: 0.3;
     }
     
     .pages-view button.add {
