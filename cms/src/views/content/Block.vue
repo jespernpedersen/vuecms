@@ -133,7 +133,7 @@ export default {
              bgcolor: block.bgcolor,
              blocktype: block.blocktype,
              bgimage: block.bgimage,
-             columns: block.columns,
+             showtitle: block.showtitle,
              published: block.published,
              title: block.title,
              container: block.container,

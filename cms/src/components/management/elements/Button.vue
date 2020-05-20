@@ -26,7 +26,6 @@ export default {
         let parent = this.$parent.$parent.$parent;  
         let blocks = parent.blocks
         let element = blocks[blockid].elements[elementid]
-        console.log(elementid)
         // Update Element Text
         if(setting == "text") {
             element.button_text = value;

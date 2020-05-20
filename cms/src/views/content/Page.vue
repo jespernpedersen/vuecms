@@ -55,7 +55,7 @@
                             </ElementImage>
                           </div>
                       </section>
-                          <div class="new-elements" :class="{ active: i === activeElementSelection}">
+                          <div class="new-elements" :class="{ active: i === activeElementSelection}" v-if="!block.saved">
                             <button class="add-element" @click="showElementLibrary(i)"><unicon name="plus-circle" />Add New Element</button>
                             <div class="element-library">
                               <button @click="AddElement(block.id, 'text')"><unicon name="text" />Paragraph Text</button>

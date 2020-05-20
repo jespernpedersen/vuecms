@@ -17,25 +17,47 @@ export default {
   props: ['text', 'blockid', 'elementid'],
   methods: {
       UpdateElement(text, blockid, elementid) {
-        // Get Parent
-        let parent = this.$parent.$parent.$parent;  
-        let blocks = parent.blocks
-        let element = blocks[blockid].elements[elementid]
-        // Update Element Text
-        element.text = text;
-        // Notify New Changes
-        parent.notifyChanges()
+        // If editing in single page view (with multiple blocks)
+        if(this.$parent.$parent.$parent.blocks != undefined) {
+            let parent = this.$parent.$parent.$parent;  
+            let blocks = parent.blocks
+            let element = blocks[blockid].elements[elementid]
+            // Update Element Text
+            element.text = text;
+            // Notify New Changes
+            parent.notifyChanges()
+        }
+        // If editing in single block view
+        else {
+            let parent = this.$parent;
+            let block = parent.block
+            let element = block.elements[elementid]
+            // Update Element Text
+            element.text = text;
+            // Notify New Changes
+            parent.notifyChanges()  
+        }
       },
       DeleteElement(blockid, elementid) {
-        // Get Parent
-        let parent = this.$parent.$parent.$parent;
-        // Get All Blocks
-        let blocks = parent.blocks
-        // Get the Specific Element
-        let element = blocks[blockid].elements;
-        // Delete
-        element.splice(elementid, 1)
-        parent.notifyChanges()
+        if(this.$parent.$parent.$parent.blocks != undefined) {
+            // Get Parent
+            let parent = this.$parent.$parent.$parent;
+            // Get All Blocks
+            let blocks = parent.blocks
+            // Get the Specific Element
+            let element = blocks[blockid].elements;
+            // Delete
+            element.splice(elementid, 1)
+            parent.notifyChanges()
+        }
+        else {
+            let parent = this.$parent;
+            let block = parent.block
+            let element = block.elements
+            // Delete
+            element.splice(elementid, 1)
+            parent.notifyChanges() 
+        }
       }
   }
 }
@@ -101,6 +123,8 @@ export default {
     }
     .settings .delete {
         cursor: pointer;
+        
+    -webkit-text-stroke: 0.5px black;
     }
     .element-text:hover .settings {
         opacity: 1;

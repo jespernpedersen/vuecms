@@ -3,12 +3,12 @@ import "@firebase/firestore"
 import 'firebase/storage';
 
 const firebaseApp = firebase.initializeApp({
-    apiKey: "a0ISjRwyJFyTT8WfZWI3ooDWlU4FldaizBx3RFRn",
-    authDomain: "vuecms-63087.firebaseapp.com",
-    databaseURL: "https://vuecms-63087.firebaseio.com",
-    projectId: "vuecms-63087",
-    storageBucket: "vuecms-63087.appspot.com",
-    messagingSenderId: "720603301863"
+    apiKey: "w7gOcBhRsWT2WQ2uM2wq9vgrvtS0nHTV68kMOmNM",
+    authDomain: "test-case-4bc3e.firebaseapp.com",
+    databaseURL: "https://test-case-4bc3e.firebaseio.com",
+    projectId: "test-case-4bc3e",
+    storageBucket: "test-case-4bc3e.appspot.com",
+    messagingSenderId: "868000158634"
 })
 
 const db = firebaseApp.firestore()
