@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div id="nav" >
-      <router-link to="/">Hjemmeside</router-link> |
-      <router-link to="/management/content/pages" :class="{ active: backendActive}">Kontrolpanel</router-link>
+      <router-link to="/">Website</router-link> |
+      <router-link to="/management/content/pages" :class="{ active: backendActive}">Control Panel</router-link>
       <div class="user">
         Welcome back, Jesper
       </div>
