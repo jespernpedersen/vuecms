@@ -136,6 +136,7 @@ export default {
     },
     deletePage(id) {
       pagesRef.doc(id).delete();
+      
     }
   },
   firestore() {
