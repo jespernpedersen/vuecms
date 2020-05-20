@@ -353,7 +353,7 @@ export default {
             id: NewSectionID,
             order: NewSectionID,
             saved: true,
-            reference: 7
+            reference: 4
           })
           
           this.getSavedBlocks()
