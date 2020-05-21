@@ -1,5 +1,5 @@
 <template>
-  <div class="blocks-view status-view">
+  <div class="blocks-view status-view" :class="{ active: sidemenu }">
     <vue-headful :title="'Status Banner - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
@@ -44,7 +44,8 @@ export default {
   data () {
     return {
       blocks: [],
-      unsavedChanges: false
+      unsavedChanges: false,
+      sidemenu: false
     }
   },
   methods: {
@@ -176,4 +177,78 @@ export default {
 .active .notification {
     bottom: 2%;
 }
+
+    /* High resolution */
+    @media screen and (max-width: 1300px) {
+        html .blocks-view section {
+            max-width: 48vw;
+        }
+    }
+    
+    /* Laptop-sized */
+    @media screen and (max-width: 1280px) {
+        html .blocks-view section {
+            max-width: 100%;
+        }
+        html aside.global-settings {
+            bottom: 100px;
+            top: auto;
+            height: auto;
+            width: calc(100% - 320px);
+            padding-top: 25px;
+        }
+    }
+
+    /* Desktop to iPad size */
+    @media screen and (max-width: 991px) {
+        html .blocks-view .content {
+            padding-left: 160px;
+        }
+
+        html aside.global-settings {
+            width: calc(100% - 190px);
+            right: 30px;
+        }
+
+    }
+
+    /* Mobile starts */
+    @media screen and (max-width: 767px) {
+        html .blocks-view .content {
+          padding-left: 0;
+          padding-right: 0;
+          padding-top: 15px;
+          max-width: 100%;
+          position: relative;
+          margin-left: 0;
+          transition: 0.3s ease-in-out;
+        }
+        html aside.global-settings {
+            width: 100%;
+            right: 0;
+            bottom: auto;
+            top: 149px;
+        }
+
+        .notification {
+            z-index: 9999;
+        }
+        html .notification h3 {
+            text-align: left;
+            font-size: 16px;
+        }
+
+        
+
+        html .blocks-view.active .content {
+          margin-left: 250px;
+        } 
+
+        
+    }
+
+    /* Small Mobile */
+    @media screen and (max-width: 540px) {
+
+    }
 </style>

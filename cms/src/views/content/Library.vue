@@ -1,5 +1,5 @@
 <template>
-  <div class="library-view">
+  <div class="library-view" :class="{ active: sidemenu }">
     <vue-headful :title="'Image Library - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
@@ -25,7 +25,8 @@ export default {
   },
   data () {
       return {
-          images: getImages
+          images: getImages,
+          sidemenu: false
       }
   },
 }
@@ -43,5 +44,61 @@ export default {
         padding-top: 50px;
         padding-right: 30px;
         min-height: 100vh;
+    }
+
+    /* High resolution */
+    @media screen and (max-width: 1500px) {
+    }
+    
+    /* Laptop-sized */
+    @media screen and (max-width: 1280px) {
+    }
+
+    /* Desktop to iPad size */
+    @media screen and (max-width: 991px) {
+    }
+
+    /* Mobile starts */
+    @media screen and (max-width: 767px) {
+        html .image-library {
+          grid-template-columns: repeat(1, 1fr);
+          max-width: none;
+          padding-left: 30px;
+          padding-right: 30px;
+        }
+        html .image-library figure {
+          display: block;
+        }
+
+        html .image-library figure img {
+          width: 100px;
+          max-width: none;
+        }
+        html .library-view .content {
+          padding-left: 0;
+          padding-right: 0;
+          height: 100%;
+          max-width: 100%;
+          margin-left: 0;
+          transition: margin 0.3s ease-in-out;
+        }
+
+        html .library-view.active .content {
+          margin-left: 250px;
+        } 
+
+        html .library-view {
+          min-height: initial;
+          overflow: scroll;
+        }
+        html .library-view .content > div {
+          float: left;
+          width: 100%;
+        }
+    }
+
+    /* Small Mobile */
+    @media screen and (max-width: 540px) {
+
     }
 </style>

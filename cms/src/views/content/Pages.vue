@@ -1,5 +1,5 @@
 <template>
-  <div class="pages-view">
+  <div class="pages-view" :class="{ active: sidemenu }">
     <Menu></Menu>
     <div class="content">
         <vue-headful :title="'Pages - Control Seat CMS'"/>
@@ -60,6 +60,7 @@ export default {
   data () {
     return {
       pages: [],
+      sidemenu: false
     }
   },
   methods: {
@@ -273,5 +274,77 @@ export default {
       padding: 5px;
       display: inline-block;
       background-color: #FFF;
+    }
+
+    /* High resolution */
+    @media screen and (max-width: 1500px) {
+      html .page-publish, 
+      html .page-published {
+        min-width: 15%;
+      }
+      html .page-featured {
+        min-width: 30%;
+      }
+      html .page-actions, .page-edit {
+        min-width: 11%;
+      }
+    }
+    
+    /* Laptop-sized */
+    @media screen and (max-width: 1280px) {
+      html .page-publish, html .page-published {
+        min-width: 20%;
+      }
+      html .page-actions, .page-edit {
+        min-width: 16%;
+      }
+      .container {
+        max-width: 992px;
+      }
+    }
+
+    /* Desktop to iPad size */
+    @media screen and (max-width: 991px) {
+        html .pages-view .content {
+          padding-left: 160px;
+        }
+    }
+
+    /* Mobile starts */
+    @media screen and (max-width: 767px) {
+        html .pages-view {
+          position: relative;
+        }
+
+        h1 {
+          padding-left: 15px;
+        }
+
+        button.add {
+          margin-right: 15px;
+        }
+        
+
+        html .page-publish, html .page-published,
+        html .page-featured {
+          display: none;
+        }
+    
+        html .pages-view .content {
+          padding-left: 0;
+          padding-right: 0;
+          margin-left: 0;
+          transition: 0.3s ease-in-out;
+          min-height: 100vh;
+        }
+
+        html .pages-view.active .content {
+          margin-left: 250px;
+        } 
+    }
+
+    /* Small Mobile */
+    @media screen and (max-width: 540px) {
+
     }
 </style>

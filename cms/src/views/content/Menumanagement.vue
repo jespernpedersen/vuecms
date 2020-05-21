@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-management-view">
+  <div class="menu-management-view" :class="{ active: sidemenu }">
     <vue-headful :title="'Menu Management - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
@@ -198,7 +198,8 @@ export default {
       editable: true,
       isDragging: false,
       delayedDragging: false,
-      unsavedChanges: false
+      unsavedChanges: false,
+      sidemenu: false
     };
   },
   methods: {
@@ -665,6 +666,59 @@ aside.page-include-view ul {
     bottom: 2%;
 }
 
+  
+    /* High resolution */
+    @media screen and (max-width: 1300px) {
+      html .two-third-layout {
+        grid-template-columns: 1fr;
+        grid-row-gap: 30px;
+      }
+    }
+    
+    /* Laptop-sized */
+    @media screen and (max-width: 1280px) {
+      html .menu-list {
+        grid-template-columns: 1fr;
+        grid-row-gap: 30px;
+      }
+      html .image-library {
+        grid-template-columns: repeat(3, 1fr)
+      }
+    }
 
+    /* Desktop to iPad size */
+    @media screen and (max-width: 991px) {
+        html .menu-management-view .content {
+          padding-left: 160px;
+        }
+    }
+
+    /* Mobile starts */
+    @media screen and (max-width: 767px) {
+        html .menu-management-view {
+          position: relative;
+          min-height: initial;
+          overflow: scroll;
+        }
+        html .menu-management-view .content {
+          padding-left: 0;
+          padding-right: 0;
+          margin-left: 0;
+          transition: 0.3s ease-in-out;
+          height: 100%;
+        }
+        html .menu-management-view.active .content {
+          margin-left: 250px;
+        }
+        html .two-third-layout {
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+    }
+
+    /* Small Mobile */
+    @media screen and (max-width: 540px) {
+
+    }
 
 </style>

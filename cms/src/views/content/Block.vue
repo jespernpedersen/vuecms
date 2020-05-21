@@ -1,5 +1,5 @@
 <template>
-  <div class="blocks-view">
+  <div class="blocks-view" :class="{ active: sidemenu }">
     
     <vue-headful :title="block.title + ' - Control Seat CMS'"/>
     <Menu></Menu>
@@ -115,6 +115,7 @@ export default {
       showImageLibrary: null,
       showModal: false,
       images: getImages,
+      sidemenu: false
     }
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
   <aside class="primary-cms-menu">
     <ul class="level-first">
-        <li v-on:click="menuview = 'content-menu'" v-bind:class="[menuview === 'content-menu' ? 'active' : '']">
+        <li v-on:click="getContentMenu()" v-bind:class="[menuview === 'content-menu' ? 'active' : '']">
             <unicon name="layer-group" />
             <span>Content</span>
         </li>
@@ -24,9 +24,11 @@
     </ul>
 
     <!-- View for Content Submenu -->
-    <ul class="level-second content-menu" v-if="menuview === 'content-menu'">
-    
-        <li>
+    <ul class="level-second content-menu" v-bind:class="[menuview === 'content-menu' ? 'active' : '']">
+        <span v-on:click="removeContentMenu()" class="mobile close-menu">
+            <unicon name="times" />
+        </span>
+        <li v-on:click="removeContentMenu()">
             <router-link to="/management/content/banner">
                 <unicon name="comment-alt-exclamation" />
                 <span>Status Banner</span>               
@@ -79,13 +81,30 @@ export default {
       menuview: ''
     }
   },
+  methods: {
+      removeContentMenu() {
+            this.menuview = ''
+            this.$parent.sidemenu = false
+      },
+      getContentMenu() {
+          // If already opened, close it
+          if(this.menuview == 'content-menu') {
+            this.menuview = ''
+            this.$parent.sidemenu = false
+          }
+          else {
+            this.menuview = 'content-menu' 
+            // This is how we set an active parameter for sidemenu for mobile versions
+            this.$parent.sidemenu = true
+          }
+      }
+  },
   computed : {
     logo() {
       return "background-image : url('" + require('@/assets/logo.png') + "'";
     }
   },
   mounted() {
-    this.menuview = this.$router.app._route.params.backendpage + "-menu"
   }
 }
 </script>
@@ -211,5 +230,108 @@ a {
     width: 100%;
 }
 
+.mobile {
+    display: none;
+}
 
+    /* Desktop to iPad size */
+    @media screen and (max-width: 991px) {
+        html .primary-cms-menu .level-second {
+            width: 65px;
+        }
+
+        html .primary-cms-menu .level-second > li a {
+            font-size: 14px;
+        }
+        html .primary-cms-menu .level-second > li a span {
+            display: none;
+        }
+    }
+
+    /* Mobile starts */
+    @media screen and (max-width: 767px) {
+        .mobile {
+            display: inline-block;
+        }
+
+        .primary-cms-menu .level-second > li {
+            float: left;
+            width: 100%;
+        }
+
+        .close-menu {
+            fill: #FFF;
+            float: left;
+            padding-right: 15px;
+            width: 100%;
+            text-align: right;
+        }
+
+        html .primary-cms-menu {
+            position: fixed;
+            bottom: auto;
+            top: 0;
+            width: 100%;
+            height: 30px;
+            z-index: 15;
+        }
+
+        html .primary-cms-menu .level-first {
+            width: 100%;
+            position: fixed;
+            bottom: 0px;
+            flex-direction: row;
+            height: auto;
+            transition: margin 0.3s ease-in-out;
+        }
+
+        html .active .primary-cms-menu .level-first {
+            margin-left: 250px;
+        }
+
+        html .primary-cms-menu .level-first .unicon {
+            height: auto;
+        }
+
+        .logo {
+            display: none;
+        }
+
+        html .primary-cms-menu .level-second {
+            width: 250px;
+            position: absolute;
+            bottom: auto;
+            top: 0;
+            height: 100vh;
+            padding-top: 45px;
+            margin-left: -250px;
+            transition: 0.3s ease-in-out;  
+        }
+
+        html .active .primary-cms-menu .level-second {
+            margin-left: 0;
+            transition: 0.3s ease-in-out;   
+        }
+        
+
+        html .primary-cms-menu .level-second > li a {
+            width: 100%;
+            text-align: left;
+        }
+
+        html .primary-cms-menu .level-second > li a span{
+            display: inline-block
+        }
+
+        .primary-cms-menu .level-second > li a {
+            text-align: center;
+            padding: 15px 20px 15px 20px;
+        }
+
+    }
+
+    /* Small Mobile */
+    @media screen and (max-width: 540px) {
+
+    }
 </style>
