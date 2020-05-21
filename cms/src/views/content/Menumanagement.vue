@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-management-view">
+  <div class="menu-management-view" :class="{ active: sidemenu }">
     <vue-headful :title="'Menu Management - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
@@ -198,7 +198,8 @@ export default {
       editable: true,
       isDragging: false,
       delayedDragging: false,
-      unsavedChanges: false
+      unsavedChanges: false,
+      sidemenu: false
     };
   },
   methods: {
@@ -696,14 +697,18 @@ aside.page-include-view ul {
     @media screen and (max-width: 767px) {
         html .menu-management-view {
           position: relative;
-          max-height: calc(100vh - 292px);
           min-height: initial;
           overflow: scroll;
         }
         html .menu-management-view .content {
           padding-left: 0;
           padding-right: 0;
+          margin-left: 0;
+          transition: 0.3s ease-in-out;
           height: 100%;
+        }
+        html .menu-management-view.active .content {
+          margin-left: 250px;
         }
         html .two-third-layout {
           padding-left: 15px;

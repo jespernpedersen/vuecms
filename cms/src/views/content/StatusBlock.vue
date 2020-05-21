@@ -1,5 +1,5 @@
 <template>
-  <div class="blocks-view status-view">
+  <div class="blocks-view status-view" :class="{ active: sidemenu }">
     <vue-headful :title="'Status Banner - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
@@ -44,7 +44,8 @@ export default {
   data () {
     return {
       blocks: [],
-      unsavedChanges: false
+      unsavedChanges: false,
+      sidemenu: false
     }
   },
   methods: {
@@ -213,15 +214,14 @@ export default {
 
     /* Mobile starts */
     @media screen and (max-width: 767px) {
-
-        html .blocks-view  {
-          min-height: calc(100vh - 292px);
-        }
         html .blocks-view .content {
           padding-left: 0;
           padding-right: 0;
           padding-top: 15px;
           max-width: 100%;
+          position: relative;
+          margin-left: 0;
+          transition: 0.3s ease-in-out;
         }
         html aside.global-settings {
             width: 100%;
@@ -237,6 +237,13 @@ export default {
             text-align: left;
             font-size: 16px;
         }
+
+        
+
+        html .blocks-view.active .content {
+          margin-left: 250px;
+        } 
+
         
     }
 

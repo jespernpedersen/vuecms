@@ -1,5 +1,5 @@
 <template>
-  <div class="pages-view">
+  <div class="pages-view" :class="{ active: sidemenu }">
     <Menu></Menu>
     <div class="content">
         <vue-headful :title="'Pages - Control Seat CMS'"/>
@@ -60,6 +60,7 @@ export default {
   data () {
     return {
       pages: [],
+      sidemenu: false
     }
   },
   methods: {
@@ -313,9 +314,6 @@ export default {
     @media screen and (max-width: 767px) {
         html .pages-view {
           position: relative;
-          max-height: calc(100vh - 292px);
-          min-height: initial;
-          overflow: scroll;
         }
 
         h1 {
@@ -335,8 +333,14 @@ export default {
         html .pages-view .content {
           padding-left: 0;
           padding-right: 0;
-          height: 100%;
+          margin-left: 0;
+          transition: 0.3s ease-in-out;
+          min-height: 100vh;
         }
+
+        html .pages-view.active .content {
+          margin-left: 250px;
+        } 
     }
 
     /* Small Mobile */

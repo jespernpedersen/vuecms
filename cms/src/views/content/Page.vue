@@ -1,6 +1,5 @@
 <template>
-  <div class="pages-view">
-    
+  <div class="pages-view" :class="{ active: sidemenu }">
     <vue-headful :title="page.title + ' - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
@@ -147,7 +146,8 @@ export default {
       showImageLibrary: null,
       showModal: false,
       images: getImages,
-      SelectedSection: null
+      SelectedSection: null,
+      sidemenu: false
     }
   },
   methods: {
@@ -849,7 +849,6 @@ export default {
     @media screen and (max-width: 767px) {
         html .pages-view {
           position: relative;
-          max-height: calc(100vh - 292px);
           min-height: initial;
           overflow: scroll;
         }
@@ -884,7 +883,7 @@ export default {
         html .section-list span > div > * {
           pointer-events: all;
         }
-        
+
         html .page-publish, html .page-published,
         html .page-featured {
           display: none;
@@ -895,6 +894,12 @@ export default {
           padding-right: 15px;
           height: 100%;
           max-width: 100%;
+          margin-left: 0;
+          transition: 0.3s ease-in-out;
+        }
+
+        html .active .pages-view .content {
+            margin-left: 250px;
         }
     }
 </style>

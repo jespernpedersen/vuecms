@@ -1,5 +1,5 @@
 <template>
-  <div class="library-view">
+  <div class="library-view" :class="{ active: sidemenu }">
     <vue-headful :title="'Image Library - Control Seat CMS'"/>
     <Menu></Menu>
     <div class="content">
@@ -25,7 +25,8 @@ export default {
   },
   data () {
       return {
-          images: getImages
+          images: getImages,
+          sidemenu: false
       }
   },
 }
@@ -78,10 +79,15 @@ export default {
           padding-right: 0;
           height: 100%;
           max-width: 100%;
+          margin-left: 0;
+          transition: margin 0.3s ease-in-out;
         }
+
+        html .library-view.active .content {
+          margin-left: 250px;
+        } 
+
         html .library-view {
-          
-          max-height: calc(100vh - 292px);
           min-height: initial;
           overflow: scroll;
         }
