@@ -211,5 +211,72 @@ a {
     width: 100%;
 }
 
+    /* Desktop to iPad size */
+    @media screen and (max-width: 991px) {
+        html .primary-cms-menu .level-second {
+            width: 65px;
+        }
 
+        html .primary-cms-menu .level-second > li a {
+            font-size: 14px;
+        }
+        html .primary-cms-menu .level-second > li a span {
+            display: none;
+        }
+    }
+
+    /* Mobile starts */
+    @media screen and (max-width: 767px) {
+        html .primary-cms-menu {
+            position: fixed;
+            bottom: 0px;
+            top: auto;
+            width: 100%;
+            height: 30px;
+        }
+
+        html .primary-cms-menu .level-first {
+            width: 100%;
+            position: fixed;
+            bottom: 0px;
+            flex-direction: row;
+            height: auto;
+        }
+
+        html .primary-cms-menu .level-first .unicon {
+            height: auto;
+        }
+
+        .logo {
+            display: none;
+        }
+
+        html .primary-cms-menu .level-second {
+            width: 100%;
+            position: absolute;
+            bottom: 61px;
+            top: auto;
+            height: auto;
+        }
+
+        html .primary-cms-menu .level-second > li a {
+            width: 100%;
+            text-align: left;
+        }
+
+        html .primary-cms-menu .level-second > li a span{
+            display: inline-block
+        }
+
+        .primary-cms-menu .level-second > li a {
+            text-align: center;
+            padding: 15px 20px 15px 20px;
+        }
+
+    }
+
+    /* Small Mobile */
+    @media screen and (max-width: 540px) {
+
+    }
 </style>

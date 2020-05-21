@@ -274,10 +274,95 @@ export default {
       background-color: #FFF;
     }
 
-    pre {
-      width: 100%;
-      text-align: left;
+    
+    /* High resolution */
+    @media screen and (max-width: 1300px) {
+      html .page-publish, 
+      html .page-published {
+        min-width: 15%;
+      }
+      html .page-featured {
+        min-width: 30%;
+      }
+      html .page-actions, .page-edit {
+        min-width: 5%;
+      }
+      .two-third-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Laptop-sized */
+    @media screen and (max-width: 1280px) {
+      html .page-publish, html .page-published {
+        min-width: 25%;
+      }
+      .container {
+        max-width: 992px;
+      }
     }
 
+    /* Desktop to iPad size */
+    @media screen and (max-width: 991px) {
+      .pages-view .content {
+        padding-left: 160px;
+      }
+    }
+
+    /* Mobile starts */
+    @media screen and (max-width: 767px) {
+        html .pages-view {
+          position: relative;
+          max-height: calc(100vh - 292px);
+          min-height: initial;
+          overflow: scroll;
+        }
+
+        html h1 {
+          padding-left: 15px;
+          width: 100%;
+          padding-right: 15px;
+          box-sizing: border-box;
+          float: left;
+          margin-bottom: 15px;
+        }
+
+        html h2 {
+          padding-left: 15px;
+          width: 100%;
+          padding-right: 15px;
+          margin-bottom: 0;
+        }
+
+        html .v-table {
+          margin-top: 10px;
+        }
+
+        html .pages-view button.add {
+          float: none;
+        }
+
+        button.add {
+          margin-right: 15px;
+          margin-bottom: 20px;
+        }
+        
+
+        html .page-publish, html .page-published,
+        html .page-featured {
+          display: none;
+        }
     
+        html .pages-view .content {
+          padding-left: 0;
+          padding-right: 0;
+          height: 100%;
+          max-width: 100%;
+        }
+    }
+
+    /* Small Mobile */
+    @media screen and (max-width: 540px) {
+
+    }
 </style>

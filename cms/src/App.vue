@@ -62,7 +62,7 @@ export default {
   box-sizing: border-box;
 }
 #app {
-  font-family: 'Cairo', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -147,4 +147,33 @@ nav {
     border: 1px solid transparent;
     border-radius: 4px;
 }
+
+// Laptop-sized
+@media screen and (max-width: 1280px) {
+  .container {
+    max-width: 992px;
+  }
+}
+
+// Desktop to iPad size
+@media screen and (max-width: 991px) {
+    .version {
+      display: none;
+    }
+}
+
+// Mobile starts
+@media screen and (max-width: 767px) {
+
+  .user {
+    display: none;
+  }
+
+}
+
+// Small Mobile
+@media screen and (max-width: 540px) {
+
+}
+
 </style>

@@ -389,4 +389,38 @@ section {
   color: #FFF;
 }
 
+
+    /* High resolution */
+    @media screen and (max-width: 1500px) {
+    }
+    
+    /* Laptop-sized */
+    @media screen and (max-width: 1280px) {
+      .container {
+        max-width: 992px;
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+    }
+
+    /* Desktop to iPad size */
+    @media screen and (max-width: 991px) {
+      .page nav ul span {
+        flex-wrap: wrap;
+        margin-top: -20px;
+      }
+      .page nav ul span li {
+        margin-top: 20px;
+      }
+    }
+
+    /* Mobile starts */
+    @media screen and (max-width: 767px) {
+
+    }
+
+    /* Small Mobile */
+    @media screen and (max-width: 540px) {
+
+    }
 </style>

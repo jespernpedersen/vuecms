@@ -22,7 +22,7 @@
                         <li class="toolbar edit" @click="EditSettings(i)">Edit Section Settings</li>
                         <li class="toolbar move">Move</li>
                         <li class="toolbar delete" @click="DeleteSection(i)">Delete</li>
-                        <li>Order: {{ block.order }}</li>
+                        <li class="toolbar order">Order: {{ block.order }}</li>
                       </div>
                       <div class="block-tooltip" v-if="block.saved">
                         Saved Block
@@ -810,5 +810,91 @@ export default {
     }
     .image-library img {
       max-width: 100%;
+    }
+    /* High resolution */
+    @media screen and (max-width: 1500px) {
+      html .page-publish, 
+      html .page-published {
+        min-width: 15%;
+      }
+      html .page-featured {
+        min-width: 30%;
+      }
+      html .page-actions, .page-edit {
+        min-width: 11%;
+      }
+    }
+    
+    /* Laptop-sized */
+    @media screen and (max-width: 1280px) {
+      html .page-publish, html .page-published {
+        min-width: 20%;
+      }
+      html .page-actions, .page-edit {
+        min-width: 16%;
+      }
+      .container {
+        max-width: 992px;
+      }
+    }
+
+    /* Desktop to iPad size */
+    @media screen and (max-width: 991px) {
+        html .pages-view .content {
+          padding-left: 160px;
+        }
+    }
+
+    /* Mobile starts */
+    @media screen and (max-width: 767px) {
+        html .pages-view {
+          position: relative;
+          max-height: calc(100vh - 292px);
+          min-height: initial;
+          overflow: scroll;
+        }
+
+        h1 {
+          padding-left: 15px;
+        }
+
+        html .section-toolbar li {
+          width: 100%;
+          text-align: left;
+        }
+
+        .section-toolbar li:not(:first-of-type) {
+          margin-left: 0;
+        }
+        
+        li.toolbar.order,
+        li.toolbar.move,
+        li.toolbar.delete {
+          display: none;
+        }
+
+        button.add {
+          margin-right: 15px;
+        }
+        
+        html .section-list span > div {
+          pointer-events: none;
+        }
+
+        html .section-list span > div > * {
+          pointer-events: all;
+        }
+        
+        html .page-publish, html .page-published,
+        html .page-featured {
+          display: none;
+        }
+    
+        html .pages-view .content {
+          padding-left: 15px;
+          padding-right: 15px;
+          height: 100%;
+          max-width: 100%;
+        }
     }
 </style>

@@ -274,4 +274,73 @@ export default {
       display: inline-block;
       background-color: #FFF;
     }
+
+    /* High resolution */
+    @media screen and (max-width: 1500px) {
+      html .page-publish, 
+      html .page-published {
+        min-width: 15%;
+      }
+      html .page-featured {
+        min-width: 30%;
+      }
+      html .page-actions, .page-edit {
+        min-width: 11%;
+      }
+    }
+    
+    /* Laptop-sized */
+    @media screen and (max-width: 1280px) {
+      html .page-publish, html .page-published {
+        min-width: 20%;
+      }
+      html .page-actions, .page-edit {
+        min-width: 16%;
+      }
+      .container {
+        max-width: 992px;
+      }
+    }
+
+    /* Desktop to iPad size */
+    @media screen and (max-width: 991px) {
+        html .pages-view .content {
+          padding-left: 160px;
+        }
+    }
+
+    /* Mobile starts */
+    @media screen and (max-width: 767px) {
+        html .pages-view {
+          position: relative;
+          max-height: calc(100vh - 292px);
+          min-height: initial;
+          overflow: scroll;
+        }
+
+        h1 {
+          padding-left: 15px;
+        }
+
+        button.add {
+          margin-right: 15px;
+        }
+        
+
+        html .page-publish, html .page-published,
+        html .page-featured {
+          display: none;
+        }
+    
+        html .pages-view .content {
+          padding-left: 0;
+          padding-right: 0;
+          height: 100%;
+        }
+    }
+
+    /* Small Mobile */
+    @media screen and (max-width: 540px) {
+
+    }
 </style>
