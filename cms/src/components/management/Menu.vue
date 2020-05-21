@@ -303,7 +303,7 @@ a {
             bottom: auto;
             top: 0;
             height: 100vh;
-            padding-top: 35px;
+            padding-top: 45px;
             margin-left: -250px;
             transition: 0.3s ease-in-out;  
         }

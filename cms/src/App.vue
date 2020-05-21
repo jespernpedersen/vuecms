@@ -94,7 +94,7 @@ font-family: 'Open Sans', sans-serif;
   color: #FFF;
   text-align: left;
   position: fixed;
-  z-index: 10;
+  z-index: 20;
   width: 100%;
   top: 0;
 
