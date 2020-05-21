@@ -115,6 +115,7 @@ export default {
               "bgimage": '',
               "bgcolor": '#ccc',
               "published": false,
+              "showtitle": false,
               "title": "A New Block",
               "container": true,
               "textcolor": "#fff",
@@ -163,6 +164,7 @@ export default {
       cursor: pointer;
       float: right;
       margin-top: 10px;
+      font-weight: 600;
     }
     .pages-view .content {
         flex: 1 0 auto;

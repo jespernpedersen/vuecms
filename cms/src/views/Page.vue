@@ -8,38 +8,39 @@
     </div>
     <header v-bind:style="{ backgroundColor: header[0].bgcolor, color: header[0].textcolor }">
       <div v-bind:class="{ container: header[0].container}">
-        <a href="/">{{ header[0].title }}</a>
-        <div v-for="element in header[0].elements" :key="element.id" v-bind:class="element.type + '-element'">
-          <Paragraph
-            v-if="element.type == 'text'"
-            :text="element.text" 
+        <a href="/"><span v-if="header[0].showtitle">{{ header[0].title }}</span>
+          <div v-for="element in header[0].elements" :key="element.id" v-bind:class="element.type + '-element'">
+            <Paragraph
+              v-if="element.type == 'text'"
+              :text="element.text" 
+              >
+            </Paragraph>
+            <ButtonLink
+              v-if="element.type == 'button'"
+              :text="element.button_text"
+              :link="element.button_link" >
+            </ButtonLink>
+            <ImageElement
+              v-if="element.type == 'image'"
+              :path="element.image_path"
+              :name="element.name"
             >
-          </Paragraph>
-          <ButtonLink
-            v-if="element.type == 'button'"
-            :text="element.button_text"
-            :link="element.button_link" >
-          </ButtonLink>
-          <ImageElement
-            v-if="element.type == 'image'"
-            :path="element.image_path"
-            :name="element.name"
-          >
-          </ImageElement>
+            </ImageElement>
+          </div>
+        </a>
+      </div>
+      <nav>
+        <div class="container">
+        <ul>
+          <transition-group type="transition" :name="'flip-list'">
+            <li v-for="item in menuitems" :key="item.order">
+              <a v-bind:href="item.url">{{ item.name }}</a>
+            </li>
+          </transition-group>
+        </ul>
         </div>
-      </div>
+      </nav>
     </header>
-    <nav>
-      <div class="container">
-      <ul>
-        <transition-group type="transition" :name="'flip-list'">
-          <li v-for="item in menuitems" :key="item.order">
-            <a v-bind:href="item.url">{{ item.name }}</a>
-          </li>
-        </transition-group>
-      </ul>
-      </div>
-    </nav>
     <main>
       <section v-for="block in pages[0].blocks" :key="block.id" v-bind:style="{ backgroundColor: block.bgcolor, color: block.textcolor }">
         <div v-bind:class="{ container: block.container}">
@@ -67,7 +68,7 @@
     </main>
     <footer v-bind:style="{ backgroundColor: footer[0].bgcolor, color: footer[0].textcolor }">
       <div v-bind:class="{ container: footer[0].container}">
-        {{ footer[0].title }}
+        <div v-if="footer[0].showtitle">{{ footer[0].title }}</div>
         <div v-for="element in footer[0].elements" :key="element.id" v-bind:class="element.type + '-element'">
           <Paragraph
             v-if="element.type == 'text'"
@@ -171,6 +172,7 @@ export default {
                                 "order": defaultBlock.order,
                                 "saved": defaultBlock.saved,
                                 "reference": defaultBlock.reference,
+                                "showtitle": savedBlock_data.title,
                                 "title": savedBlock_data.title,
                                 "bgcolor": savedBlock_data.bgcolor,
                                 "bgimage": savedBlock_data.bgimage,
@@ -179,8 +181,7 @@ export default {
                                 "elements": savedBlock_data.elements,
                                 "published": savedBlock_data.published,
                                 "showtitle": savedBlock_data.showtitle,
-                                "textcolor": savedBlock_data.textcolor,
-                                "title": savedBlock_data.title
+                                "textcolor": savedBlock_data.textcolor
                               }
 
                               // Push to Object
@@ -190,10 +191,13 @@ export default {
                         })
 
                       }
-                      else {
+                      else if(blockData.saved != true) {
                         if(blockData.published) {
                           getPage[0].blocks.push(blockData)
                         }
+                      }
+                      else {
+                        alert("Error")
                       }
                     })
                 })
@@ -223,18 +227,57 @@ export default {
             let PageID = docData.id
             getPage.push(DocumentData)
            // Page Block Data
-            pagesRef.doc(String(PageID)).collection("blocks").get().then(function(blocks) {
-              // For every block
-              // If we have already inserted data, don't do this again
-              if(getPage[0].blocks == '') {
-                blocks.forEach(function(block) {
-                  let blockData = block.data()
-                  if(blockData.published != false) {
-                    getPage[0].blocks.push(blockData)
-                  }
+                pagesRef.doc(String(docData.id)).collection("blocks").get().then(function(blocks) {
+                  // For every block
+                  // If we have already inserted data, don't do this again
+                    blocks.forEach(function(block) {
+                      let blockData = block.data()
+                      if(blockData.saved) {
+                        let defaultBlock = blockData
+                        let reference = blockData.reference
+
+                        let SavedBlockRef = blocksRef.where("id", "==", reference).limit(1)
+
+                        SavedBlockRef.get().then(function(subquerySnapshot) {
+                          subquerySnapshot.forEach(function(savedBlock) {
+                            if(savedBlock.exists) {
+                              // Construct Data
+                              let savedBlock_data = savedBlock.data() 
+
+                              let SavedBlockStructure = {
+                                "id": defaultBlock.id,
+                                "order": defaultBlock.order,
+                                "saved": defaultBlock.saved,
+                                "reference": defaultBlock.reference,
+                                "showtitle": savedBlock_data.title,
+                                "title": savedBlock_data.title,
+                                "bgcolor": savedBlock_data.bgcolor,
+                                "bgimage": savedBlock_data.bgimage,
+                                "blocktype": savedBlock_data.blocktype,
+                                "container": savedBlock_data.container,
+                                "elements": savedBlock_data.elements,
+                                "published": savedBlock_data.published,
+                                "showtitle": savedBlock_data.showtitle,
+                                "textcolor": savedBlock_data.textcolor
+                              }
+
+                              // Push to Object
+                              getPage[0].blocks.push(SavedBlockStructure)
+                            }
+                          })
+                        })
+
+                      }
+                      else if(blockData.saved != true) {
+                        if(blockData.published) {
+                          getPage[0].blocks.push(blockData)
+                        }
+                      }
+                      else {
+                        alert("Error")
+                      }
+                    })
                 })
-              }
-            })
           })
         })
       }
@@ -267,7 +310,6 @@ export default {
 
 .page header {
   background-color: teal;
-  padding: 30px 0;
   color: #FFF;
 }
 
@@ -303,12 +345,11 @@ export default {
 
 .page nav {
   padding: 20px 0;
-  background-color: burlywood;
 }
 
 .page nav ul span {
   display: flex;
-  color: #222;
+  color: inherit;
   width: 100%;
   list-style: none;
   margin: 0;

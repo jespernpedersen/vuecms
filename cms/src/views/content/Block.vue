@@ -133,6 +133,10 @@ export default {
              bgcolor: block.bgcolor,
              blocktype: block.blocktype,
              bgimage: block.bgimage,
+<<<<<<< HEAD
+=======
+             showtitle: block.showtitle,
+>>>>>>> 2d615d93c62b8125ac47b4fcb379f44fd00a8dd3
              published: block.published,
              title: block.title,
              container: block.container,

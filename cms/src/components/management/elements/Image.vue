@@ -28,7 +28,6 @@ export default {
             this.$parent.$parent.$parent.notifyChanges()
         }
         else {
-            console.log(this.$parent.block)
             this.$parent.block.elements.splice(elementid, 1)
             this.$parent.notifyChanges()
         }

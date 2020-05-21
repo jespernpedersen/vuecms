@@ -59,7 +59,6 @@ export default {
         blocksRef.doc(blockId).update({
              bgcolor: block.bgcolor,
              bgimage: block.bgimage,
-             columns: block.columns,
              published: block.published,
              title: block.title,
              container: block.container,
