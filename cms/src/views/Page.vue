@@ -29,12 +29,12 @@
           </div>
         </a>
       </div>
-      <nav>
+      <nav v-bind:style="{ color: header[0].textcolor }">
         <div class="container">
         <ul>
           <transition-group type="transition" :name="'flip-list'">
-            <li v-for="item in menuitems" :key="item.order">
-              <a v-bind:href="item.url">{{ item.name }}</a>
+            <li v-for="item in menuitems" :key="item.order" >
+              <a v-bind:href="item.url" v-bind:style="{ 'border-color': header[0].textcolor}">{{ item.name }}</a>
             </li>
           </transition-group>
         </ul>

@@ -65,18 +65,6 @@ const my_routes = [{
         component: () =>
             import ( /* webpackChunkName: "about" */ '../views/content/Menumanagement.vue')
     },
-    {
-        path: '/management/:backendpage/customers',
-        name: 'Menu_Management',
-        component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/people/Customers.vue')
-    },
-    {
-        path: '/management/:backendpage/accounts',
-        name: 'Menu_Management',
-        component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/people/Accounts.vue')
-    }
 ]
 
 const router = new VueRouter({
