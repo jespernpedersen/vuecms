@@ -3,17 +3,18 @@
     <ul class="level-first">
         <li v-on:click="getContentMenu()" v-bind:class="[menuview === 'content-menu' ? 'active' : '']">
             <unicon name="layer-group" />
-            <span>Content</span>
+            <span class="tooltip">Content</span>
         </li>
         <li v-on:click="menuview = 'image-menu'" v-bind:class="[menuview === 'image-menu' ? 'active' : '']">
             <router-link to="/management/image/upload">
                 <unicon name="images" />
+                <span class="tooltip">Image Library</span>
             </router-link>
         </li>
         
         <li class="disabled" v-on:click="menuview = 'user-menu'">
             <unicon name="users-alt" />
-            <span>Users</span>
+            <span class="tooltip">Users</span>
         </li>
         <li class="disabled">
             <router-link to="/management/image/upload">
@@ -187,11 +188,62 @@ a {
     margin-right: 8px;
 }
 
-.primary-cms-menu .level-first > li > span {
-    display: inline-block;
-    width: 65px;
-    display: none;
+.primary-cms-menu .level-first > li {
+    position: relative;
 }
+
+.primary-cms-menu .level-first > li .tooltip {
+    display: block;
+    position: absolute;
+    left: 75px;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(0%, -50%);
+    background-color: #333;
+    z-index: 20;
+    padding: 3px 12px;
+	border: 2px solid #f8cb5d;
+    font-size: 12px;
+    border-radius: 5px;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s ease-in-out;
+    min-width: 105px;
+}
+
+.primary-cms-menu .level-first > li:not(.disabled):hover .tooltip {
+    opacity: 1;
+    pointer-events: all;
+    z-index: 50;
+}
+
+
+.tooltip:after, .tooltip:before {
+	right: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+
+.tooltip:after {
+	border-color: rgba(51, 51, 51, 0);
+	border-right-color: #333;
+	border-width: 5px;
+	margin-top: -5px;
+}
+.tooltip:before {
+	border-color: rgba(248, 203, 93, 0);
+	border-right-color: #f8cb5d;
+	border-width: 8px;
+	margin-top: -8px;
+}
+
+
 
 .primary-cms-menu .level-second {
     top: 0;

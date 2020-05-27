@@ -9,7 +9,7 @@
               <nav>
                   <h2 style="text-align: left">Pages</h2>
                   <p>These items come from your page list, you can add them to each of your menus by dragging them to a menu. Pages that are published will only be shown in this list</p>
-                  <draggable class="list-group" tag="ul" v-model="pages" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false, updateItemOrder">
+                  <draggable class="list-group" tag="ul" v-model="pages" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false" @change="updateItemOrder(pages)">
                       <transition-group type="transition" :name="'flip-list'">
                         <li class="list-group-item" v-for="page in pages" :key="page.order">
                             {{ page.name }}
@@ -24,7 +24,7 @@
             <div class="menu-list">
               <nav v-for="menu in menus" :key="menu['.key']">
                   <h2 style="text-align: left">{{ menu.name }}</h2>
-                  <draggable class="list-group" tag="ul" v-model="menu.items" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+                  <draggable class="list-group" tag="ul" v-model="menu.items" v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false" @change="updateItemOrder(menu)">
                       <transition-group type="transition" :name="'flip-list'">
                         <li class="list-group-item" v-for="item in menu.items" :key="item.order">
                           <span v-if="item.ghost" class="ghost-item">
@@ -61,7 +61,6 @@ import { db, menusRef, pagesRef } from '../../firebase/db.js'
 
 // Get Menu Data
 let getMenus = [];
-let getDefaultMenus = [];
 let getpageMenu = [];
 
 let visiblePagesRef = pagesRef.where("published", "==", true);
@@ -88,103 +87,6 @@ pagesRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
   }
 })
 
-// All our menus
-menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
-  // Get Every First Level Documents (i.e. menus)
-  if(getMenus.length == 0) {
-    querySnapshot.forEach(function(doc) {
-      // Get data
-      let menu = doc.data();
-      // Main Collection
-
-      let menuArray = {
-        id: menu.id,
-        name: menu.name,
-        // We start with empty items, and later add them down
-        items: []
-      }
-
-      // Add menu to object
-
-      getMenus.push(menuArray);
-
-      // Menu Items
-      menusRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
-        // Set ID of the menu's items we will sort by
-        let this_menu = doc.id;
-
-        // For every menu item, we push them to our object configured by our menu id
-        if(getMenus[doc.id]['items'].length == 0) { 
-          subquerySnapshot.forEach(function(subdoc) {
-            // Get item data
-            let item = subdoc.data();
-
-            // Construct data
-            let itemsArray = {
-              id: item.id,
-              name: item.name,
-              url: item.url,
-              order: item.order,
-              reference: item.id,
-              ghost: item.ghost
-            }
-            getMenus[doc.id]['items'].push(itemsArray);
-            // Output it based on item order
-            getMenus[doc.id]['items'].map(function(item, index) {
-              item.order = index;
-            })
-          });
-        }
-      });
-    });
-  }
-});
-
-// All our old menus
-menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
-  // Get Every First Level Documents (i.e. menus)
-  querySnapshot.forEach(function(doc) {
-    // Get data
-    let menu = doc.data();
-    // Main Collection
-
-    let menuArray = {
-      id: menu.id,
-      name: menu.name,
-      // We start with empty items, and later add them down
-      items: []
-    }
-
-    // Add menu to object
-    getDefaultMenus.push(menuArray);
-
-    // Menu Items
-    menusRef.doc(doc.id).collection("items").get().then(function(subquerySnapshot) {
-      // Set ID of the menu's items we will sort by
-      let this_menu = doc.id;
-
-      // For every menu item, we push them to our object configured by our menu id
-      subquerySnapshot.forEach(function(subdoc) {
-        // Get item data
-        let item = subdoc.data();
-
-        // Construct data
-        let itemsArray = {
-          id: item.id,
-          name: item.name,
-          url: item.url,
-          order: item.order,
-          reference: item.id,
-          ghost: item.ghost
-        }
-
-        // Add menu items to object
-        getDefaultMenus[doc.id]['items'].push(itemsArray);
-      });
-    });
-  });
-});
-
 export default {
   name: "hello",
   components: {
@@ -192,8 +94,8 @@ export default {
   },
   data() {
     return {
-      menus: getMenus,
-      defaultMenus: getDefaultMenus,
+      menus: [],
+      defaultMenus: [],
       pages: getpageMenu,
       editable: true,
       isDragging: false,
@@ -203,8 +105,93 @@ export default {
     };
   },
   methods: {
-    updateItemOrder() {
-      console.log("Hello")
+    getAllMenus(vue) {
+      // All our menus
+      menusRef.onSnapshot({ includeMetadataChanges: true },function(querySnapshot) {
+        let defaultMenus = [];
+        // Get Every First Level Documents (i.e. menus)
+        if(vue.menus.length == 0) {
+          querySnapshot.forEach(function(doc) {
+            // Get data
+            let menu = doc.data()
+            // Main Collection
+
+            let menuArray = {
+              id: menu.id,
+              name: menu.name,
+              // We start with empty items, and later add them down
+              items: []
+            }
+
+            // Add menu to object
+
+            vue.menus.push(menuArray);
+
+            // Menu Items
+            menusRef.doc(doc.id).collection("items").orderBy("order").get().then((subquerySnapshot) => {
+              // Set ID of the menu's items we will sort by
+              let this_menu = doc.id;
+
+              // For every menu item, we push them to our object configured by our menu id
+              if(vue.menus[this_menu]['items'].length == 0) { 
+                subquerySnapshot.forEach((subdoc) => {
+                  // Get item data
+                  let item = subdoc.data();
+
+                  // Construct data
+                  let itemsArray = {
+                    id: item.id,
+                    name: item.name,
+                    url: item.url,
+                    order: item.order,
+                    reference: item.id,
+                    ghost: item.ghost
+                  }
+                  // console.log(vue.menus)
+                  vue.menus[this_menu]['items'].push(itemsArray);
+                });
+              }
+            });
+          });
+        }
+        // Firestore duplicates data inside same scope, so we will need to create a new one
+        if(vue.defaultMenus.length == 0) {
+          querySnapshot.forEach(function(doc) {
+            let defaultMenu = doc.data()
+
+            let defaultMenuArray = {
+              id: defaultMenu.id,
+              name: defaultMenu.name,
+              items: []
+            }
+            vue.defaultMenus.push(defaultMenuArray)
+            
+            menusRef.doc(doc.id).collection("items").orderBy("order").get().then((subquerySnapshot) => {
+              let this_menu = doc.id
+                if(vue.defaultMenus[this_menu]['items'].length == 0) { 
+                  subquerySnapshot.forEach((subdoc) => {
+                    let item = subdoc.data()
+
+                    let DefaultItemsArray = {
+                        id: item.id,
+                        name: item.name,
+                        url: item.url,
+                        order: item.order,
+                        reference: item.id,
+                        ghost: item.ghost                  
+                    }
+                    vue.defaultMenus[this_menu]['items'].push(DefaultItemsArray)
+                  })
+                }
+            });
+        });
+        }
+      });
+    },
+    updateItemOrder(menu) {
+      this.menus[menu.id]['items'].map(function(item, index) {
+        item.order = index;
+      })
     },
     onMove({ relatedContext, draggedContext }) {
       const relatedElement = relatedContext.element;
@@ -212,14 +199,6 @@ export default {
       return (
         (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
       );
-    },
-    ReOrderItems(oldIndex, newIndex) {
-      // move the item in the underlying array
-      this.list.splice(newIndex, 0, this.list.splice(oldIndex, 1)[0]);
-      // update order properties based on position in array
-      this.list.forEach(function(item, index){
-        item.order = index;
-      });
     },
     async SaveMenu(menus, defaultMenus) {
         // menus = current object
@@ -229,7 +208,7 @@ export default {
 
         // Because of incompatiblity between menus, we will start by deleting the old way of things and then insert it
         // We have to delete per document, instead of collection per Firestore
-        defaultMenus.forEach(function(defaultMenu) {
+        this.defaultMenus.forEach(function(defaultMenu) {
             // Delete
             let menu = defaultMenu['items']
             let menuid = defaultMenu.id
@@ -241,11 +220,12 @@ export default {
         // If the menus have been deleted
         if(hasDeleted == true) {
             // Then we add in all the menu items
-            menus.forEach(function(menu) {
-                menu.items.forEach(function(item) {
+            this.menus.forEach(function(menu) {
                     let menuID = String(menu.id)
                     menu.items.forEach(function(item) {
                         let itemID = String(item.id)
+                        
+                        console.log(item.name + " " + item.order)
                         if(!item.ghost) {
                           menusRef.doc(menuID).collection("items").doc(itemID).set({
                               "id": item.id,
@@ -257,7 +237,6 @@ export default {
                         }
                         hasDeleted = false
                     })
-                })
             })
         }
         else {
@@ -301,6 +280,9 @@ export default {
       });
     }
   },
+  created() {
+    this.getAllMenus(this)
+  }
 };
 </script>
 
